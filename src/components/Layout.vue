@@ -120,7 +120,7 @@ const isCollapse = ref(false)
     padding: 0;
 
     .layout-content {
-      padding: 20px;
+      padding: 8px 16px 16px;
     }
   }
 }

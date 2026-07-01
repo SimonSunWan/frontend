@@ -73,3 +73,8 @@ h6 {
   font-size: inherit;
   font-weight: inherit;
 }
+
+/* Element Plus 表单项间距覆盖 */
+.el-form-item {
+  margin-bottom: 16px;
+}
