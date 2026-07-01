@@ -26,7 +26,24 @@
         :border="border"
         :default-expand-all="defaultExpandAll"
       >
-        <slot />
+        <!-- 基于 columns 配置自动渲染列 -->
+        <template v-if="columns?.length">
+          <table-column
+            v-for="(col, idx) in columns"
+            :key="col.key || col.prop || col.type || col.label || idx"
+            :col="col"
+          >
+            <template
+              v-for="name in slotNames"
+              :key="name"
+              #[name]="slotProps"
+            >
+              <slot :name="name" v-bind="slotProps" />
+            </template>
+          </table-column>
+        </template>
+        <!-- 兜底: 允许直接传入 el-table-column -->
+        <slot v-else />
       </el-table>
 
       <div v-if="showPagination" class="pagination">
@@ -45,7 +62,82 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  h,
+  reactive,
+  resolveComponent,
+  useSlots,
+  watch,
+} from 'vue'
+
+const ElTableColumn = resolveComponent('ElTableColumn')
+
+/**
+ * 递归列渲染组件
+ * - col.children   多级表头
+ * - col.slotName    自定义单元格内容 (使用对应具名插槽)
+ * - col.options     字典映射 [{ label, value }]
+ * - col.formatter   el-table-column 原生 formatter
+ * - col.attrs       透传其他原生属性 (filters / filter-method 等)
+ */
+const TableColumn = defineComponent({
+  name: 'TableColumn',
+  props: {
+    col: { type: Object, required: true },
+  },
+  setup(props, { slots }) {
+    return () => {
+      const col = props.col
+      const scopedSlots = {}
+
+      if (col.children && col.children.length) {
+        // 多级表头: 子列通过 default 插槽挂载
+        scopedSlots.default = () =>
+          col.children.map((child, i) =>
+            h(
+              TableColumn,
+              {
+                key: child.key || child.prop || child.label || i,
+                col: child,
+              },
+              slots,
+            ),
+          )
+      } else if (col.slotName && slots[col.slotName]) {
+        // 自定义插槽渲染
+        scopedSlots.default = (scope) => slots[col.slotName](scope)
+      } else if (col.options) {
+        // 字典映射
+        scopedSlots.default = ({ row }) => {
+          const val = row[col.prop]
+          const matched = col.options.find((o) => o.value === val)
+          return matched ? matched.label : val
+        }
+      }
+
+      return h(
+        ElTableColumn,
+        {
+          prop: col.prop,
+          label: col.label,
+          width: col.width,
+          minWidth: col.minWidth,
+          fixed: col.fixed,
+          align: col.align,
+          headerAlign: col.headerAlign,
+          sortable: col.sortable,
+          type: col.type,
+          showOverflowTooltip: col.showOverflowTooltip,
+          formatter: col.formatter,
+          ...(col.attrs || {}),
+        },
+        scopedSlots,
+      )
+    }
+  },
+})
 
 const props = defineProps({
   loading: { type: Boolean, default: false },
@@ -61,9 +153,14 @@ const props = defineProps({
   stripe: { type: Boolean, default: true },
   border: { type: Boolean, default: false },
   defaultExpandAll: { type: Boolean, default: false },
+  // 列配置 (JSON 数组驱动渲染)
+  columns: { type: Array, default: () => [] },
 })
 
 const emit = defineEmits(['search', 'reset', 'page-change', 'size-change', 'current-change'])
+
+const slots = useSlots()
+const slotNames = computed(() => Object.keys(slots))
 
 const showPagination = !!props.pagination
 

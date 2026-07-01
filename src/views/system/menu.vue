@@ -3,6 +3,7 @@
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
+    :columns="columns"
     row-key="id"
     :tree-props="{ children: 'children' }"
     @search="handleSearch"
@@ -21,49 +22,35 @@
       <el-button type="primary" @click="showDialog('add', null)">添加菜单</el-button>
     </template>
 
-    <el-table-column prop="name" label="菜单名称" min-width="160" show-overflow-tooltip />
-    <el-table-column label="菜单类型" width="90" align="center">
-      <template #default="{ row }">
-        <el-tag :type="getMenuTypeTag(row)" size="small">
-          {{ getMenuTypeText(row) }}
-        </el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column label="路由地址" min-width="140" show-overflow-tooltip>
-      <template #default="{ row }">
-        {{ row.isLink ? (row.link || '-') : (row.path || '-') }}
-      </template>
-    </el-table-column>
-    <el-table-column label="权限标识" min-width="120" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.authMark || '-' }}</template>
-    </el-table-column>
-    <el-table-column label="图标" width="70" align="center">
-      <template #default="{ row }">{{ row.icon || '-' }}</template>
-    </el-table-column>
-    <el-table-column label="状态" width="80" align="center">
-      <template #default="{ row }">
-        <el-tag :type="row.isEnable ? 'primary' : 'info'">
-          {{ row.isEnable ? '启用' : '禁用' }}
-        </el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="sort" label="排序" width="70" align="center" />
-    <el-table-column label="操作" width="200" fixed="right" align="center">
-      <template #default="{ row }">
-        <el-button
-          v-if="row.menuType !== 'button'"
-          type="primary"
-          link
-          @click="showDialog('add', row)"
-        >
-          新增子级
-        </el-button>
-        <el-divider v-if="row.menuType !== 'button'" direction="vertical" />
-        <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
-      </template>
-    </el-table-column>
+    <template #menuType="{ row }">
+      <el-tag :type="getMenuTypeTag(row)" size="small">
+        {{ getMenuTypeText(row) }}
+      </el-tag>
+    </template>
+    <template #path="{ row }">
+      {{ row.isLink ? (row.link || '-') : (row.path || '-') }}
+    </template>
+    <template #authMark="{ row }">{{ row.authMark || '-' }}</template>
+    <template #icon="{ row }">{{ row.icon || '-' }}</template>
+    <template #status="{ row }">
+      <el-tag :type="row.isEnable ? 'primary' : 'info'">
+        {{ row.isEnable ? '启用' : '禁用' }}
+      </el-tag>
+    </template>
+    <template #action="{ row }">
+      <el-button
+        v-if="row.menuType !== 'button'"
+        type="primary"
+        link
+        @click="showDialog('add', row)"
+      >
+        新增子级
+      </el-button>
+      <el-divider v-if="row.menuType !== 'button'" direction="vertical" />
+      <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+    </template>
   </TablePage>
 
   <!-- 新增/编辑抽屉 -->
@@ -176,6 +163,17 @@ import { computed, onMounted, reactive, ref } from 'vue'
 
 const loading = ref(false)
 const tableData = ref([])
+
+const columns = [
+  { prop: 'name', label: '菜单名称', minWidth: 160, showOverflowTooltip: true },
+  { label: '菜单类型', width: 90, align: 'center', slotName: 'menuType' },
+  { label: '路由地址', minWidth: 140, showOverflowTooltip: true, slotName: 'path' },
+  { label: '权限标识', minWidth: 120, showOverflowTooltip: true, slotName: 'authMark' },
+  { label: '图标', width: 70, align: 'center', slotName: 'icon' },
+  { label: '状态', width: 80, align: 'center', slotName: 'status' },
+  { prop: 'sort', label: '排序', width: 70, align: 'center' },
+  { label: '操作', width: 200, fixed: 'right', align: 'center', slotName: 'action' },
+]
 
 const searchForm = reactive({
   name: '',

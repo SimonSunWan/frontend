@@ -3,6 +3,7 @@
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
+    :columns="columns"
     :pagination="pagination"
     @search="handleSearch"
     @reset="handleReset"
@@ -19,32 +20,18 @@
       <el-button type="primary" @click="showDialog('add')">新增角色</el-button>
     </template>
 
-    <el-table-column type="index" label="序号" width="60" align="center" />
-    <el-table-column prop="roleName" label="角色名称" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.roleName || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="roleCode" label="角色编码" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.roleCode || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="description" label="描述" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.description || '-' }}</template>
-    </el-table-column>
-    <el-table-column label="状态" width="80" align="center">
-      <template #default="{ row }">
-        <el-tag :type="row.status ? 'primary' : 'info'">
-          {{ row.status ? '启用' : '禁用' }}
-        </el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" width="200" fixed="right" align="center">
-      <template #default="{ row }">
-        <el-button type="primary" link @click="showPermissionDialog(row)">菜单权限</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
-      </template>
-    </el-table-column>
+    <template #status="{ row }">
+      <el-tag :type="row.status ? 'primary' : 'info'">
+        {{ row.status ? '启用' : '禁用' }}
+      </el-tag>
+    </template>
+    <template #action="{ row }">
+      <el-button type="primary" link @click="showPermissionDialog(row)">菜单权限</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+    </template>
   </TablePage>
 
   <!-- 新增/编辑抽屉 -->
@@ -144,6 +131,30 @@ import { nextTick, onMounted, reactive, ref } from 'vue'
 
 const loading = ref(false)
 const tableData = ref([])
+
+const columns = [
+  { type: 'index', label: '序号', width: 60, align: 'center' },
+  {
+    prop: 'roleName',
+    label: '角色名称',
+    showOverflowTooltip: true,
+    formatter: (row) => row.roleName || '-',
+  },
+  {
+    prop: 'roleCode',
+    label: '角色编码',
+    showOverflowTooltip: true,
+    formatter: (row) => row.roleCode || '-',
+  },
+  {
+    prop: 'description',
+    label: '描述',
+    showOverflowTooltip: true,
+    formatter: (row) => row.description || '-',
+  },
+  { label: '状态', width: 80, align: 'center', slotName: 'status' },
+  { label: '操作', width: 200, fixed: 'right', align: 'center', slotName: 'action' },
+]
 
 const searchForm = reactive({
   roleName: '',

@@ -3,6 +3,7 @@
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
+    :columns="columns"
     :pagination="pagination"
     @search="handleSearch"
     @reset="handleReset"
@@ -44,64 +45,43 @@
       <el-button type="primary" @click="showDialog('add')">新增用户</el-button>
     </template>
 
-    <el-table-column type="index" label="序号" width="60" align="center" />
-    <el-table-column prop="userName" label="账号" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.userName || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="nickName" label="姓名" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.nickName || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="phone" label="手机号" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.phone || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="email" label="邮箱" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.email || '-' }}</template>
-    </el-table-column>
-    <el-table-column label="角色名称" min-width="120">
-      <template #default="{ row }">
-        <template v-if="row.roleNames?.length">
-          <el-tag
-            v-for="name in row.roleNames"
-            :key="name"
-            type="info"
-            size="small"
-            style="margin-right: 4px"
-          >
-            {{ name }}
-          </el-tag>
-        </template>
-        <span v-else>-</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="所属部门" min-width="120">
-      <template #default="{ row }">
-        <template v-if="row.departments?.length">
-          <el-tag
-            v-for="name in row.departments"
-            :key="name"
-            type="success"
-            size="small"
-            style="margin-right: 4px"
-          >
-            {{ name }}
-          </el-tag>
-        </template>
-        <span v-else>-</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="状态" width="80" align="center">
-      <template #default="{ row }">
-        <el-tag :type="row.status ? 'primary' : 'info'">
-          {{ row.status ? '启用' : '禁用' }}
+    <template #roleNames="{ row }">
+      <template v-if="row.roleNames?.length">
+        <el-tag
+          v-for="name in row.roleNames"
+          :key="name"
+          type="info"
+          size="small"
+          style="margin-right: 4px"
+        >
+          {{ name }}
         </el-tag>
       </template>
-    </el-table-column>
-    <el-table-column label="操作" width="120" fixed="right" align="center">
-      <template #default="{ row }">
-        <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
-        <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+      <span v-else>-</span>
+    </template>
+    <template #departments="{ row }">
+      <template v-if="row.departments?.length">
+        <el-tag
+          v-for="name in row.departments"
+          :key="name"
+          type="success"
+          size="small"
+          style="margin-right: 4px"
+        >
+          {{ name }}
+        </el-tag>
       </template>
-    </el-table-column>
+      <span v-else>-</span>
+    </template>
+    <template #status="{ row }">
+      <el-tag :type="row.status ? 'primary' : 'info'">
+        {{ row.status ? '启用' : '禁用' }}
+      </el-tag>
+    </template>
+    <template #action="{ row }">
+      <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
+      <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+    </template>
   </TablePage>
 
   <!-- 新增/编辑抽屉 -->
@@ -178,6 +158,38 @@ import { onMounted, reactive, ref, watch } from 'vue'
 const loading = ref(false)
 const tableData = ref([])
 const roleList = ref([])
+
+const columns = [
+  { type: 'index', label: '序号', width: 60, align: 'center' },
+  {
+    prop: 'userName',
+    label: '账号',
+    showOverflowTooltip: true,
+    formatter: (row) => row.userName || '-',
+  },
+  {
+    prop: 'nickName',
+    label: '姓名',
+    showOverflowTooltip: true,
+    formatter: (row) => row.nickName || '-',
+  },
+  {
+    prop: 'phone',
+    label: '手机号',
+    showOverflowTooltip: true,
+    formatter: (row) => row.phone || '-',
+  },
+  {
+    prop: 'email',
+    label: '邮箱',
+    showOverflowTooltip: true,
+    formatter: (row) => row.email || '-',
+  },
+  { label: '角色名称', minWidth: 120, slotName: 'roleNames' },
+  { label: '所属部门', minWidth: 120, slotName: 'departments' },
+  { label: '状态', width: 80, align: 'center', slotName: 'status' },
+  { label: '操作', width: 120, fixed: 'right', align: 'center', slotName: 'action' },
+]
 
 const searchForm = reactive({
   userName: '',

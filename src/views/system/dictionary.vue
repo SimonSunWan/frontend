@@ -3,6 +3,7 @@
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
+    :columns="columns"
     :pagination="pagination"
     @search="handleSearch"
     @reset="handleReset"
@@ -19,32 +20,18 @@
       <el-button type="primary" @click="showTypeDialog('add')">新增字典</el-button>
     </template>
 
-    <el-table-column type="index" label="序号" width="60" align="center" />
-    <el-table-column prop="name" label="字典名称" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.name || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="code" label="字典编码" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.code || '-' }}</template>
-    </el-table-column>
-    <el-table-column prop="description" label="描述" show-overflow-tooltip>
-      <template #default="{ row }">{{ row.description || '-' }}</template>
-    </el-table-column>
-    <el-table-column label="状态" width="80" align="center">
-      <template #default="{ row }">
-        <el-tag :type="row.status ? 'primary' : 'info'">
-          {{ row.status ? '启用' : '禁用' }}
-        </el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" width="220" fixed="right" align="center">
-      <template #default="{ row }">
-        <el-button type="primary" link @click="showEnumDialog(row)">枚举管理</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
-      </template>
-    </el-table-column>
+    <template #status="{ row }">
+      <el-tag :type="row.status ? 'primary' : 'info'">
+        {{ row.status ? '启用' : '禁用' }}
+      </el-tag>
+    </template>
+    <template #action="{ row }">
+      <el-button type="primary" link @click="showEnumDialog(row)">枚举管理</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
+    </template>
   </TablePage>
 
   <!-- 字典分类抽屉 -->
@@ -171,6 +158,30 @@ import { computed, onMounted, reactive, ref } from 'vue'
 // 字典分类列表
 const loading = ref(false)
 const tableData = ref([])
+
+const columns = [
+  { type: 'index', label: '序号', width: 60, align: 'center' },
+  {
+    prop: 'name',
+    label: '字典名称',
+    showOverflowTooltip: true,
+    formatter: (row) => row.name || '-',
+  },
+  {
+    prop: 'code',
+    label: '字典编码',
+    showOverflowTooltip: true,
+    formatter: (row) => row.code || '-',
+  },
+  {
+    prop: 'description',
+    label: '描述',
+    showOverflowTooltip: true,
+    formatter: (row) => row.description || '-',
+  },
+  { label: '状态', width: 80, align: 'center', slotName: 'status' },
+  { label: '操作', width: 220, fixed: 'right', align: 'center', slotName: 'action' },
+]
 
 const searchForm = reactive({
   name: '',

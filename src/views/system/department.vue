@@ -3,6 +3,7 @@
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
+    :columns="columns"
     row-key="id"
     :tree-props="{ children: 'children' }"
     @search="handleSearch"
@@ -18,34 +19,24 @@
       <el-button type="primary" @click="showDialog('add', null)">添加部门</el-button>
     </template>
 
-    <el-table-column prop="deptName" label="部门名称" show-overflow-tooltip />
-    <el-table-column label="负责人" min-width="120" show-overflow-tooltip>
-      <template #default="{ row }">
-        {{ row.leaderNames?.length ? row.leaderNames.join('、') : '-' }}
-      </template>
-    </el-table-column>
-    <el-table-column label="部门成员" min-width="120" show-overflow-tooltip>
-      <template #default="{ row }">
-        {{ row.memberNames?.length ? row.memberNames.join('、') : '-' }}
-      </template>
-    </el-table-column>
-    <el-table-column label="状态" width="80" align="center">
-      <template #default="{ row }">
-        <el-tag :type="row.status ? 'primary' : 'info'">
-          {{ row.status ? '启用' : '禁用' }}
-        </el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
-    <el-table-column label="操作" width="200" fixed="right" align="center">
-      <template #default="{ row }">
-        <el-button type="primary" link @click="showDialog('add', row)">新增子级</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
-        <el-divider direction="vertical" />
-        <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
-      </template>
-    </el-table-column>
+    <template #leaders="{ row }">
+      {{ row.leaderNames?.length ? row.leaderNames.join('、') : '-' }}
+    </template>
+    <template #members="{ row }">
+      {{ row.memberNames?.length ? row.memberNames.join('、') : '-' }}
+    </template>
+    <template #status="{ row }">
+      <el-tag :type="row.status ? 'primary' : 'info'">
+        {{ row.status ? '启用' : '禁用' }}
+      </el-tag>
+    </template>
+    <template #action="{ row }">
+      <el-button type="primary" link @click="showDialog('add', row)">新增子级</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
+      <el-divider direction="vertical" />
+      <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+    </template>
   </TablePage>
 
   <!-- 新增/编辑抽屉 -->
@@ -138,6 +129,15 @@ import { computed, onMounted, reactive, ref } from 'vue'
 
 const loading = ref(false)
 const tableData = ref([])
+
+const columns = [
+  { prop: 'deptName', label: '部门名称', showOverflowTooltip: true },
+  { label: '负责人', minWidth: 120, showOverflowTooltip: true, slotName: 'leaders' },
+  { label: '部门成员', minWidth: 120, showOverflowTooltip: true, slotName: 'members' },
+  { label: '状态', width: 80, align: 'center', slotName: 'status' },
+  { prop: 'sortOrder', label: '排序', width: 80, align: 'center' },
+  { label: '操作', width: 200, fixed: 'right', align: 'center', slotName: 'action' },
+]
 
 const searchForm = reactive({
   deptName: '',
