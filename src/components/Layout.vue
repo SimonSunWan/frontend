@@ -179,9 +179,14 @@ const handleSearchSelect = (item) => {
   .layout-main {
     background: #fafbfc;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     .layout-content {
       padding: 8px 16px 16px;
+      flex: 1;
+      overflow-y: auto;
     }
   }
 }

@@ -2,12 +2,16 @@ import { useAuthStore } from '@/stores/auth'
 import { useMenuStore } from '@/stores/menu'
 import { getNavigationMenusApi } from '@/api/menus'
 import { registerDynamicRoutes } from './registerRoutes'
+import NProgress from 'nprogress'
+
+NProgress.configure({ showSpinner: false, trickleSpeed: 200 })
 
 /**
  * 设置路由全局前置守卫
  */
 export function setupGuard(router) {
   router.beforeEach(async (to, from, next) => {
+    NProgress.start()
     const authStore = useAuthStore()
     const menuStore = useMenuStore()
 
@@ -46,5 +50,9 @@ export function setupGuard(router) {
     }
 
     next()
+  })
+
+  router.afterEach(() => {
+    NProgress.done()
   })
 }
