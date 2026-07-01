@@ -12,18 +12,21 @@
         >
       </div>
       <el-menu :default-active="route.path" :collapse="isCollapse" router>
-        <el-sub-menu index="/system">
-          <template #title>
-            <el-icon><Setting /></el-icon>
-            <span>系统管理</span>
-          </template>
-          <el-menu-item index="/system/mine">个人中心</el-menu-item>
-          <el-menu-item index="/system/user">用户管理</el-menu-item>
-          <el-menu-item index="/system/role">角色管理</el-menu-item>
-          <el-menu-item index="/system/dept">部门管理</el-menu-item>
-          <el-menu-item index="/system/menu">菜单管理</el-menu-item>
-          <el-menu-item index="/system/dict">字典管理</el-menu-item>
-        </el-sub-menu>
+        <template v-for="menu in menuStore.menuList" :key="menu.path">
+          <el-sub-menu v-if="menu.children?.length" :index="menu.path">
+            <template #title>
+              <span>{{ menu.meta?.title || menu.name }}</span>
+            </template>
+            <template v-for="child in menu.children" :key="child.path">
+              <el-menu-item v-if="!child.meta?.isLink" :index="child.path">
+                {{ child.meta?.title || child.name }}
+              </el-menu-item>
+            </template>
+          </el-sub-menu>
+          <el-menu-item v-else-if="!menu.meta?.isLink" :index="menu.path">
+            {{ menu.meta?.title || menu.name }}
+          </el-menu-item>
+        </template>
       </el-menu>
     </el-aside>
     <el-container>
@@ -32,6 +35,24 @@
           <Fold v-if="!isCollapse" />
           <Expand v-else />
         </el-icon>
+        <el-autocomplete
+          v-model="searchKeyword"
+          class="menu-search"
+          placeholder="搜索菜单"
+          :fetch-suggestions="searchMenu"
+          clearable
+          @select="handleSearchSelect"
+        >
+          <template #prefix>
+            <el-icon><Search /></el-icon>
+          </template>
+          <template #default="{ item }">
+            <div class="search-item">
+              <span class="search-item-title">{{ item.title }}</span>
+              <span class="search-item-path">{{ item.path }}</span>
+            </div>
+          </template>
+        </el-autocomplete>
         <div class="header-right">
           <UserDropdown />
         </div>
@@ -49,12 +70,51 @@
 <script setup>
 import TabView from '@/components/TabView.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
-import { Expand, Fold, Setting } from '@element-plus/icons-vue'
+import { useMenuStore } from '@/stores/menu'
+import { Expand, Fold, Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
+const menuStore = useMenuStore()
 const isCollapse = ref(false)
+const searchKeyword = ref('')
+
+// 递归收集所有可跳转的叶子菜单
+const flattenMenus = (list, result = []) => {
+  list.forEach((item) => {
+    if (item.meta?.isLink) return
+    if (item.children?.length) {
+      flattenMenus(item.children, result)
+    } else if (item.path) {
+      result.push({
+        title: item.meta?.title || item.name,
+        path: item.path,
+      })
+    }
+  })
+  return result
+}
+
+const searchMenu = (query, cb) => {
+  if (!query) {
+    cb([])
+    return
+  }
+  const all = flattenMenus(menuStore.menuList)
+  const results = all.filter((item) =>
+    item.title.toLowerCase().includes(query.toLowerCase()),
+  )
+  cb(results)
+}
+
+const handleSearchSelect = (item) => {
+  if (item.path) {
+    router.push(item.path)
+    searchKeyword.value = ''
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -97,6 +157,7 @@ const isCollapse = ref(false)
   .layout-header {
     display: flex;
     align-items: center;
+    gap: 16px;
     border-bottom: 1px solid var(--el-border-color);
     background: #fff;
 
@@ -108,6 +169,10 @@ const isCollapse = ref(false)
       &:hover {
         color: #409eff;
       }
+    }
+
+    .menu-search {
+      width: 260px;
     }
 
     .header-right {
@@ -122,6 +187,21 @@ const isCollapse = ref(false)
     .layout-content {
       padding: 8px 16px 16px;
     }
+  }
+}
+
+.search-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .search-item-title {
+    color: var(--el-text-color-primary);
+  }
+
+  .search-item-path {
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
   }
 }
 </style>

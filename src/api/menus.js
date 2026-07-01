@@ -8,6 +8,10 @@ export function getMenuTreeApi() {
   return request.get('/api/menus/tree')
 }
 
+export function getNavigationMenusApi() {
+  return request.get('/api/menus/navigation')
+}
+
 export function createMenuApi(data) {
   return request.post('/api/menus/', data)
 }

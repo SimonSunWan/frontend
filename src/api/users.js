@@ -31,3 +31,11 @@ export function updateUserApi(id, data) {
 export function deleteUserApi(id) {
   return request.delete(`/api/users/${id}`)
 }
+
+export function registerApi(data) {
+  return request.post('/api/users/register', data)
+}
+
+export function forgetPasswordApi(data) {
+  return request.post('/api/users/forget-password', data)
+}

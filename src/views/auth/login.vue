@@ -21,6 +21,10 @@
             show-password
           />
         </el-form-item>
+        <div class="form-extra">
+          <el-checkbox v-model="form.rememberPassword">记住密码</el-checkbox>
+          <router-link to="/auth/forget-password" class="forget-link">忘记密码？</router-link>
+        </div>
       </el-form>
       <template #footer>
         <el-button
@@ -32,6 +36,12 @@
         >
           登 录
         </el-button>
+        <div class="footer">
+          <p>
+            还没有账号？
+            <router-link to="/auth/register">立即注册</router-link>
+          </p>
+        </div>
       </template>
     </el-card>
   </div>
@@ -47,7 +57,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const authStore = useAuthStore()
 const formRef = ref()
-const form = ref({ userName: '', password: '' })
+const form = ref({ userName: '', password: '', rememberPassword: true })
 const loading = ref(false)
 
 const rules = {
@@ -63,7 +73,7 @@ const handleLogin = async () => {
     .login(form.value)
     .then(() => {
       ElMessage.success('登录成功')
-      router.push('/system/mine')
+      router.push('/')
     })
     .finally(() => {
       loading.value = false
@@ -80,6 +90,39 @@ const handleLogin = async () => {
 
   .login-card {
     width: 400px;
+
+    .form-extra {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .forget-link {
+        color: var(--el-color-primary);
+        text-decoration: none;
+        font-size: 14px;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--el-text-color-secondary);
+
+      a {
+        color: var(--el-color-primary);
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 </style>

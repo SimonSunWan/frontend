@@ -1,4 +1,5 @@
 import { getUserInfoApi, loginApi } from '@/api/users'
+import { useMenuStore } from '@/stores/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -35,6 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
     userInfo.value = null
     localStorage.removeItem('token')
     localStorage.removeItem('userInfo')
+    useMenuStore().resetMenu()
   }
 
   return { token, userInfo, setToken, setUserInfo, getUserInfo, login, logout }

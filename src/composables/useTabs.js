@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useMenuStore } from '@/stores/menu'
 
 const tabs = ref([])
 let initialized = false
@@ -7,19 +8,13 @@ let initialized = false
 export function useTabs() {
   const router = useRouter()
   const route = useRoute()
-
-  const routeMap = {
-    '/system/mine': '个人中心',
-    '/system/user': '用户管理',
-    '/system/role': '角色管理',
-    '/system/dept': '部门管理',
-    '/system/menu': '菜单管理',
-    '/system/dict': '字典管理',
-  }
+  const menuStore = useMenuStore()
 
   const addTab = (path) => {
+    const matched = router.resolve(path)
+    const title = matched?.meta?.title || path
     if (!tabs.value.find((t) => t.path === path)) {
-      tabs.value.push({ path, title: routeMap[path] || path })
+      tabs.value.push({ path, title })
     }
   }
 
@@ -29,7 +24,7 @@ export function useTabs() {
     tabs.value.splice(idx, 1)
     if (route.path === path) {
       const next = tabs.value[tabs.value.length - 1]
-      router.push(next ? next.path : '/system/mine')
+      router.push(next ? next.path : menuStore.homePath || '/')
     }
   }
 
