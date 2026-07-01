@@ -38,6 +38,7 @@
         <el-autocomplete
           v-model="searchKeyword"
           class="menu-search"
+          style="width: 240px; flex-shrink: 0; margin-left: auto"
           placeholder="搜索菜单"
           :fetch-suggestions="searchMenu"
           clearable
@@ -171,12 +172,7 @@ const handleSearchSelect = (item) => {
       }
     }
 
-    .menu-search {
-      width: 260px;
-    }
-
     .header-right {
-      margin-left: auto;
     }
   }
 

@@ -1,125 +1,120 @@
 <template>
-  <div class="dict-container">
-    <div class="dict-content">
-      <!-- 左侧字典分类 -->
-      <el-card class="left-panel" shadow="never">
-        <template #header>
-          <div class="card-header">
-            <span>字典分类</span>
-            <el-button type="primary" @click="showTypeDialog('add')">新增分类</el-button>
-          </div>
-        </template>
+  <TablePage
+    :loading="loading"
+    :data="tableData"
+    :search-form="searchForm"
+    :pagination="pagination"
+    @search="handleSearch"
+    @reset="handleReset"
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+  >
+    <template #search="{ form }">
+      <el-form-item label="字典名称">
+        <el-input v-model="form.name" placeholder="请输入字典名称" clearable />
+      </el-form-item>
+    </template>
 
-        <el-input
-          v-model="typeSearch"
-          placeholder="请输入字典名称"
-          clearable
-          style="margin-bottom: 12px"
-          @input="handleTypeSearch"
-        />
+    <template #search-extra>
+      <el-button type="primary" @click="showTypeDialog('add')">新增字典</el-button>
+    </template>
 
-        <el-table
-          v-loading="typeLoading"
-          :data="typeData"
-          border
-          highlight-current-row
-          @row-click="selectType"
-        >
-          <el-table-column prop="name" label="字典名称" show-overflow-tooltip />
-          <el-table-column prop="code" label="字典编码" width="120" show-overflow-tooltip />
-          <el-table-column label="操作" width="100" align="center">
-            <template #default="{ row }">
-              <el-button type="primary" link @click.stop="showTypeDialog('edit', row)">编辑</el-button>
-              <el-button type="danger" link @click.stop="handleDeleteType(row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <div class="pagination">
-          <el-pagination
-            v-model:current-page="typePagination.current"
-            v-model:page-size="typePagination.size"
-            :total="typePagination.total"
-            layout="prev, pager, next"
-            small
-            @current-change="loadTypeData"
-          />
-        </div>
-      </el-card>
-
-      <!-- 右侧字典枚举 -->
-      <el-card class="right-panel" shadow="never">
-        <template #header>
-          <div class="card-header">
-            <span>字典枚举</span>
-            <div v-if="selectedType" class="header-actions">
-              <el-button @click="toggleExpand">{{ isExpanded ? '收起' : '展开' }}</el-button>
-              <el-button type="primary" @click="showEnumDialog('add', null)">新增枚举</el-button>
-            </div>
-          </div>
-        </template>
-
-        <template v-if="selectedType">
-          <el-table
-            v-if="refreshTable"
-            v-loading="enumLoading"
-            :data="enumData"
-            row-key="id"
-            border
-            :tree-props="{ children: 'children' }"
-            :default-expand-all="isExpanded"
-          >
-            <el-table-column prop="dictValue" label="枚举名称" min-width="160" show-overflow-tooltip />
-            <el-table-column prop="keyValue" label="枚举编码" min-width="140" show-overflow-tooltip />
-            <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
-            <el-table-column label="操作" width="200" fixed="right" align="center">
-              <template #default="{ row }">
-                <el-button type="primary" link @click="showEnumDialog('add', row)">新增子级</el-button>
-                <el-button type="primary" link @click="showEnumDialog('edit', row)">编辑</el-button>
-                <el-button type="danger" link @click="handleDeleteEnum(row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </template>
-        <el-empty v-else description="请选择左侧字典分类" />
-      </el-card>
-    </div>
-
-    <!-- 字典分类弹窗 -->
-    <el-dialog
-      v-model="typeDialogVisible"
-      :title="typeDialogType === 'add' ? '新增字典分类' : '编辑字典分类'"
-      width="500px"
-      align-center
-    >
-      <el-form ref="typeFormRef" :model="typeForm" :rules="typeRules" label-width="100px">
-        <el-form-item label="字典名称" prop="name">
-          <el-input v-model="typeForm.name" placeholder="请输入字典名称" />
-        </el-form-item>
-        <el-form-item label="字典编码" prop="code">
-          <el-input v-model="typeForm.code" placeholder="请输入字典编码" />
-        </el-form-item>
-        <el-form-item label="字典描述" prop="description">
-          <el-input
-            v-model="typeForm.description"
-            type="textarea"
-            placeholder="请输入字典描述"
-            :rows="3"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="typeDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="typeSubmitLoading" @click="handleTypeSubmit">确定</el-button>
+    <el-table-column type="index" label="序号" width="60" align="center" />
+    <el-table-column prop="name" label="字典名称" show-overflow-tooltip>
+      <template #default="{ row }">{{ row.name || '-' }}</template>
+    </el-table-column>
+    <el-table-column prop="code" label="字典编码" show-overflow-tooltip>
+      <template #default="{ row }">{{ row.code || '-' }}</template>
+    </el-table-column>
+    <el-table-column prop="description" label="描述" show-overflow-tooltip>
+      <template #default="{ row }">{{ row.description || '-' }}</template>
+    </el-table-column>
+    <el-table-column label="状态" width="80" align="center">
+      <template #default="{ row }">
+        <el-tag :type="row.status ? 'primary' : 'info'">
+          {{ row.status ? '启用' : '禁用' }}
+        </el-tag>
       </template>
-    </el-dialog>
+    </el-table-column>
+    <el-table-column label="操作" width="220" fixed="right" align="center">
+      <template #default="{ row }">
+        <el-button type="primary" link @click="showEnumDialog(row)">枚举管理</el-button>
+        <el-divider direction="vertical" />
+        <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
+        <el-divider direction="vertical" />
+        <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </TablePage>
 
-    <!-- 字典枚举弹窗 -->
+  <!-- 字典分类弹窗 -->
+  <el-dialog
+    v-model="typeDialogVisible"
+    :title="typeDialogType === 'add' ? '新增字典分类' : '编辑字典分类'"
+    width="500px"
+    align-center
+  >
+    <el-form ref="typeFormRef" :model="typeForm" :rules="typeRules" label-width="100px">
+      <el-form-item label="字典名称" prop="name">
+        <el-input v-model="typeForm.name" placeholder="请输入字典名称" />
+      </el-form-item>
+      <el-form-item label="字典编码" prop="code">
+        <el-input v-model="typeForm.code" placeholder="请输入字典编码" />
+      </el-form-item>
+      <el-form-item label="字典描述" prop="description">
+        <el-input
+          v-model="typeForm.description"
+          type="textarea"
+          placeholder="请输入字典描述"
+          :rows="3"
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button @click="typeDialogVisible = false">取消</el-button>
+      <el-button type="primary" :loading="typeSubmitLoading" @click="handleTypeSubmit">确定</el-button>
+    </template>
+  </el-dialog>
+
+  <!-- 字典枚举弹窗 -->
+  <el-dialog
+    v-model="enumDialogVisible"
+    :title="`${currentType?.name || ''} - 枚举管理`"
+    width="700px"
+    align-center
+  >
+    <div class="enum-header">
+      <el-button type="primary" @click="showEnumFormDialog('add', null)">新增枚举</el-button>
+    </div>
+    <el-table
+      v-loading="enumLoading"
+      :data="enumData"
+      row-key="id"
+      border
+      :tree-props="{ children: 'children' }"
+      default-expand-all
+    >
+      <el-table-column prop="dictValue" label="枚举名称" min-width="160" show-overflow-tooltip />
+      <el-table-column prop="keyValue" label="枚举编码" min-width="140" show-overflow-tooltip />
+      <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
+      <el-table-column label="操作" width="200" fixed="right" align="center">
+        <template #default="{ row }">
+          <el-button type="primary" link @click="showEnumFormDialog('add', row)">新增子级</el-button>
+          <el-divider direction="vertical" />
+          <el-button type="primary" link @click="showEnumFormDialog('edit', row)">编辑</el-button>
+          <el-divider direction="vertical" />
+          <el-button type="danger" link @click="handleDeleteEnum(row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <!-- 枚举新增/编辑表单弹窗 -->
     <el-dialog
-      v-model="enumDialogVisible"
-      :title="enumDialogType === 'add' ? '新增字典枚举' : '编辑字典枚举'"
+      v-model="enumFormDialogVisible"
+      :title="enumFormDialogType === 'add' ? '新增字典枚举' : '编辑字典枚举'"
       width="500px"
       align-center
+      append-to-body
     >
       <el-form ref="enumFormRef" :model="enumForm" :rules="enumRules" label-width="100px">
         <el-form-item v-if="enumParentName" label="父级枚举">
@@ -141,14 +136,15 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="enumDialogVisible = false">取消</el-button>
+        <el-button @click="enumFormDialogVisible = false">取消</el-button>
         <el-button type="primary" :loading="enumSubmitLoading" @click="handleEnumSubmit">确定</el-button>
       </template>
     </el-dialog>
-  </div>
+  </el-dialog>
 </template>
 
 <script setup>
+import TablePage from '@/components/TablePage.vue'
 import {
   createDictionaryEnumApi,
   createDictionaryTypeApi,
@@ -160,74 +156,61 @@ import {
   updateDictionaryTypeApi,
 } from '@/api/dictionaries'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 
-// 左侧字典分类
-const typeLoading = ref(false)
-const typeData = ref([])
-const typeSearch = ref('')
-const selectedType = ref(null)
+// 字典分类列表
+const loading = ref(false)
+const tableData = ref([])
 
-const typePagination = reactive({
+const searchForm = reactive({
+  name: '',
+})
+
+const pagination = reactive({
   current: 1,
   size: 10,
   total: 0,
 })
 
-const loadTypeData = async () => {
-  typeLoading.value = true
+const loadData = async () => {
+  loading.value = true
   try {
     const params = {
-      current: typePagination.current,
-      size: typePagination.size,
+      current: pagination.current,
+      size: pagination.size,
     }
-    if (typeSearch.value) params.name = typeSearch.value
+    if (searchForm.name) params.name = searchForm.name
     const res = await getDictionaryTypesApi(params)
     const data = res?.data || {}
-    typeData.value = data.records || []
-    typePagination.total = data.total || 0
+    tableData.value = data.records || []
+    pagination.total = data.total || 0
   } catch (error) {
     console.error(error)
   } finally {
-    typeLoading.value = false
+    loading.value = false
   }
 }
 
-const handleTypeSearch = () => {
-  typePagination.current = 1
-  loadTypeData()
+const handleSearch = () => {
+  pagination.current = 1
+  loadData()
 }
 
-const selectType = (type) => {
-  selectedType.value = type
-  loadEnumData()
+const handleReset = () => {
+  searchForm.name = ''
+  pagination.current = 1
+  loadData()
 }
 
-// 右侧字典枚举
-const enumLoading = ref(false)
-const enumData = ref([])
-const isExpanded = ref(false)
-const refreshTable = ref(true)
-
-const loadEnumData = async () => {
-  if (!selectedType.value) return
-  enumLoading.value = true
-  try {
-    const res = await getDictionaryEnumsApi(selectedType.value.id)
-    enumData.value = res?.data?.records || []
-  } catch (error) {
-    console.error(error)
-  } finally {
-    enumLoading.value = false
-  }
+const handleSizeChange = (size) => {
+  pagination.size = size
+  pagination.current = 1
+  loadData()
 }
 
-const toggleExpand = () => {
-  isExpanded.value = !isExpanded.value
-  refreshTable.value = false
-  nextTick(() => {
-    refreshTable.value = true
-  })
+const handleCurrentChange = (current) => {
+  pagination.current = current
+  loadData()
 }
 
 // 字典分类弹窗
@@ -249,11 +232,7 @@ const typeRules = {
 }
 
 const resetTypeForm = () => {
-  Object.assign(typeForm, {
-    name: '',
-    code: '',
-    description: '',
-  })
+  Object.assign(typeForm, { name: '', code: '', description: '' })
   currentTypeId.value = null
 }
 
@@ -284,7 +263,7 @@ const handleTypeSubmit = async () => {
       ElMessage.success('编辑成功')
     }
     typeDialogVisible.value = false
-    loadTypeData()
+    loadData()
   } catch (error) {
     console.error(error)
   } finally {
@@ -301,11 +280,7 @@ const handleDeleteType = async (row) => {
     })
     await deleteDictionaryTypeApi(row.id)
     ElMessage.success('删除成功')
-    if (selectedType.value?.id === row.id) {
-      selectedType.value = null
-      enumData.value = []
-    }
-    loadTypeData()
+    loadData()
   } catch (error) {
     if (error !== 'cancel') {
       console.error(error)
@@ -313,9 +288,34 @@ const handleDeleteType = async (row) => {
   }
 }
 
-// 字典枚举弹窗
+// 字典枚举弹窗（列表）
 const enumDialogVisible = ref(false)
-const enumDialogType = ref('add')
+const enumLoading = ref(false)
+const enumData = ref([])
+const currentType = ref(null)
+
+const showEnumDialog = async (row) => {
+  currentType.value = row
+  enumDialogVisible.value = true
+  await loadEnumData()
+}
+
+const loadEnumData = async () => {
+  if (!currentType.value) return
+  enumLoading.value = true
+  try {
+    const res = await getDictionaryEnumsApi(currentType.value.id)
+    enumData.value = res?.data?.records || []
+  } catch (error) {
+    console.error(error)
+  } finally {
+    enumLoading.value = false
+  }
+}
+
+// 枚举新增/编辑表单弹窗
+const enumFormDialogVisible = ref(false)
+const enumFormDialogType = ref('add')
 const enumSubmitLoading = ref(false)
 const enumFormRef = ref()
 const currentEnumId = ref(null)
@@ -348,24 +348,15 @@ const enumParentName = computed(() => {
 })
 
 const resetEnumForm = () => {
-  Object.assign(enumForm, {
-    dictValue: '',
-    keyValue: '',
-    sortOrder: 0,
-  })
+  Object.assign(enumForm, { dictValue: '', keyValue: '', sortOrder: 0 })
   currentEnumId.value = null
   currentEnumParentId.value = null
 }
 
-const showEnumDialog = (type, row) => {
-  if (!selectedType.value) {
-    ElMessage.warning('请先选择字典分类')
-    return
-  }
-  enumDialogType.value = type
+const showEnumFormDialog = (type, row) => {
+  enumFormDialogType.value = type
   resetEnumForm()
   if (type === 'add' && row) {
-    // 新增子级
     currentEnumParentId.value = row.id
   } else if (type === 'edit' && row) {
     currentEnumId.value = row.id
@@ -375,7 +366,7 @@ const showEnumDialog = (type, row) => {
       sortOrder: row.sortOrder ?? 0,
     })
   }
-  enumDialogVisible.value = true
+  enumFormDialogVisible.value = true
 }
 
 const handleEnumSubmit = async () => {
@@ -383,11 +374,8 @@ const handleEnumSubmit = async () => {
   if (!valid) return
   enumSubmitLoading.value = true
   try {
-    if (enumDialogType.value === 'add') {
-      const data = {
-        typeId: selectedType.value.id,
-        ...enumForm,
-      }
+    if (enumFormDialogType.value === 'add') {
+      const data = { typeId: currentType.value.id, ...enumForm }
       if (currentEnumParentId.value) data.parentId = currentEnumParentId.value
       await createDictionaryEnumApi(data)
       ElMessage.success('新增成功')
@@ -395,7 +383,7 @@ const handleEnumSubmit = async () => {
       await updateDictionaryEnumApi(currentEnumId.value, enumForm)
       ElMessage.success('编辑成功')
     }
-    enumDialogVisible.value = false
+    enumFormDialogVisible.value = false
     loadEnumData()
   } catch (error) {
     console.error(error)
@@ -422,55 +410,12 @@ const handleDeleteEnum = async (row) => {
 }
 
 onMounted(() => {
-  loadTypeData()
+  loadData()
 })
 </script>
 
 <style lang="scss" scoped>
-.dict-container {
-  .dict-content {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .left-panel {
-    width: 420px;
-    flex-shrink: 0;
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin-top: 12px;
-    }
-  }
-
-  .right-panel {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
-  }
-}
-
-@media (max-width: 992px) {
-  .dict-container {
-    .dict-content {
-      flex-direction: column;
-
-      .left-panel {
-        width: 100%;
-      }
-    }
-  }
+.enum-header {
+  margin-bottom: 16px;
 }
 </style>
