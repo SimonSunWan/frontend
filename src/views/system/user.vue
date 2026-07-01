@@ -113,35 +113,51 @@
     @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="80px">
-      <el-form-item label="账号" prop="userName">
-        <el-input v-model="dialogForm.userName" placeholder="请输入账号" />
-      </el-form-item>
-      <el-form-item label="姓名" prop="nickName">
-        <el-input v-model="dialogForm.nickName" placeholder="请输入姓名" />
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input v-model="dialogForm.phone" placeholder="请输入手机号" />
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="dialogForm.email" placeholder="请输入邮箱" />
-      </el-form-item>
-      <el-form-item label="角色" prop="roles">
-        <el-select v-model="dialogForm.roles" multiple placeholder="请选择角色" style="width: 100%">
-          <el-option
-            v-for="role in roleList"
-            :key="role.value"
-            :label="role.label"
-            :value="role.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-switch v-model="dialogForm.status" />
-      </el-form-item>
-      <el-form-item v-if="dialogType === 'add'" label="密码" prop="password">
-        <el-input v-model="dialogForm.password" readonly placeholder="自动生成" />
-        <div class="password-tip">密码规则：账号 + 手机号后4位</div>
-      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="账号" prop="userName">
+            <el-input v-model="dialogForm.userName" placeholder="请输入账号" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="姓名" prop="nickName">
+            <el-input v-model="dialogForm.nickName" placeholder="请输入姓名" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="手机号" prop="phone">
+            <el-input v-model="dialogForm.phone" placeholder="请输入手机号" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="dialogForm.email" placeholder="请输入邮箱" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="角色" prop="roles">
+            <el-select v-model="dialogForm.roles" multiple placeholder="请选择角色" style="width: 100%">
+              <el-option
+                v-for="role in roleList"
+                :key="role.value"
+                :label="role.label"
+                :value="role.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="状态" prop="status">
+            <el-switch v-model="dialogForm.status" />
+          </el-form-item>
+        </el-col>
+        <el-col v-if="dialogType === 'add'" :span="24">
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="dialogForm.password" readonly placeholder="自动生成" />
+            <div class="password-tip">密码规则：账号 + 手机号后4位</div>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </FormDrawer>
 </template>

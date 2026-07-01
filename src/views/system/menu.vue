@@ -74,64 +74,90 @@
     @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="85px">
-      <el-form-item label="菜单类型">
-        <el-radio-group v-model="dialogForm.menuType" :disabled="dialogType === 'edit'">
-          <el-radio-button value="menu">菜单</el-radio-button>
-          <el-radio-button value="button">权限</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="24">
+          <el-form-item label="菜单类型">
+            <el-radio-group v-model="dialogForm.menuType" :disabled="dialogType === 'edit'">
+              <el-radio-button value="menu">菜单</el-radio-button>
+              <el-radio-button value="button">权限</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
 
-      <template v-if="dialogForm.menuType === 'menu'">
-        <el-form-item label="菜单名称" prop="name">
-          <el-input v-model="dialogForm.name" placeholder="请输入菜单名称" />
-        </el-form-item>
-        <el-form-item v-if="!dialogForm.isLink" label="路由地址" prop="path">
-          <el-input v-model="dialogForm.path" placeholder="请输入路由地址" />
-        </el-form-item>
-        <el-form-item v-else label="外链地址" prop="link">
-          <el-input v-model="dialogForm.link" placeholder="请输入外链地址" />
-        </el-form-item>
-        <el-form-item label="图标" prop="icon">
-          <el-input v-model="dialogForm.icon" placeholder="请输入图标" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input-number
-            v-model="dialogForm.sort"
-            :min="1"
-            controls-position="right"
-            style="width: 100%"
-          />
-        </el-form-item>
-        <el-form-item label="是否启用">
-          <el-switch v-model="dialogForm.isEnable" />
-        </el-form-item>
-        <el-form-item label="是否外链">
-          <el-switch v-model="dialogForm.isLink" />
-        </el-form-item>
-        <el-form-item label="页面缓存">
-          <el-switch v-model="dialogForm.isKeepAlive" />
-        </el-form-item>
-      </template>
+        <template v-if="dialogForm.menuType === 'menu'">
+          <el-col :span="12">
+            <el-form-item label="菜单名称" prop="name">
+              <el-input v-model="dialogForm.name" placeholder="请输入菜单名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item v-if="!dialogForm.isLink" label="路由地址" prop="path">
+              <el-input v-model="dialogForm.path" placeholder="请输入路由地址" />
+            </el-form-item>
+            <el-form-item v-else label="外链地址" prop="link">
+              <el-input v-model="dialogForm.link" placeholder="请输入外链地址" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="图标" prop="icon">
+              <el-input v-model="dialogForm.icon" placeholder="请输入图标" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="排序" prop="sort">
+              <el-input-number
+                v-model="dialogForm.sort"
+                :min="1"
+                controls-position="right"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="是否启用">
+              <el-switch v-model="dialogForm.isEnable" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="是否外链">
+              <el-switch v-model="dialogForm.isLink" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="页面缓存">
+              <el-switch v-model="dialogForm.isKeepAlive" />
+            </el-form-item>
+          </el-col>
+        </template>
 
-      <template v-if="dialogForm.menuType === 'button'">
-        <el-form-item label="权限名称" prop="name">
-          <el-input v-model="dialogForm.name" placeholder="请输入权限名称" />
-        </el-form-item>
-        <el-form-item label="权限标识" prop="authMark">
-          <el-input v-model="dialogForm.authMark" placeholder="请输入权限标识" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input-number
-            v-model="dialogForm.sort"
-            :min="1"
-            controls-position="right"
-            style="width: 100%"
-          />
-        </el-form-item>
-        <el-form-item label="是否启用">
-          <el-switch v-model="dialogForm.isEnable" />
-        </el-form-item>
-      </template>
+        <template v-if="dialogForm.menuType === 'button'">
+          <el-col :span="12">
+            <el-form-item label="权限名称" prop="name">
+              <el-input v-model="dialogForm.name" placeholder="请输入权限名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="权限标识" prop="authMark">
+              <el-input v-model="dialogForm.authMark" placeholder="请输入权限标识" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="排序" prop="sort">
+              <el-input-number
+                v-model="dialogForm.sort"
+                :min="1"
+                controls-position="right"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="是否启用">
+              <el-switch v-model="dialogForm.isEnable" />
+            </el-form-item>
+          </el-col>
+        </template>
+      </el-row>
     </el-form>
   </FormDrawer>
 </template>

@@ -56,23 +56,33 @@
     @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="80px">
-      <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="dialogForm.roleName" placeholder="请输入角色名称" />
-      </el-form-item>
-      <el-form-item label="角色编码" prop="roleCode">
-        <el-input v-model="dialogForm.roleCode" placeholder="请输入角色编码" />
-      </el-form-item>
-      <el-form-item label="描述" prop="description">
-        <el-input
-          v-model="dialogForm.description"
-          type="textarea"
-          placeholder="请输入角色描述"
-          :rows="3"
-        />
-      </el-form-item>
-      <el-form-item label="状态">
-        <el-switch v-model="dialogForm.status" />
-      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="角色名称" prop="roleName">
+            <el-input v-model="dialogForm.roleName" placeholder="请输入角色名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="角色编码" prop="roleCode">
+            <el-input v-model="dialogForm.roleCode" placeholder="请输入角色编码" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="描述" prop="description">
+            <el-input
+              v-model="dialogForm.description"
+              type="textarea"
+              placeholder="请输入角色描述"
+              :rows="3"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="状态">
+            <el-switch v-model="dialogForm.status" />
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </FormDrawer>
 

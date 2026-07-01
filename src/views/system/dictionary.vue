@@ -55,20 +55,28 @@
     @submit="handleTypeSubmit"
   >
     <el-form ref="typeFormRef" :model="typeForm" :rules="typeRules" label-width="100px">
-      <el-form-item label="字典名称" prop="name">
-        <el-input v-model="typeForm.name" placeholder="请输入字典名称" />
-      </el-form-item>
-      <el-form-item label="字典编码" prop="code">
-        <el-input v-model="typeForm.code" placeholder="请输入字典编码" />
-      </el-form-item>
-      <el-form-item label="字典描述" prop="description">
-        <el-input
-          v-model="typeForm.description"
-          type="textarea"
-          placeholder="请输入字典描述"
-          :rows="3"
-        />
-      </el-form-item>
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item label="字典名称" prop="name">
+            <el-input v-model="typeForm.name" placeholder="请输入字典名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="字典编码" prop="code">
+            <el-input v-model="typeForm.code" placeholder="请输入字典编码" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="字典描述" prop="description">
+            <el-input
+              v-model="typeForm.description"
+              type="textarea"
+              placeholder="请输入字典描述"
+              :rows="3"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </FormDrawer>
 
@@ -112,23 +120,33 @@
       @submit="handleEnumSubmit"
     >
       <el-form ref="enumFormRef" :model="enumForm" :rules="enumRules" label-width="100px">
-        <el-form-item v-if="enumParentName" label="父级枚举">
-          <el-input :model-value="enumParentName" disabled />
-        </el-form-item>
-        <el-form-item label="枚举名称" prop="dictValue">
-          <el-input v-model="enumForm.dictValue" placeholder="请输入枚举名称" />
-        </el-form-item>
-        <el-form-item label="枚举编码" prop="keyValue">
-          <el-input v-model="enumForm.keyValue" placeholder="请输入枚举编码" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sortOrder">
-          <el-input-number
-            v-model="enumForm.sortOrder"
-            :min="0"
-            controls-position="right"
-            style="width: 100%"
-          />
-        </el-form-item>
+        <el-row :gutter="16">
+          <el-col v-if="enumParentName" :span="24">
+            <el-form-item label="父级枚举">
+              <el-input :model-value="enumParentName" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="枚举名称" prop="dictValue">
+              <el-input v-model="enumForm.dictValue" placeholder="请输入枚举名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="枚举编码" prop="keyValue">
+              <el-input v-model="enumForm.keyValue" placeholder="请输入枚举编码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="排序" prop="sortOrder">
+              <el-input-number
+                v-model="enumForm.sortOrder"
+                :min="0"
+                controls-position="right"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </FormDrawer>
   </FormDrawer>

@@ -70,7 +70,7 @@ watch(
 .tab-view {
   display: flex;
   gap: 6px;
-  margin: 8px 16px;
+  margin: 16px;
   flex-wrap: nowrap;
   overflow-x: auto;
 

@@ -59,7 +59,7 @@ const props = defineProps({
   rowKey: { type: String, default: 'id' },
   treeProps: { type: Object, default: () => ({ children: 'children' }) },
   stripe: { type: Boolean, default: true },
-  border: { type: Boolean, default: true },
+  border: { type: Boolean, default: false },
   defaultExpandAll: { type: Boolean, default: false },
 })
 

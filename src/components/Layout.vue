@@ -184,7 +184,7 @@ const handleSearchSelect = (item) => {
     overflow: hidden;
 
     .layout-content {
-      padding: 8px 16px 16px;
+      padding: 0 16px 16px;
       flex: 1;
       overflow-y: auto;
     }

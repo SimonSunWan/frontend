@@ -56,55 +56,69 @@
     @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="100px">
-      <el-form-item v-if="parentDeptName" label="父部门">
-        <el-input :model-value="parentDeptName" disabled />
-      </el-form-item>
-      <el-form-item label="部门名称" prop="deptName">
-        <el-input v-model="dialogForm.deptName" placeholder="请输入部门名称" />
-      </el-form-item>
-      <el-form-item label="负责人" prop="leaderIds">
-        <el-select
-          v-model="dialogForm.leaderIds"
-          multiple
-          filterable
-          placeholder="请选择负责人"
-          style="width: 100%"
-        >
-          <el-option
-            v-for="user in userOptions"
-            :key="user.id"
-            :label="user.nickName || user.userName"
-            :value="user.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="部门成员" prop="memberIds">
-        <el-select
-          v-model="dialogForm.memberIds"
-          multiple
-          filterable
-          placeholder="请选择部门成员"
-          style="width: 100%"
-        >
-          <el-option
-            v-for="user in userOptions"
-            :key="user.id"
-            :label="user.nickName || user.userName"
-            :value="user.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="排序" prop="sortOrder">
-        <el-input-number
-          v-model="dialogForm.sortOrder"
-          :min="1"
-          controls-position="right"
-          style="width: 100%"
-        />
-      </el-form-item>
-      <el-form-item label="启用状态">
-        <el-switch v-model="dialogForm.status" />
-      </el-form-item>
+      <el-row :gutter="16">
+        <el-col v-if="parentDeptName" :span="24">
+          <el-form-item label="父部门">
+            <el-input :model-value="parentDeptName" disabled />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="部门名称" prop="deptName">
+            <el-input v-model="dialogForm.deptName" placeholder="请输入部门名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="排序" prop="sortOrder">
+            <el-input-number
+              v-model="dialogForm.sortOrder"
+              :min="1"
+              controls-position="right"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="负责人" prop="leaderIds">
+            <el-select
+              v-model="dialogForm.leaderIds"
+              multiple
+              filterable
+              placeholder="请选择负责人"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="user in userOptions"
+                :key="user.id"
+                :label="user.nickName || user.userName"
+                :value="user.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="部门成员" prop="memberIds">
+            <el-select
+              v-model="dialogForm.memberIds"
+              multiple
+              filterable
+              placeholder="请选择部门成员"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="user in userOptions"
+                :key="user.id"
+                :label="user.nickName || user.userName"
+                :value="user.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="启用状态">
+            <el-switch v-model="dialogForm.status" />
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </FormDrawer>
 </template>
