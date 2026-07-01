@@ -48,12 +48,12 @@
     </el-table-column>
   </TablePage>
 
-  <!-- 新增/编辑弹窗 -->
-  <el-dialog
+  <!-- 新增/编辑抽屉 -->
+  <FormDrawer
     v-model="dialogVisible"
     :title="dialogTitle"
-    width="500px"
-    align-center
+    :loading="submitLoading"
+    @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="100px">
       <el-form-item v-if="parentDeptName" label="父部门">
@@ -106,15 +106,12 @@
         <el-switch v-model="dialogForm.status" />
       </el-form-item>
     </el-form>
-    <template #footer>
-      <el-button @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="handleSubmit">确定</el-button>
-    </template>
-  </el-dialog>
+  </FormDrawer>
 </template>
 
 <script setup>
 import TablePage from '@/components/TablePage.vue'
+import FormDrawer from '@/components/FormDrawer.vue'
 import {
   createDepartmentApi,
   deleteDepartmentApi,

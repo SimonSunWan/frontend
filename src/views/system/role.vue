@@ -47,12 +47,13 @@
     </el-table-column>
   </TablePage>
 
-  <!-- 新增/编辑弹窗 -->
-  <el-dialog
+  <!-- 新增/编辑抽屉 -->
+  <FormDrawer
     v-model="dialogVisible"
     :title="dialogType === 'add' ? '新增角色' : '编辑角色'"
-    width="500px"
-    align-center
+    :loading="submitLoading"
+    confirm-text="提交"
+    @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="80px">
       <el-form-item label="角色名称" prop="roleName">
@@ -73,18 +74,16 @@
         <el-switch v-model="dialogForm.status" />
       </el-form-item>
     </el-form>
-    <template #footer>
-      <el-button @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="handleSubmit">提交</el-button>
-    </template>
-  </el-dialog>
+  </FormDrawer>
 
-  <!-- 菜单权限弹窗 -->
-  <el-dialog
+  <!-- 菜单权限抽屉 -->
+  <FormDrawer
     v-model="permissionVisible"
     title="菜单权限"
-    width="500px"
-    align-center
+    size="500px"
+    :loading="permLoading"
+    confirm-text="保存"
+    @submit="savePermission"
   >
     <el-scrollbar height="60vh">
       <el-tree
@@ -108,20 +107,20 @@
         </template>
       </el-tree>
     </el-scrollbar>
-    <template #footer>
+    <div class="tree-actions">
       <el-button @click="toggleExpandAll">
         {{ isExpandAll ? '全部收起' : '全部展开' }}
       </el-button>
       <el-button @click="toggleSelectAll">
         {{ isSelectAll ? '取消全选' : '全部选择' }}
       </el-button>
-      <el-button type="primary" :loading="permLoading" @click="savePermission">保存</el-button>
-    </template>
-  </el-dialog>
+    </div>
+  </FormDrawer>
 </template>
 
 <script setup>
 import TablePage from '@/components/TablePage.vue'
+import FormDrawer from '@/components/FormDrawer.vue'
 import {
   createRoleApi,
   deleteRoleApi,
@@ -421,5 +420,11 @@ onMounted(() => {
   .node-tag {
     margin-right: 10px;
   }
+}
+
+.tree-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
 }
 </style>

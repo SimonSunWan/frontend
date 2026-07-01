@@ -104,12 +104,13 @@
     </el-table-column>
   </TablePage>
 
-  <!-- 新增/编辑弹窗 -->
-  <el-dialog
+  <!-- 新增/编辑抽屉 -->
+  <FormDrawer
     v-model="dialogVisible"
     :title="dialogType === 'add' ? '添加用户' : '编辑用户'"
-    width="500px"
-    align-center
+    :loading="submitLoading"
+    confirm-text="提交"
+    @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="80px">
       <el-form-item label="账号" prop="userName">
@@ -142,15 +143,12 @@
         <div class="password-tip">密码规则：账号 + 手机号后4位</div>
       </el-form-item>
     </el-form>
-    <template #footer>
-      <el-button @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="handleSubmit">提交</el-button>
-    </template>
-  </el-dialog>
+  </FormDrawer>
 </template>
 
 <script setup>
 import TablePage from '@/components/TablePage.vue'
+import FormDrawer from '@/components/FormDrawer.vue'
 import {
   createUserApi,
   deleteUserApi,

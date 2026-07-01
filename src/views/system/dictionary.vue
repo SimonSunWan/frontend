@@ -47,12 +47,12 @@
     </el-table-column>
   </TablePage>
 
-  <!-- 字典分类弹窗 -->
-  <el-dialog
+  <!-- 字典分类抽屉 -->
+  <FormDrawer
     v-model="typeDialogVisible"
     :title="typeDialogType === 'add' ? '新增字典分类' : '编辑字典分类'"
-    width="500px"
-    align-center
+    :loading="typeSubmitLoading"
+    @submit="handleTypeSubmit"
   >
     <el-form ref="typeFormRef" :model="typeForm" :rules="typeRules" label-width="100px">
       <el-form-item label="字典名称" prop="name">
@@ -70,18 +70,13 @@
         />
       </el-form-item>
     </el-form>
-    <template #footer>
-      <el-button @click="typeDialogVisible = false">取消</el-button>
-      <el-button type="primary" :loading="typeSubmitLoading" @click="handleTypeSubmit">确定</el-button>
-    </template>
-  </el-dialog>
+  </FormDrawer>
 
-  <!-- 字典枚举弹窗 -->
-  <el-dialog
+  <!-- 字典枚举抽屉 -->
+  <FormDrawer
     v-model="enumDialogVisible"
     :title="`${currentType?.name || ''} - 枚举管理`"
-    width="700px"
-    align-center
+    size="700px"
   >
     <div class="enum-header">
       <el-button type="primary" @click="showEnumFormDialog('add', null)">新增枚举</el-button>
@@ -108,13 +103,13 @@
       </el-table-column>
     </el-table>
 
-    <!-- 枚举新增/编辑表单弹窗 -->
-    <el-dialog
+    <!-- 枚举新增/编辑表单抽屉 -->
+    <FormDrawer
       v-model="enumFormDialogVisible"
       :title="enumFormDialogType === 'add' ? '新增字典枚举' : '编辑字典枚举'"
-      width="500px"
-      align-center
+      :loading="enumSubmitLoading"
       append-to-body
+      @submit="handleEnumSubmit"
     >
       <el-form ref="enumFormRef" :model="enumForm" :rules="enumRules" label-width="100px">
         <el-form-item v-if="enumParentName" label="父级枚举">
@@ -135,16 +130,13 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <el-button @click="enumFormDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="enumSubmitLoading" @click="handleEnumSubmit">确定</el-button>
-      </template>
-    </el-dialog>
-  </el-dialog>
+    </FormDrawer>
+  </FormDrawer>
 </template>
 
 <script setup>
 import TablePage from '@/components/TablePage.vue'
+import FormDrawer from '@/components/FormDrawer.vue'
 import {
   createDictionaryEnumApi,
   createDictionaryTypeApi,

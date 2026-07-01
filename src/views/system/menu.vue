@@ -66,12 +66,12 @@
     </el-table-column>
   </TablePage>
 
-  <!-- 新增/编辑弹窗 -->
-  <el-dialog
+  <!-- 新增/编辑抽屉 -->
+  <FormDrawer
     v-model="dialogVisible"
     :title="dialogTitle"
-    width="500px"
-    align-center
+    :loading="submitLoading"
+    @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="85px">
       <el-form-item label="菜单类型">
@@ -133,15 +133,12 @@
         </el-form-item>
       </template>
     </el-form>
-    <template #footer>
-      <el-button @click="dialogVisible = false">取消</el-button>
-      <el-button type="primary" :loading="submitLoading" @click="handleSubmit">确定</el-button>
-    </template>
-  </el-dialog>
+  </FormDrawer>
 </template>
 
 <script setup>
 import TablePage from '@/components/TablePage.vue'
+import FormDrawer from '@/components/FormDrawer.vue'
 import {
   createMenuApi,
   deleteMenuApi,
