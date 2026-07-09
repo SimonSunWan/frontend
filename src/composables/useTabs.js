@@ -28,6 +28,18 @@ export function useTabs() {
     }
   }
 
+  const closeOthers = (keepPath) => {
+    const keep = keepPath || route.path
+    tabs.value = tabs.value.filter((t) => t.path === keep)
+  }
+
+  const closeAll = () => {
+    const home = menuStore.homePath || '/'
+    tabs.value = []
+    router.push(home).catch(() => {})
+    addTab(home)
+  }
+
   const switchTab = (path) => {
     router.push(path)
   }
@@ -37,5 +49,5 @@ export function useTabs() {
     initialized = true
   }
 
-  return { tabs, addTab, removeTab, switchTab }
+  return { tabs, addTab, removeTab, closeOthers, closeAll, switchTab }
 }
