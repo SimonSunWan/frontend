@@ -49,6 +49,7 @@
   --var-bg-container: #ffffff;       /* 卡片/容器背景 */
   --var-bg-overlay: var(--el-bg-color-overlay); /* 弹层背景 */
   --var-bg-muted: #f5f7fa;           /* 次级背景（表格条纹/禁用区） */
+  --var-bg-hover: #f2f4f5;          /* 悬浮背景（菜单等） */
   --var-bg-brand: var(--el-color-primary); /* 品牌色背景 */
 
   /* ==================== 颜色 - 边框 ==================== */
@@ -124,6 +125,7 @@ html.dark {
   --var-bg-page: var(--el-bg-color-page);
   --var-bg-container: var(--el-bg-color);
   --var-bg-muted: #1d1e1f;
+  --var-bg-hover: #17171c;
   /* 品牌渐变在暗黑下稍微提亮，保持可读性 */
   --var-gradient-brand: linear-gradient(221deg, #3d6fd6, #2f3ec4);
   --var-brand-hover: #2a3b5c;

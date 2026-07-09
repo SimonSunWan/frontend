@@ -36,7 +36,7 @@
     </el-header>
     <el-container>
       <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
-        <el-menu :default-active="route.path" :collapse="isCollapse" router>
+        <el-menu :default-active="route.path" :collapse="isCollapse" unique-opened router>
           <template v-for="menu in menuStore.menuList" :key="menu.path">
             <el-sub-menu v-if="menu.children?.length" :index="menu.path">
               <template #title>
@@ -200,11 +200,53 @@ const handleSearchSelect = (item) => {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
+      overscroll-behavior: contain;
+      padding: 4px 0;
+
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+
+      // 菜单项通用样式（宽度留白 + 圆角 + 高度）
+      .el-menu-item,
+      :deep(.el-sub-menu__title) {
+        width: calc(100% - 16px);
+        height: 42px;
+        margin-left: 8px;
+        margin-bottom: 4px;
+        line-height: 42px;
+        border-radius: 6px;
+        font-size: var(--var-font-size-base);
+
+        span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      // hover 态（非选中项）
+      .el-menu-item:not(.is-active):hover,
+      :deep(.el-sub-menu__title:hover) {
+        background-color: var(--var-bg-hover);
+      }
+
+      // active 态
+      .el-menu-item.is-active {
+        color: #4b5eff;
+        font-weight: var(--var-font-weight-medium);
+        background-color: #eef3ff;
+      }
+
+      // 右侧展开箭头颜色
+      :deep(.el-sub-menu__icon-arrow) {
+        color: var(--var-text-secondary);
+      }
     }
 
     .menu-icon {
       margin-right: 8px;
-      font-size: 18px;
+      font-size: 20px;
       vertical-align: middle;
     }
   }
@@ -217,9 +259,10 @@ const handleSearchSelect = (item) => {
     overflow: hidden;
 
     .layout-content {
-      padding: 16px;
+      padding: 12px;
       flex: 1;
-      overflow-y: auto;
+      min-height: 0;
+      overflow: hidden;
     }
   }
 }

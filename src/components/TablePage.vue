@@ -17,34 +17,39 @@
       <div v-if="$slots['table-header']" class="table-header">
         <slot name="table-header" />
       </div>
-      <el-table
-        v-loading="loading"
-        :data="data"
-        :row-key="rowKey"
-        :tree-props="treeProps"
-        :stripe="stripe"
-        :border="border"
-        :default-expand-all="defaultExpandAll"
-      >
-        <!-- 基于 columns 配置自动渲染列 -->
-        <template v-if="columns?.length">
-          <table-column
-            v-for="(col, idx) in columns"
-            :key="col.key || col.prop || col.type || col.label || idx"
-            :col="col"
+      <div class="table-body">
+        <div class="table-body-inner">
+          <el-table
+            v-loading="loading"
+            :data="data"
+            :row-key="rowKey"
+            :tree-props="treeProps"
+            :stripe="stripe"
+            :border="border"
+            :default-expand-all="defaultExpandAll"
+            height="100%"
           >
-            <template
-              v-for="name in slotNames"
-              :key="name"
-              #[name]="slotProps"
+          <!-- 基于 columns 配置自动渲染列 -->
+          <template v-if="columns?.length">
+            <table-column
+              v-for="(col, idx) in columns"
+              :key="col.key || col.prop || col.type || col.label || idx"
+              :col="col"
             >
-              <slot :name="name" v-bind="slotProps" />
-            </template>
-          </table-column>
-        </template>
-        <!-- 兜底: 允许直接传入 el-table-column -->
-        <slot v-else />
-      </el-table>
+              <template
+                v-for="name in slotNames"
+                :key="name"
+                #[name]="slotProps"
+              >
+                <slot :name="name" v-bind="slotProps" />
+              </template>
+            </table-column>
+          </template>
+          <!-- 兜底: 允许直接传入 el-table-column -->
+          <slot v-else />
+          </el-table>
+        </div>
+      </div>
 
       <div v-if="showPagination" class="pagination">
         <el-pagination
@@ -199,7 +204,16 @@ const handleCurrentChange = (current) => {
 
 <style lang="scss" scoped>
 .table-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  :deep(.el-card) {
+    border-radius: var(--var-radius-lg);
+  }
+
   .search-card {
+    flex-shrink: 0;
     margin-bottom: 16px;
 
     :deep(.el-card__body) {
@@ -208,11 +222,49 @@ const handleCurrentChange = (current) => {
   }
 
   .table-card {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+
+    :deep(.el-card__body) {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
     .table-header {
+      flex-shrink: 0;
       margin-bottom: 16px;
     }
 
+    // 表格区域：relative + absolute 撑满，让 el-table height:100% 有明确基准
+    .table-body {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .table-body-inner {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    // 表头背景色
+    :deep(.el-table__header-wrapper) {
+      .el-table__cell {
+        color: #0d162a;
+        font-weight: var(--var-font-weight-medium);
+        background-color: var(--var-bg-muted);
+      }
+    }
+
     .pagination {
+      flex-shrink: 0;
       display: flex;
       justify-content: flex-end;
       margin-top: 16px;

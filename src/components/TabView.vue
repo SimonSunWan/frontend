@@ -142,7 +142,7 @@ onUnmounted(() => {
     height: 32px;
     padding: 0 8px 0 12px;
     margin-right: 4px;
-    font-size: var(--var-font-size-base);
+    font-size: var(--var-font-size-xs);
     color: var(--var-text-regular);
     cursor: pointer;
     border-radius: var(--var-radius-lg) var(--var-radius-lg) 0 0;
@@ -155,23 +155,24 @@ onUnmounted(() => {
 
     /* 谷歌风格：激活态用品牌浅色背景 + 底部连通 */
     &.active {
-      color: var(--el-color-primary);
-      background-color: var(--el-color-primary-light-9);
+      color: #4b5eff;
+      font-weight: var(--var-font-weight-medium);
+      background-color: #eef3ff;
       border-bottom: 0;
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
 
       &::before,
       &::after {
-        box-shadow: 0 0 0 30px var(--el-color-primary-light-9);
+        box-shadow: 0 0 0 30px #eef3ff;
       }
 
       .tab-close {
-        color: var(--el-color-primary);
+        color: #4b5eff;
 
         &:hover {
           color: var(--var-text-inverse);
-          background-color: var(--el-color-primary);
+          background-color: #4b5eff;
         }
       }
     }

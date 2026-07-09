@@ -1,6 +1,7 @@
 <template>
   <el-drawer
     v-model="visible"
+    class="form-drawer"
     :title="title"
     :size="size"
     :direction="direction"
@@ -28,7 +29,7 @@ import { computed } from 'vue'
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   title: { type: String, default: '' },
-  size: { type: [String, Number], default: '500px' },
+  size: { type: [String, Number], default: '700px' },
   direction: { type: String, default: 'rtl' },
   loading: { type: Boolean, default: false },
   confirmText: { type: String, default: '确定' },
@@ -58,8 +59,22 @@ const handleClose = (done) => {
   justify-content: flex-end;
   gap: 12px;
 }
+</style>
 
-:deep(.el-drawer__body) {
-  padding: 16px 20px;
+<style lang="scss">
+.form-drawer {
+  .el-drawer__header {
+    margin-bottom: 0;
+    padding-bottom: var(--var-spacing-md);
+    border-bottom: 1px solid var(--var-border-light);
+  }
+
+  .el-drawer__body {
+    padding: var(--var-spacing-md) var(--var-spacing-lg);
+  }
+
+  .el-drawer__footer {
+    border-top: 1px solid var(--var-border-light);
+  }
 }
 </style>
