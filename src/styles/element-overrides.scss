@@ -2,3 +2,30 @@
 .el-card__body {
   padding: 16px;
 }
+
+/* 暗黑模式：覆盖项目中的硬编码颜色 */
+html.dark {
+  body {
+    background-color: var(--el-bg-color);
+    color: var(--el-text-color-primary);
+  }
+
+  /* 顶部搜索框背景 */
+  .layout-header .el-input__wrapper {
+    background-color: var(--el-bg-color-overlay) !important;
+  }
+
+  .layout-header .el-input__inner {
+    color: var(--el-text-color-regular);
+  }
+
+  .layout-header .el-input__inner::placeholder {
+    color: var(--el-text-color-placeholder);
+  }
+
+  .layout-header .el-input__prefix,
+  .layout-header .el-input__suffix {
+    color: var(--el-text-color-regular);
+  }
+}
+

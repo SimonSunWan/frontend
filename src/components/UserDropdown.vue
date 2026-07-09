@@ -39,9 +39,10 @@ const handleLogout = () => {
   align-items: center;
   gap: 4px;
   cursor: pointer;
+  color: #fff;
 
-  &:hover {
-    color: #409eff;
+  :deep(.el-text) {
+    color: #fff;
   }
 }
 
@@ -56,7 +57,7 @@ const handleLogout = () => {
 
     &:hover {
       background: #f5f7fa;
-      color: #409eff;
+      color: var(--el-color-primary);
     }
   }
 }

@@ -1,78 +1,80 @@
 <template>
   <el-container class="layout">
-    <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
-      <div class="logo" :style="{ gap: isCollapse ? '0px' : '8px' }">
+    <el-header class="layout-header">
+      <div class="header-left">
         <el-image src="/favicon.ico" alt="logo" class="logo-img" fit="contain" />
-        <el-text
-          size="large"
-          tag="b"
-          class="logo-text"
-          :style="{ opacity: isCollapse ? 0 : 1, maxWidth: isCollapse ? '0px' : '200px' }"
-          >管理系统</el-text
-        >
+        <el-text size="large" tag="b" class="logo-text">智慧社区服务平台</el-text>
+        <i
+          class="iconfont collapse-btn"
+          @click="isCollapse = !isCollapse"
+          v-html="isCollapse ? '&#xea8f;' : '&#xea8e;'"
+        ></i>
       </div>
-      <el-menu :default-active="route.path" :collapse="isCollapse" router>
-        <template v-for="menu in menuStore.menuList" :key="menu.path">
-          <el-sub-menu v-if="menu.children?.length" :index="menu.path">
-            <template #title>
-              <span>{{ menu.meta?.title || menu.name }}</span>
-            </template>
-            <template v-for="child in menu.children" :key="child.path">
-              <el-menu-item v-if="!child.meta?.isLink" :index="child.path">
-                {{ child.meta?.title || child.name }}
-              </el-menu-item>
-            </template>
-          </el-sub-menu>
-          <el-menu-item v-else-if="!menu.meta?.isLink" :index="menu.path">
-            {{ menu.meta?.title || menu.name }}
-          </el-menu-item>
+      <el-autocomplete
+        v-model="searchKeyword"
+        class="menu-search"
+        style="width: 240px; flex-shrink: 0"
+        placeholder="搜索菜单"
+        :fetch-suggestions="searchMenu"
+        clearable
+        @select="handleSearchSelect"
+      >
+        <template #prefix>
+          <el-icon><Search /></el-icon>
         </template>
-      </el-menu>
-    </el-aside>
+        <template #default="{ item }">
+          <div class="search-item">
+            <span class="search-item-title">{{ item.title }}</span>
+            <span class="search-item-path">{{ item.path }}</span>
+          </div>
+        </template>
+      </el-autocomplete>
+      <div class="header-right">
+        <ThemeToggle />
+        <UserDropdown />
+      </div>
+    </el-header>
     <el-container>
-      <el-header class="layout-header">
-        <el-icon class="collapse-btn" @click="isCollapse = !isCollapse">
-          <Fold v-if="!isCollapse" />
-          <Expand v-else />
-        </el-icon>
-        <el-autocomplete
-          v-model="searchKeyword"
-          class="menu-search"
-          style="width: 240px; flex-shrink: 0; margin-left: auto"
-          placeholder="搜索菜单"
-          :fetch-suggestions="searchMenu"
-          clearable
-          @select="handleSearchSelect"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
+      <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
+        <el-menu :default-active="route.path" :collapse="isCollapse" router>
+          <template v-for="menu in menuStore.menuList" :key="menu.path">
+            <el-sub-menu v-if="menu.children?.length" :index="menu.path">
+              <template #title>
+                <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
+                <span>{{ menu.meta?.title || menu.name }}</span>
+              </template>
+              <template v-for="child in menu.children" :key="child.path">
+                <el-menu-item v-if="!child.meta?.isLink" :index="child.path">
+                  <i v-if="child.meta?.icon" class="iconfont menu-icon" :class="child.meta.icon"></i>
+                  <span>{{ child.meta?.title || child.name }}</span>
+                </el-menu-item>
+              </template>
+            </el-sub-menu>
+            <el-menu-item v-else-if="!menu.meta?.isLink" :index="menu.path">
+              <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
+              <span>{{ menu.meta?.title || menu.name }}</span>
+            </el-menu-item>
           </template>
-          <template #default="{ item }">
-            <div class="search-item">
-              <span class="search-item-title">{{ item.title }}</span>
-              <span class="search-item-path">{{ item.path }}</span>
-            </div>
-          </template>
-        </el-autocomplete>
-        <div class="header-right">
-          <UserDropdown />
-        </div>
-      </el-header>
-      <el-main class="layout-main">
-        <TabView />
-        <div class="layout-content">
-          <RouterView />
-        </div>
-      </el-main>
+        </el-menu>
+      </el-aside>
+      <el-container>
+        <el-main class="layout-main">
+          <TabView />
+          <div class="layout-content">
+            <RouterView />
+          </div>
+        </el-main>
+      </el-container>
     </el-container>
   </el-container>
 </template>
 
 <script setup>
 import TabView from '@/components/TabView.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 import { useMenuStore } from '@/stores/menu'
-import { Expand, Fold, Search } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -121,58 +123,89 @@ const handleSearchSelect = (item) => {
 <style lang="scss" scoped>
 .layout {
   height: 100vh;
-
-  .layout-aside {
-    transition: width 0.3s;
-    overflow: hidden;
-    border-right: 1px solid var(--el-border-color);
-
-    .logo {
-      height: 60px;
-      display: flex;
-      padding-left: 20px;
-      align-items: center;
-      gap: 8px;
-      transition: gap 0.3s;
-
-      .logo-img {
-        width: 24px;
-        height: 24px;
-        flex-shrink: 0;
-      }
-
-      .logo-text {
-        white-space: nowrap;
-        overflow: hidden;
-        transition:
-          opacity 0.3s,
-          max-width 0.3s;
-      }
-    }
-
-    .el-menu {
-      border-right: none;
-    }
-  }
+  flex-direction: column;
 
   .layout-header {
     display: flex;
     align-items: center;
     gap: 16px;
     border-bottom: 1px solid var(--el-border-color);
-    background: #fff;
+    background:
+      url('@/assets/images/top-bg.png') no-repeat left center / auto 100%,
+      linear-gradient(221deg, #4f8aff, #3d50f1);
+    height: 60px;
+    flex-shrink: 0;
+    color: #fff;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-right: auto;
+    }
+
+    .logo-img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      white-space: nowrap;
+      color: #fff;
+    }
 
     .collapse-btn {
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
-      color: #606266;
+      color: #fff;
 
       &:hover {
-        color: #409eff;
+        color: #e6f0ff;
       }
     }
 
     .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-search {
+      :deep(.el-input__inner) {
+        color: #fff;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      :deep(.el-input__prefix),
+      :deep(.el-input__suffix) {
+        color: #fff;
+      }
+    }
+  }
+
+  .layout-aside {
+    transition: width 0.3s;
+    overflow: hidden;
+    border-right: 1px solid var(--el-border-color);
+    display: flex;
+    flex-direction: column;
+
+    .el-menu {
+      border-right: none;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .menu-icon {
+      margin-right: 8px;
+      font-size: 18px;
+      vertical-align: middle;
     }
   }
 
@@ -204,5 +237,36 @@ const handleSearchSelect = (item) => {
     color: var(--el-text-color-secondary);
     font-size: 12px;
   }
+}
+</style>
+
+<style>
+.layout-header .el-input__wrapper {
+  background-color: #fff !important;
+  box-shadow: none !important;
+  border-radius: 50px !important;
+}
+
+.layout-header .el-input__wrapper:hover,
+.layout-header .el-input__wrapper.is-focus {
+  box-shadow: none !important;
+}
+
+.layout-header .el-input__inner {
+  color: var(--el-text-color-regular, #606266);
+}
+
+.layout-header .el-input__inner::placeholder {
+  color: var(--el-text-color-placeholder, #a8abb2);
+}
+
+.layout-header .el-input__prefix,
+.layout-header .el-input__suffix {
+  color: var(--el-text-color-regular, #606266);
+}
+
+/* 暗黑模式 */
+html.dark .layout .layout-main {
+  background: var(--el-bg-color-page) !important;
 }
 </style>

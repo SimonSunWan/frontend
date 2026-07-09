@@ -24,7 +24,7 @@
         <el-input v-model="form.email" placeholder="请输入邮箱" clearable />
       </el-form-item>
       <el-form-item label="角色">
-        <el-select v-model="form.roleCode" placeholder="请选择角色" clearable style="width: 160px">
+        <el-select v-model="form.roleCode" placeholder="请选择角色" clearable style="width: 194.5px">
           <el-option
             v-for="role in roleList"
             :key="role.value"
@@ -34,7 +34,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="状态">
-        <el-select v-model="form.status" placeholder="请选择状态" clearable style="width: 120px">
+        <el-select v-model="form.status" placeholder="请选择状态" clearable style="width: 194.5px">
           <el-option label="启用" :value="true" />
           <el-option label="禁用" :value="false" />
         </el-select>

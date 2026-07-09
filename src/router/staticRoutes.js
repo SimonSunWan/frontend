@@ -13,6 +13,6 @@ export const staticRoutes = [
   {
     path: '/auth/forget-password',
     name: 'ForgetPassword',
-    component: () => import('@/views/auth/forget-password.vue'),
+    component: () => import('@/views/auth/forget.vue'),
   },
 ]

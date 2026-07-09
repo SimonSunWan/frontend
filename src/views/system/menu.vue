@@ -31,7 +31,10 @@
       {{ row.isLink ? (row.link || '-') : (row.path || '-') }}
     </template>
     <template #authMark="{ row }">{{ row.authMark || '-' }}</template>
-    <template #icon="{ row }">{{ row.icon || '-' }}</template>
+    <template #icon="{ row }">
+      <i v-if="row.icon" class="iconfont menu-icon" :class="row.icon"></i>
+      <span v-else>-</span>
+    </template>
     <template #status="{ row }">
       <el-tag :type="row.isEnable ? 'primary' : 'info'">
         {{ row.isEnable ? '启用' : '禁用' }}
@@ -87,7 +90,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="图标" prop="icon">
-              <el-input v-model="dialogForm.icon" placeholder="请输入图标" />
+              <IconPicker v-model="dialogForm.icon" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -152,6 +155,7 @@
 <script setup>
 import TablePage from '@/components/TablePage.vue'
 import FormDrawer from '@/components/FormDrawer.vue'
+import IconPicker from '@/components/IconPicker.vue'
 import {
   createMenuApi,
   deleteMenuApi,
@@ -368,3 +372,10 @@ onMounted(() => {
   loadData()
 })
 </script>
+
+<style lang="scss" scoped>
+.menu-icon {
+  font-size: 18px;
+  color: var(--el-text-color-regular);
+}
+</style>
