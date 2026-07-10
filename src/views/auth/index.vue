@@ -59,9 +59,13 @@ const handleSwitch = (target) => {
   background: url('@/assets/images/login-bg.png') no-repeat center center / cover;
 
   :deep(.auth-card) {
-    width: 460px;
-    border-radius: 16px;
+    width: 450px;
+    border-radius: 8px;
     overflow: hidden;
+
+    .el-card__body {
+      padding-bottom: 0;
+    }
 
     .header-title {
       display: flex;
