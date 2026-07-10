@@ -11,8 +11,8 @@
     @current-change="handleCurrentChange"
   >
     <template #search="{ form }">
-      <el-form-item label="账号">
-        <el-input v-model="form.userName" placeholder="请输入账号" clearable />
+      <el-form-item label="用户名">
+        <el-input v-model="form.userName" placeholder="请输入用户名" clearable />
       </el-form-item>
       <el-form-item label="姓名">
         <el-input v-model="form.nickName" placeholder="请输入姓名" clearable />
@@ -95,8 +95,8 @@
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="80px">
       <el-row :gutter="16">
         <el-col :span="12">
-          <el-form-item label="账号" prop="userName">
-            <el-input v-model="dialogForm.userName" placeholder="请输入账号" />
+          <el-form-item label="用户名" prop="userName">
+            <el-input v-model="dialogForm.userName" placeholder="请输入用户名" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -134,7 +134,7 @@
         <el-col v-if="dialogType === 'add'" :span="24">
           <el-form-item label="密码" prop="password">
             <el-input v-model="dialogForm.password" readonly placeholder="自动生成" />
-            <div class="password-tip">密码规则：账号 + 手机号后4位</div>
+            <div class="password-tip">密码规则：用户名 + 手机号后4位</div>
           </el-form-item>
         </el-col>
       </el-row>
@@ -163,7 +163,7 @@ const columns = [
   { type: 'index', label: '序号', width: 60, align: 'center' },
   {
     prop: 'userName',
-    label: '账号',
+    label: '用户名',
     showOverflowTooltip: true,
     formatter: (row) => row.userName || '-',
   },
@@ -224,7 +224,7 @@ const dialogForm = reactive({
 
 const validateUserName = (rule, value, callback) => {
   if (!value) {
-    callback(new Error('请输入账号'))
+    callback(new Error('请输入用户名'))
   } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,19}$/.test(value)) {
     callback(new Error('字母开头, 4-20位, 支持字母、数字、下划线'))
   } else {

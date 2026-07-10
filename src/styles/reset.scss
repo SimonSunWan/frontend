@@ -75,6 +75,23 @@ h6 {
 }
 
 /* Element Plus 表单项间距覆盖 */
-.el-form-item {
-  margin-bottom: 16px;
+.el-card__body {
+  padding-bottom: 0;
+}
+
+/* 登录成功消息：主色风格 */
+.login-success-message {
+  --el-message-bg-color: #eef3ff !important;
+  --el-message-border-color: #eef3ff !important;
+  --el-message-text-color: #4b5eff !important;
+  background-color: #eef3ff !important;
+  border-color: #eef3ff !important;
+
+  .el-message__content {
+    color: #4b5eff !important;
+  }
+
+  .el-message__icon {
+    color: #4b5eff !important;
+  }
 }

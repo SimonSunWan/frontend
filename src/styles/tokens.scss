@@ -11,9 +11,7 @@
  *
  * 命名空间：--var-  （Element Plus 用 --el-，两者互不冲突）
  *
- * 颜色说明：文字/背景/边框等语义色映射自 Element Plus 变量，
- *           切换暗黑模式时会自动跟随，无需额外处理。
- *           仅项目特有色（品牌渐变等）需在 html.dark 中单独覆盖。
+ * 颜色说明：文字/背景/边框等语义色映射自 Element Plus 变量。
  * ------------------------------------------------------------
  */
 
@@ -117,20 +115,4 @@
   --var-z-modal: 1040;
   --var-z-popover: 1060;
   --var-z-tooltip: 1080;
-}
-
-/* ==================== 暗黑模式覆盖 ==================== */
-/* 仅覆盖项目特有色；映射自 Element Plus 的语义色会自动切换。 */
-html.dark {
-  --var-bg-page: var(--el-bg-color-page);
-  --var-bg-container: var(--el-bg-color);
-  --var-bg-muted: #1d1e1f;
-  --var-bg-hover: #17171c;
-  /* 品牌渐变在暗黑下稍微提亮，保持可读性 */
-  --var-gradient-brand: linear-gradient(221deg, #3d6fd6, #2f3ec4);
-  --var-brand-hover: #2a3b5c;
-  /* 暗黑下阴影更深 */
-  --var-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --var-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --var-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
 }

@@ -3,7 +3,7 @@
     <el-header class="layout-header">
       <div class="header-left">
         <el-image src="/favicon.ico" alt="logo" class="logo-img" fit="contain" />
-        <el-text size="large" tag="b" class="logo-text">智慧社区服务平台</el-text>
+        <el-text size="large" tag="b" class="logo-text">极简设计运营平台</el-text>
         <i
           class="iconfont collapse-btn"
           @click="isCollapse = !isCollapse"
@@ -30,7 +30,6 @@
         </template>
       </el-autocomplete>
       <div class="header-right">
-        <ThemeToggle />
         <UserDropdown />
       </div>
     </el-header>
@@ -71,7 +70,6 @@
 
 <script setup>
 import TabView from '@/components/TabView.vue'
-import ThemeToggle from '@/components/ThemeToggle.vue'
 import UserDropdown from '@/components/UserDropdown.vue'
 import { useMenuStore } from '@/stores/menu'
 import { Search } from '@element-plus/icons-vue'
@@ -128,7 +126,8 @@ const handleSearchSelect = (item) => {
   .layout-header {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    padding: 0 12px;
     border-bottom: 1px solid var(--el-border-color);
     background:
       url('@/assets/images/top-bg.png') no-repeat left center / auto 100%,
@@ -200,47 +199,15 @@ const handleSearchSelect = (item) => {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      overscroll-behavior: contain;
-      padding: 4px 0;
 
       &::-webkit-scrollbar {
         width: 0;
       }
 
-      // 菜单项通用样式（宽度留白 + 圆角 + 高度）
-      .el-menu-item,
-      :deep(.el-sub-menu__title) {
-        width: calc(100% - 16px);
-        height: 42px;
-        margin-left: 8px;
-        margin-bottom: 4px;
-        line-height: 42px;
-        border-radius: 6px;
-        font-size: var(--var-font-size-base);
-
-        span {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-
-      // hover 态（非选中项）
-      .el-menu-item:not(.is-active):hover,
-      :deep(.el-sub-menu__title:hover) {
-        background-color: var(--var-bg-hover);
-      }
-
-      // active 态
       .el-menu-item.is-active {
         color: #4b5eff;
         font-weight: var(--var-font-weight-medium);
         background-color: #eef3ff;
-      }
-
-      // 右侧展开箭头颜色
-      :deep(.el-sub-menu__icon-arrow) {
-        color: var(--var-text-secondary);
       }
     }
 
@@ -287,7 +254,7 @@ const handleSearchSelect = (item) => {
 .layout-header .el-input__wrapper {
   background-color: #fff !important;
   box-shadow: none !important;
-  border-radius: 50px !important;
+  border-radius: 16px !important;
 }
 
 .layout-header .el-input__wrapper:hover,
@@ -308,8 +275,4 @@ const handleSearchSelect = (item) => {
   color: var(--el-text-color-regular, #606266);
 }
 
-/* 暗黑模式 */
-html.dark .layout .layout-main {
-  background: var(--el-bg-color-page) !important;
-}
 </style>

@@ -3,16 +3,16 @@ export const staticRoutes = [
   {
     path: '/auth/login',
     name: 'Login',
-    component: () => import('@/views/auth/login.vue'),
+    component: () => import('@/views/auth/index.vue'),
   },
   {
     path: '/auth/register',
     name: 'Register',
-    component: () => import('@/views/auth/register.vue'),
+    component: () => import('@/views/auth/index.vue'),
   },
   {
-    path: '/auth/forget-password',
-    name: 'ForgetPassword',
-    component: () => import('@/views/auth/forget.vue'),
+    path: '/auth/forget',
+    name: 'Forget',
+    component: () => import('@/views/auth/index.vue'),
   },
 ]

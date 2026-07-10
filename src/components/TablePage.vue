@@ -259,7 +259,16 @@ const handleCurrentChange = (current) => {
       .el-table__cell {
         color: #0d162a;
         font-weight: var(--var-font-weight-medium);
-        background-color: var(--var-bg-muted);
+        background-color: #eef3ff;
+      }
+    }
+
+    // 斑马纹背景色
+    :deep(.el-table__body-wrapper) {
+      tr.el-table__row--striped {
+        td.el-table__cell {
+          background-color: #f5f8ff;
+        }
       }
     }
 

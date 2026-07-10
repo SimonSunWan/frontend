@@ -23,11 +23,5 @@
 );
 
 /* 全量引入 Element Plus 样式源码（使用上面已覆盖的变量）。
-   必须放在 @forward 之后，保证变量覆盖先生效。
-   注意：亮色与暗黑样式需放在同一 SCSS 编译单元内，否则
-   @forward 的变量覆盖不会传递到单独 import 的暗黑样式编译中。 */
+   必须放在 @forward 之后，保证变量覆盖先生效。 */
 @use 'element-plus/theme-chalk/src/index.scss' as *;
-
-/* 暗黑模式变量（从源码编译，自动使用上面覆盖后的主题色，
-   light-N 会与暗黑背景色 #141414 混合生成合适的色阶） */
-@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;

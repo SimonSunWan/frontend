@@ -26,14 +26,14 @@
       </ul>
     </div>
 
-    <el-dropdown trigger="click" @command="handleCommand">
+    <el-dropdown trigger="hover" @command="handleCommand">
       <span class="more-btn">
         <el-icon><ArrowDown /></el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="closeOthers">关闭其他</el-dropdown-item>
-          <el-dropdown-item command="closeAll">关闭全部</el-dropdown-item>
+          <el-dropdown-item command="closeOthers" style="font-size: 12px">关闭其他</el-dropdown-item>
+          <el-dropdown-item command="closeAll" style="font-size: 12px">关闭全部</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

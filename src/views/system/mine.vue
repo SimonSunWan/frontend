@@ -4,7 +4,7 @@
       <template #header>基本设置</template>
       <el-form ref="formRef" :model="form" :rules="rules" label-width="86px">
         <el-row>
-          <el-form-item label="账号" prop="userName">
+          <el-form-item label="用户名" prop="userName">
             <el-input v-model="form.userName" :disabled="!isEdit" />
           </el-form-item>
           <el-form-item label="姓名" prop="nickName" class="right-input">
@@ -100,7 +100,7 @@ const pwdForm = reactive({
 
 const validateUserName = (rule, value, callback) => {
   if (!value) {
-    callback(new Error('请输入账号'))
+    callback(new Error('请输入用户名'))
   } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,19}$/.test(value)) {
     callback(new Error('字母开头, 4-20位, 支持字母、数字、下划线'))
   } else {
