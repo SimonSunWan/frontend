@@ -1,11 +1,7 @@
 <template>
   <div class="tab-view">
     <div class="tab-scroll" ref="scrollRef">
-      <ul
-        class="tab-list"
-        ref="tabsRef"
-        :style="{ transform: `translateX(${translateX}px)` }"
-      >
+      <ul class="tab-list" ref="tabsRef" :style="{ transform: `translateX(${translateX}px)` }">
         <li
           v-for="(tab, index) in tabs"
           :key="tab.path"
@@ -14,11 +10,7 @@
           @click="handleClick(tab.path)"
         >
           <span class="tab-title">{{ tab.title }}</span>
-          <span
-            v-if="tabs.length > 1"
-            class="tab-close"
-            @click.stop="removeTab(tab.path)"
-          >
+          <span v-if="tabs.length > 1" class="tab-close" @click.stop="removeTab(tab.path)">
             <el-icon><Close /></el-icon>
           </span>
           <span v-if="index !== 0" class="line"></span>
@@ -32,7 +24,9 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="closeOthers" style="font-size: 12px">关闭其他</el-dropdown-item>
+          <el-dropdown-item command="closeOthers" style="font-size: 12px"
+            >关闭其他</el-dropdown-item
+          >
           <el-dropdown-item command="closeAll" style="font-size: 12px">关闭全部</el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -114,7 +108,7 @@ onUnmounted(() => {
 .tab-view {
   display: flex;
   align-items: flex-end;
-  padding: 0 4px;
+  padding: 0 8px 0 12px;
   background-color: var(--ins-bg-container);
   border-bottom: 1px solid var(--ins-border-light);
   border-radius: var(--ins-radius-md) var(--ins-radius-md) 0 0;

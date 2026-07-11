@@ -36,26 +36,30 @@
     <el-container class="layout-body">
       <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
         <el-scrollbar>
-        <el-menu :default-active="route.path" :collapse="isCollapse" unique-opened router>
-          <template v-for="menu in menuStore.menuList" :key="menu.path">
-            <el-sub-menu v-if="menu.children?.length" :index="menu.path">
-              <template #title>
+          <el-menu :default-active="route.path" :collapse="isCollapse" unique-opened router>
+            <template v-for="menu in menuStore.menuList" :key="menu.path">
+              <el-sub-menu v-if="menu.children?.length" :index="menu.path">
+                <template #title>
+                  <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
+                  <span>{{ menu.meta?.title || menu.name }}</span>
+                </template>
+                <template v-for="child in menu.children" :key="child.path">
+                  <el-menu-item v-if="!child.meta?.isLink" :index="child.path">
+                    <i
+                      v-if="child.meta?.icon"
+                      class="iconfont menu-icon"
+                      :class="child.meta.icon"
+                    ></i>
+                    <span>{{ child.meta?.title || child.name }}</span>
+                  </el-menu-item>
+                </template>
+              </el-sub-menu>
+              <el-menu-item v-else-if="!menu.meta?.isLink" :index="menu.path">
                 <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
                 <span>{{ menu.meta?.title || menu.name }}</span>
-              </template>
-              <template v-for="child in menu.children" :key="child.path">
-                <el-menu-item v-if="!child.meta?.isLink" :index="child.path">
-                  <i v-if="child.meta?.icon" class="iconfont menu-icon" :class="child.meta.icon"></i>
-                  <span>{{ child.meta?.title || child.name }}</span>
-                </el-menu-item>
-              </template>
-            </el-sub-menu>
-            <el-menu-item v-else-if="!menu.meta?.isLink" :index="menu.path">
-              <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
-              <span>{{ menu.meta?.title || menu.name }}</span>
-            </el-menu-item>
-          </template>
-        </el-menu>
+              </el-menu-item>
+            </template>
+          </el-menu>
         </el-scrollbar>
       </el-aside>
       <el-container class="layout-body">
@@ -106,9 +110,7 @@ const searchMenu = (query, cb) => {
     return
   }
   const all = flattenMenus(menuStore.menuList)
-  const results = all.filter((item) =>
-    item.title.toLowerCase().includes(query.toLowerCase()),
-  )
+  const results = all.filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
   cb(results)
 }
 
@@ -129,7 +131,7 @@ const handleSearchSelect = (item) => {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 12px;
+    padding: 0 16px;
     border-bottom: 1px solid var(--el-border-color);
     background:
       url('@/assets/images/top-bg.png') no-repeat left center / auto 100%,
@@ -226,7 +228,7 @@ const handleSearchSelect = (item) => {
     overflow: hidden;
 
     .layout-content {
-      padding: 12px;
+      padding: 16px;
       flex: 1;
       min-height: 0;
       overflow: hidden;
@@ -274,5 +276,4 @@ const handleSearchSelect = (item) => {
 .layout-header .el-input__suffix {
   color: var(--el-text-color-regular, #606266);
 }
-
 </style>

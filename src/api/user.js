@@ -13,7 +13,7 @@ export function updateUserInfoApi(data) {
 }
 
 export function changePasswordApi(data) {
-  return request.put('/api/user/me/change-password', data)
+  return request.put('/api/user/me/change', data)
 }
 
 export function getUserListApi(params) {
@@ -37,5 +37,5 @@ export function registerApi(data) {
 }
 
 export function forgetPasswordApi(data) {
-  return request.post('/api/user/forget-password', data)
+  return request.post('/api/user/forget', data)
 }
