@@ -2,7 +2,7 @@
 description: 项目编码规范
 alwaysApply: true
 enabled: true
-updatedAt: 2026-07-11T09:58:00.000Z
+updatedAt: 2026-07-11T14:21:00.000Z
 provider:
 ---
 
@@ -40,6 +40,8 @@ try {
 
 ### 4. 全局样式
 - 全局样式文件放在 `src/styles/` 目录下
+- 组件样式统一使用 `src/styles/tokens.scss` 中定义的 `--ins-*` 设计变量（颜色、间距、圆角、字号、字重等），禁止硬编码具体色值与像素间距
+- Element Plus 组件的基础样式覆写（如 `.el-card` 圆角）统一在 `src/styles/element.scss` 中全局定义，不在各组件的 scoped 样式里重复声明，保证风格一致与高复用
 
 ### 5. 代码质量
 - 代码逻辑清晰、简洁，避免冗余实现

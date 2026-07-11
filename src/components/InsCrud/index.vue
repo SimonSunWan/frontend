@@ -60,9 +60,5 @@ defineEmits(['search', 'reset', 'page-change', 'size-change', 'current-change'])
   height: 100%;
   display: flex;
   flex-direction: column;
-
-  :deep(.el-card) {
-    border-radius: var(--ins-radius-lg);
-  }
 }
 </style>
