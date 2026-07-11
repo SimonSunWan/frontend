@@ -8,11 +8,11 @@
     @show="onShow"
   >
     <template #reference>
-      <div class="icon-picker-trigger" @click="visible = true">
+      <div class="icon-picker-trigger" :class="{ 'is-focus': visible }">
         <i v-if="modelValue" class="iconfont preview" :class="modelValue"></i>
         <span v-else class="placeholder">请选择图标</span>
-        <el-icon v-if="modelValue" class="clear" @click.stop="clear"><Close /></el-icon>
-        <el-icon class="arrow" @click.stop="visible = !visible"><ArrowDown /></el-icon>
+        <el-icon v-if="modelValue" class="clear" @click.stop="clear"><CircleClose /></el-icon>
+        <el-icon v-else class="arrow" :class="{ 'is-open': visible }"><ArrowDown /></el-icon>
       </div>
     </template>
 
@@ -37,7 +37,7 @@
 
 <script setup>
 import iconfontCss from '@/assets/iconfont/iconfont.css?raw'
-import { ArrowDown, Close, Search } from '@element-plus/icons-vue'
+import { ArrowDown, CircleClose, Search } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 
 defineProps({
@@ -98,34 +98,47 @@ const clear = () => {
     border-color: var(--el-border-color-hover, #c0c4cc);
   }
 
+  &.is-focus {
+    border-color: var(--el-color-primary, #409eff);
+  }
+
   .preview {
     font-size: 18px;
     color: var(--el-text-color-primary);
+    margin-right: auto;
   }
 
   .placeholder {
     color: var(--el-text-color-placeholder, #a8abb2);
     font-size: 14px;
+    margin-right: auto;
   }
 
   .clear {
     color: var(--el-text-color-placeholder, #a8abb2);
     cursor: pointer;
+    transition: color 0.2s;
 
     &:hover {
-      color: var(--el-text-color-regular, #606266);
+      color: var(--el-color-primary, #409eff);
     }
   }
 
   .arrow {
-    margin-left: auto;
     color: var(--el-text-color-placeholder, #a8abb2);
+    transition: transform 0.2s;
+
+    &.is-open {
+      transform: rotate(180deg);
+    }
   }
 }
 
 .icon-picker {
   .icon-grid {
     margin-top: 10px;
+    margin-right: -12px;
+    padding-right: 12px;
     max-height: 280px;
     overflow-y: auto;
     display: grid;

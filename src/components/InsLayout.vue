@@ -54,28 +54,7 @@
       <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
         <el-scrollbar>
           <el-menu :default-active="route.path" :collapse="isCollapse" unique-opened router>
-            <template v-for="menu in menuStore.menuList" :key="menu.path">
-              <el-sub-menu v-if="menu.children?.length" :index="menu.path">
-                <template #title>
-                  <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
-                  <span>{{ menu.meta?.title || menu.name }}</span>
-                </template>
-                <template v-for="child in menu.children" :key="child.path">
-                  <el-menu-item v-if="!child.meta?.isLink" :index="child.path">
-                    <i
-                      v-if="child.meta?.icon"
-                      class="iconfont menu-icon"
-                      :class="child.meta.icon"
-                    ></i>
-                    <span>{{ child.meta?.title || child.name }}</span>
-                  </el-menu-item>
-                </template>
-              </el-sub-menu>
-              <el-menu-item v-else-if="!menu.meta?.isLink" :index="menu.path">
-                <i v-if="menu.meta?.icon" class="iconfont menu-icon" :class="menu.meta.icon"></i>
-                <span>{{ menu.meta?.title || menu.name }}</span>
-              </el-menu-item>
-            </template>
+            <InsMenuTree :menus="menuStore.menuList" />
           </el-menu>
         </el-scrollbar>
       </el-aside>
@@ -93,6 +72,7 @@
 
 <script setup>
 import InsTabBar from '@/components/InsTabBar.vue'
+import InsMenuTree from '@/components/InsMenuTree.vue'
 import { useMenuStore } from '@/stores/menu'
 import { useAuthStore } from '@/stores/auth'
 import { ArrowDown, Search, SwitchButton, User } from '@element-plus/icons-vue'
@@ -228,16 +208,56 @@ const handleLogout = () => {
 
     .el-menu {
       border-right: none;
+      --el-menu-base-level-padding: 12px;
 
-      .el-menu-item.is-active {
+      :deep(.el-menu--inline) {
+        overflow: hidden;
+      }
+
+      :deep(.el-menu-item) {
+        height: 40px;
+        line-height: 40px;
+        margin: var(--ins-spacing-2xs) var(--ins-spacing-xs);
+      }
+
+      :deep(.el-menu-item):hover {
+        color: #4b5eff;
+        background-color: var(--ins-brand-hover);
+        border-radius: var(--ins-radius-md);
+      }
+
+      :deep(.el-menu-item.is-active) {
         color: #4b5eff;
         font-weight: var(--ins-font-weight-medium);
-        background-color: #eef3ff;
+        background-color: var(--ins-brand-hover);
+        border-radius: var(--ins-radius-md);
+      }
+
+      :deep(.el-sub-menu__title) {
+        height: 40px;
+        line-height: 40px;
+        margin: 0 var(--ins-spacing-xs);
+        border-radius: var(--ins-radius-md);
+      }
+
+      :deep(.el-sub-menu__title):hover {
+        color: #4b5eff;
+        background-color: var(--ins-brand-hover);
+        border-radius: var(--ins-radius-md);
+      }
+
+      :deep(.el-menu-item) > span,
+      :deep(.el-sub-menu__title) > span {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
-    .menu-icon {
-      margin-right: 8px;
+    :deep(.menu-icon) {
+      margin-right: var(--ins-spacing-2xs);
       font-size: 20px;
       vertical-align: middle;
     }
