@@ -39,7 +39,7 @@
     </template>
 
     <template #search-extra>
-      <el-button type="primary" @click="showDialog('add')">新增用户</el-button>
+      <el-button type="primary" @click="showDialog('add')">新增</el-button>
     </template>
 
     <template #roleNames="{ row }">
@@ -84,7 +84,7 @@
   <!-- 新增/编辑抽屉 -->
   <InsDrawer
     v-model="dialogVisible"
-    :title="dialogType === 'add' ? '添加用户' : '编辑用户'"
+    :type="dialogType"
     :loading="submitLoading"
     @submit="handleSubmit"
   >
@@ -92,24 +92,27 @@
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="用户名" prop="userName">
-            <el-input v-model="dialogForm.userName" placeholder="请输入用户名" />
+            <el-input v-model="dialogForm.userName" clearable placeholder="请输入用户名" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="姓名" prop="nickName">
-            <el-input v-model="dialogForm.nickName" placeholder="请输入姓名" />
+            <el-input v-model="dialogForm.nickName" clearable placeholder="请输入姓名" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="手机号" prop="phone">
-            <el-input v-model="dialogForm.phone" placeholder="请输入手机号" />
+            <el-input v-model="dialogForm.phone" clearable placeholder="请输入手机号" />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="角色" prop="roles">
             <el-select
               v-model="dialogForm.roles"
               multiple
+              collapse-tags
+              collapse-tags-tooltip
+              clearable
               placeholder="请选择角色"
               style="width: 100%"
             >
@@ -341,7 +344,7 @@ const handleSubmit = async () => {
 }
 
 const handleDelete = (row) => {
-  ElMessageBox.confirm(`确定要删除用户 "${row.userName}" 吗？`, '删除用户', {
+  ElMessageBox.confirm(`确定删除${row.userName}吗？`, '删除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',

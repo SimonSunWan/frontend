@@ -19,7 +19,7 @@
     </template>
 
     <template #search-extra>
-      <el-button type="primary" @click="showDialog('add', null)">添加菜单</el-button>
+      <el-button type="primary" @click="showDialog('add', null)">新增</el-button>
     </template>
 
     <template #menuType="{ row }">
@@ -57,7 +57,7 @@
   <!-- 新增/编辑抽屉 -->
   <InsDrawer
     v-model="dialogVisible"
-    :title="dialogTitle"
+    :type="dialogType"
     :loading="submitLoading"
     @submit="handleSubmit"
   >
@@ -213,14 +213,6 @@ const dialogRules = computed(() => {
     rules.authMark = [{ required: true, message: '请输入权限标识', trigger: 'blur' }]
   }
   return rules
-})
-
-const dialogTitle = computed(() => {
-  if (currentParentId.value) return '新建子菜单'
-  if (dialogType.value === 'edit') {
-    return `编辑${dialogForm.menuType === 'menu' ? '菜单' : '权限'}`
-  }
-  return '新建菜单'
 })
 
 const getMenuTypeTag = (row) => {

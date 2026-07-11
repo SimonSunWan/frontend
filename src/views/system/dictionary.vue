@@ -17,7 +17,7 @@
     </template>
 
     <template #search-extra>
-      <el-button type="primary" @click="showTypeDialog('add')">新增字典</el-button>
+      <el-button type="primary" @click="showTypeDialog('add')">新增</el-button>
     </template>
 
     <template #status="{ row }">
@@ -35,7 +35,7 @@
   <!-- 字典分类抽屉 -->
   <InsDrawer
     v-model="typeDialogVisible"
-    :title="typeDialogType === 'add' ? '新增字典分类' : '编辑字典分类'"
+    :type="typeDialogType"
     :loading="typeSubmitLoading"
     @submit="handleTypeSubmit"
   >
@@ -72,7 +72,7 @@
     size="700px"
   >
     <div class="enum-header">
-      <el-button type="primary" @click="showEnumFormDialog('add', null)">新增枚举</el-button>
+      <el-button type="primary" @click="showEnumFormDialog('add', null)">新增</el-button>
     </div>
     <el-table
       v-loading="enumLoading"
@@ -99,7 +99,7 @@
     <!-- 枚举新增/编辑表单抽屉 -->
     <InsDrawer
       v-model="enumFormDialogVisible"
-      :title="enumFormDialogType === 'add' ? '新增字典枚举' : '编辑字典枚举'"
+      :type="enumFormDialogType"
       :loading="enumSubmitLoading"
       append-to-body
       @submit="handleEnumSubmit"

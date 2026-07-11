@@ -17,7 +17,7 @@
     </template>
 
     <template #search-extra>
-      <el-button type="primary" @click="showDialog('add')">新增角色</el-button>
+      <el-button type="primary" @click="showDialog('add')">新增</el-button>
     </template>
 
     <template #status="{ row }">
@@ -26,7 +26,7 @@
       </el-tag>
     </template>
     <template #action="{ row }">
-      <el-button type="primary" link @click="showPermissionDialog(row)">菜单权限</el-button>
+      <el-button type="primary" link @click="showPermissionDialog(row)">权限</el-button>
       <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
       <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
     </template>
@@ -35,7 +35,7 @@
   <!-- 新增/编辑抽屉 -->
   <InsDrawer
     v-model="dialogVisible"
-    :title="dialogType === 'add' ? '新增角色' : '编辑角色'"
+    :type="dialogType"
     :loading="submitLoading"
     @submit="handleSubmit"
   >
@@ -70,10 +70,10 @@
     </el-form>
   </InsDrawer>
 
-  <!-- 菜单权限抽屉 -->
+  <!-- 权限抽屉 -->
   <InsDrawer
     v-model="permissionVisible"
-    title="菜单权限"
+    title="权限"
     size="500px"
     :loading="permLoading"
     confirm-text="保存"
@@ -305,7 +305,7 @@ const handleSubmit = async () => {
 }
 
 const handleDelete = (row) => {
-  ElMessageBox.confirm('确定删除该角色吗？', '删除确认', {
+  ElMessageBox.confirm(`确定删除${row.roleName}吗？`, '删除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
@@ -406,7 +406,7 @@ const savePermission = () => {
 
   if (allCheckedKeys.length === 0) {
     ElMessageBox.confirm(
-      '当前没有选中任何菜单权限，这将清空该角色的所有权限。确定要继续吗？',
+      '当前没有选中任何权限，这将清空该角色的所有权限。确定要继续吗？',
       '确认清空权限',
       {
         confirmButtonText: '确定',

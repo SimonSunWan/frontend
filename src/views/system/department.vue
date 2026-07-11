@@ -16,7 +16,7 @@
     </template>
 
     <template #search-extra>
-      <el-button type="primary" @click="showDialog('add', null)">添加部门</el-button>
+      <el-button type="primary" @click="showDialog('add', null)">新增</el-button>
     </template>
 
     <template #leaders="{ row }">
@@ -40,7 +40,7 @@
   <!-- 新增/编辑抽屉 -->
   <InsDrawer
     v-model="dialogVisible"
-    :title="dialogTitle"
+    :type="dialogType"
     :loading="submitLoading"
     @submit="handleSubmit"
   >
@@ -163,11 +163,6 @@ const dialogRules = {
   deptName: [{ required: true, message: '请输入部门名称', trigger: 'blur' }],
   sortOrder: [{ required: true, message: '请输入排序号', trigger: 'blur' }],
 }
-
-const dialogTitle = computed(() => {
-  if (currentParentId.value) return '添加子部门'
-  return dialogType.value === 'add' ? '添加部门' : '编辑部门'
-})
 
 const parentDeptName = computed(() => {
   if (!currentParentId.value) return ''

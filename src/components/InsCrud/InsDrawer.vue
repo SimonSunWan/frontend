@@ -1,7 +1,7 @@
 <template>
   <el-drawer
     v-model="visible"
-    :title="title"
+    :title="resolvedTitle"
     :size="size"
     :direction="direction"
     :append-to-body="appendToBody"
@@ -28,6 +28,7 @@ defineOptions({ name: 'InsDrawer' })
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   title: { type: String, default: '' },
+  type: { type: String, default: 'add' },
   size: { type: [String, Number], default: '700px' },
   direction: { type: String, default: 'rtl' },
   loading: { type: Boolean, default: false },
@@ -41,6 +42,8 @@ const visible = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val),
 })
+
+const resolvedTitle = computed(() => props.title || (props.type === 'edit' ? '编辑' : '新增'))
 
 const handleClose = (done) => {
   emit('close')
