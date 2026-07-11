@@ -249,9 +249,15 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .mine-container {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: var(--ins-spacing-lg);
+  margin-right: calc(-1 * var(--ins-spacing-lg));
+
   .mine-layout {
     display: flex;
     align-items: stretch;
+    min-height: 100%;
     gap: var(--ins-spacing-lg);
 
     .mine-left {
