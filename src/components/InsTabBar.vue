@@ -24,10 +24,8 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="closeOthers" style="font-size: 12px"
-            >关闭其他</el-dropdown-item
-          >
-          <el-dropdown-item command="closeAll" style="font-size: 12px">关闭全部</el-dropdown-item>
+          <el-dropdown-item command="closeOthers" class="dropdown-item">关闭其他</el-dropdown-item>
+          <el-dropdown-item command="closeAll" class="dropdown-item">关闭全部</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -77,11 +75,9 @@ const autoPosition = () => {
   const ulWidth = tabsRef.value.offsetWidth
   const offsetLeft = activeEl.offsetLeft
   const curRight = offsetLeft + activeEl.clientWidth
-  // 右侧被遮：往左推
   if (curRight > containerWidth - translateX.value) {
     translateX.value = Math.max(containerWidth - curRight - 6, containerWidth - ulWidth)
   } else if (offsetLeft < -translateX.value) {
-    // 左侧被遮：往右推
     translateX.value = -offsetLeft
   }
 }
@@ -108,7 +104,7 @@ onUnmounted(() => {
 .tab-view {
   display: flex;
   align-items: flex-end;
-  padding: 0 12px 0 16px;
+  padding: 0 var(--ins-spacing-sm) 0 var(--ins-spacing-md);
   background-color: var(--ins-bg-container);
   border-bottom: 1px solid var(--ins-border-light);
   border-radius: var(--ins-radius-md) var(--ins-radius-md) 0 0;
@@ -117,14 +113,14 @@ onUnmounted(() => {
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    padding-top: 4px;
+    padding-top: var(--ins-spacing-2xs);
   }
 
   .tab-list {
     display: inline-flex;
     align-items: flex-end;
     height: 32px;
-    padding-left: 4px;
+    padding-left: var(--ins-spacing-2xs);
     white-space: nowrap;
     will-change: transform;
   }
@@ -134,8 +130,8 @@ onUnmounted(() => {
     display: inline-flex;
     align-items: center;
     height: 32px;
-    padding: 0 8px 0 12px;
-    margin-right: 4px;
+    padding: 0 var(--ins-spacing-xs) 0 var(--ins-spacing-sm);
+    margin-right: var(--ins-spacing-2xs);
     font-size: var(--ins-font-size-xs);
     color: var(--ins-text-regular);
     cursor: pointer;
@@ -147,31 +143,29 @@ onUnmounted(() => {
       background-color: var(--ins-bg-muted);
     }
 
-    /* 谷歌风格：激活态用品牌浅色背景 + 底部连通 */
     &.active {
-      color: #4b5eff;
+      color: var(--ins-color-primary);
       font-weight: var(--ins-font-weight-medium);
-      background-color: #eef3ff;
+      background-color: var(--ins-brand-hover);
       border-bottom: 0;
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
 
       &::before,
       &::after {
-        box-shadow: 0 0 0 30px #eef3ff;
+        box-shadow: 0 0 0 30px var(--ins-brand-hover);
       }
 
       .tab-close {
-        color: #4b5eff;
+        color: var(--ins-color-primary);
 
         &:hover {
           color: var(--ins-text-inverse);
-          background-color: #4b5eff;
+          background-color: var(--ins-color-primary);
         }
       }
     }
 
-    /* 左右 Chrome 圆弧曲线（默认透明，激活时填背景色） */
     &::before,
     &::after {
       position: absolute;
@@ -203,13 +197,13 @@ onUnmounted(() => {
       justify-content: center;
       width: 18px;
       height: 18px;
-      margin-left: 4px;
+      margin-left: var(--ins-spacing-2xs);
       border-radius: 50%;
       color: var(--ins-text-secondary);
       transition: all var(--ins-transition-fast);
 
       .el-icon {
-        font-size: 12px;
+        font-size: var(--ins-font-size-xs);
       }
 
       &:hover {
@@ -218,7 +212,6 @@ onUnmounted(() => {
       }
     }
 
-    /* 标签间竖向分隔线 */
     .line {
       position: absolute;
       left: -4px;
@@ -231,7 +224,6 @@ onUnmounted(() => {
       pointer-events: none;
     }
 
-    /* hover / active 时隐藏自身及相邻标签的分隔线，保证曲线无缝 */
     &:hover .line,
     &.active .line,
     &:first-child .line,
@@ -247,7 +239,7 @@ onUnmounted(() => {
     justify-content: center;
     width: 32px;
     height: 32px;
-    margin-left: 4px;
+    margin-left: var(--ins-spacing-2xs);
     color: var(--ins-text-secondary);
     cursor: pointer;
     border-radius: var(--ins-radius-md);
@@ -260,5 +252,9 @@ onUnmounted(() => {
       background-color: var(--ins-bg-muted);
     }
   }
+}
+
+.dropdown-item {
+  font-size: var(--ins-font-size-xs);
 }
 </style>

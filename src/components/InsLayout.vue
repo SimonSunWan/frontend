@@ -133,20 +133,20 @@ const handleLogout = () => {
   .layout-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0 20px;
+    gap: var(--ins-spacing-sm);
+    padding: 0 var(--ins-spacing-lg);
     border-bottom: 1px solid var(--el-border-color);
     background:
       url('@/assets/images/layout-bg.png') no-repeat left center / auto 100%,
-      linear-gradient(221deg, #4f8aff, #3d50f1);
+      var(--ins-gradient-brand);
     height: 60px;
     flex-shrink: 0;
-    color: #fff;
+    color: var(--ins-text-inverse);
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--ins-spacing-sm);
       margin-right: auto;
     }
 
@@ -157,30 +157,30 @@ const handleLogout = () => {
     }
 
     .logo-text {
-      font-size: 20px;
+      font-size: var(--ins-font-size-2xl);
       white-space: nowrap;
-      color: #fff;
+      color: var(--ins-text-inverse);
     }
 
     .collapse-btn {
-      font-size: 20px;
+      font-size: var(--ins-font-size-2xl);
       cursor: pointer;
-      color: #fff;
+      color: var(--ins-text-inverse);
 
       &:hover {
-        color: #e6f0ff;
+        color: var(--ins-brand-hover);
       }
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: var(--ins-spacing-md);
     }
 
     .menu-search {
       :deep(.el-input__inner) {
-        color: #fff;
+        color: var(--ins-text-inverse);
 
         &::placeholder {
           color: rgba(255, 255, 255, 0.7);
@@ -189,7 +189,7 @@ const handleLogout = () => {
 
       :deep(.el-input__prefix),
       :deep(.el-input__suffix) {
-        color: #fff;
+        color: var(--ins-text-inverse);
       }
     }
   }
@@ -221,13 +221,13 @@ const handleLogout = () => {
       }
 
       :deep(.el-menu-item):hover {
-        color: #4b5eff;
+        color: var(--ins-color-primary);
         background-color: var(--ins-brand-hover);
         border-radius: var(--ins-radius-md);
       }
 
       :deep(.el-menu-item.is-active) {
-        color: #4b5eff;
+        color: var(--ins-color-primary);
         font-weight: var(--ins-font-weight-medium);
         background-color: var(--ins-brand-hover);
         border-radius: var(--ins-radius-md);
@@ -241,7 +241,7 @@ const handleLogout = () => {
       }
 
       :deep(.el-sub-menu__title):hover {
-        color: #4b5eff;
+        color: var(--ins-color-primary);
         background-color: var(--ins-brand-hover);
         border-radius: var(--ins-radius-md);
       }
@@ -258,23 +258,35 @@ const handleLogout = () => {
 
     :deep(.menu-icon) {
       margin-right: var(--ins-spacing-2xs);
-      font-size: 20px;
+      font-size: var(--ins-font-size-2xl);
       vertical-align: middle;
     }
   }
 
   .layout-main {
-    background: #fafbfc;
+    background: var(--ins-bg-page);
     padding: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 
     .layout-content {
-      padding: 20px;
+      padding: var(--ins-spacing-lg);
       flex: 1;
       min-height: 0;
       overflow: hidden;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: var(--ins-spacing-2xs);
+      cursor: pointer;
+      color: var(--ins-text-inverse);
+
+      :deep(.el-text) {
+        color: var(--ins-text-inverse);
+      }
     }
   }
 }
@@ -283,26 +295,15 @@ const handleLogout = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--ins-spacing-2xs);
 
-  .search-item-title {
-    color: var(--el-text-color-primary);
+  &-title {
+    color: var(--ins-text-primary);
   }
 
-  .search-item-path {
-    color: var(--el-text-color-secondary);
-    font-size: 12px;
-  }
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  color: #fff;
-
-  :deep(.el-text) {
-    color: #fff;
+  &-path {
+    color: var(--ins-text-secondary);
+    font-size: var(--ins-font-size-xs);
   }
 }
 
@@ -310,42 +311,44 @@ const handleLogout = () => {
   .user-menu-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 4px;
+    gap: var(--ins-spacing-xs);
+    padding: var(--ins-spacing-xs) var(--ins-spacing-2xs);
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: var(--ins-radius-md);
 
     &:hover {
-      background: #f5f7fa;
-      color: var(--el-color-primary);
+      background: var(--ins-bg-muted);
+      color: var(--ins-color-primary);
     }
   }
 }
 </style>
 
-<style>
-.layout-header .el-input__wrapper {
-  background-color: #fff !important;
-  box-shadow: none !important;
-  border-radius: 16px !important;
-}
+<style lang="scss">
+.layout-header {
+  .el-input__wrapper {
+    background-color: var(--ins-bg-container) !important;
+    box-shadow: none !important;
+    border-radius: 999px !important;
 
-.layout-header .el-input__wrapper:hover,
-.layout-header .el-input__wrapper.is-focus {
-  box-shadow: none !important;
-}
+    &:hover,
+    &.is-focus {
+      box-shadow: none !important;
+    }
+  }
 
-.layout-header .el-input__inner {
-  color: var(--el-text-color-regular, #606266);
-}
+  .el-input__inner {
+    color: var(--el-text-color-regular);
 
-.layout-header .el-input__inner::placeholder {
-  color: var(--el-text-color-placeholder, #a8abb2);
-}
+    &::placeholder {
+      color: var(--el-text-color-placeholder);
+    }
+  }
 
-.layout-header .el-input__prefix,
-.layout-header .el-input__suffix {
-  color: var(--el-text-color-regular, #606266);
+  .el-input__prefix,
+  .el-input__suffix {
+    color: var(--el-text-color-regular);
+  }
 }
 
 .user-dropdown-popper {
