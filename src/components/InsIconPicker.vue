@@ -48,11 +48,9 @@ defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-
 const visible = ref(false)
 const query = ref('')
 
-// 从 iconfont.css 中解析出所有图标 class 名
 const iconNames = [
   ...new Set(
     [...iconfontCss.matchAll(/\.icon-([a-zA-Z0-9_-]+)\s*:before/g)].map((m) => `icon-${m[1]}`),
@@ -83,50 +81,50 @@ const clear = () => {
 .icon-picker-trigger {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--ins-spacing-xs);
   width: 100%;
   height: 32px;
-  padding: 0 11px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  border-radius: var(--el-border-radius-base, 4px);
+  padding: 0 var(--ins-spacing-sm);
+  border: 1px solid var(--el-border-color);
+  border-radius: var(--ins-radius-md);
   cursor: pointer;
-  background: var(--el-fill-color-blank, #fff);
-  transition: border-color 0.2s;
+  background: var(--ins-bg-container);
+  transition: border-color var(--ins-transition-base);
   box-sizing: border-box;
 
   &:hover {
-    border-color: var(--el-border-color-hover, #c0c4cc);
+    border-color: var(--el-border-color-hover);
   }
 
   &.is-focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--ins-color-primary);
   }
 
   .preview {
-    font-size: 18px;
-    color: var(--el-text-color-primary);
+    font-size: var(--ins-font-size-xl);
+    color: var(--ins-text-primary);
     margin-right: auto;
   }
 
   .placeholder {
-    color: var(--el-text-color-placeholder, #a8abb2);
-    font-size: 14px;
+    color: var(--ins-text-secondary);
+    font-size: var(--ins-font-size-base);
     margin-right: auto;
   }
 
   .clear {
-    color: var(--el-text-color-placeholder, #a8abb2);
+    color: var(--ins-text-secondary);
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color var(--ins-transition-base);
 
     &:hover {
-      color: var(--el-color-primary, #409eff);
+      color: var(--ins-color-primary);
     }
   }
 
   .arrow {
-    color: var(--el-text-color-placeholder, #a8abb2);
-    transition: transform 0.2s;
+    color: var(--ins-text-secondary);
+    transition: transform var(--ins-transition-base);
 
     &.is-open {
       transform: rotate(180deg);
@@ -136,46 +134,41 @@ const clear = () => {
 
 .icon-picker {
   .icon-grid {
-    margin-top: 10px;
-    margin-right: -12px;
-    padding-right: 12px;
+    margin-top: var(--ins-spacing-xs);
+    margin-right: calc(-1 * var(--ins-spacing-sm));
+    padding-right: var(--ins-spacing-sm);
     max-height: 280px;
     overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
+    gap: var(--ins-spacing-2xs);
 
     .icon-cell {
       display: flex;
       align-items: center;
       justify-content: center;
       height: 40px;
-      border: 1px solid var(--el-border-color-light, #e4e7ed);
-      border-radius: 4px;
+      border: 1px solid var(--el-border-color-light);
+      border-radius: var(--ins-radius-md);
       cursor: pointer;
-      font-size: 20px;
-      color: var(--el-text-color-regular);
-      transition: all 0.15s;
+      font-size: var(--ins-font-size-2xl);
+      color: var(--ins-text-regular);
+      transition: all var(--ins-transition-fast);
 
-      &:hover {
-        border-color: var(--el-color-primary, #409eff);
-        color: var(--el-color-primary, #409eff);
-        background: var(--el-color-primary-light-9, #ecf5ff);
-      }
-
+      &:hover,
       &.active {
-        border-color: var(--el-color-primary, #409eff);
-        color: var(--el-color-primary, #409eff);
-        background: var(--el-color-primary-light-9, #ecf5ff);
+        border-color: var(--ins-color-primary);
+        color: var(--ins-color-primary);
+        background: var(--ins-brand-hover);
       }
     }
 
     .empty {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 24px 0;
-      color: var(--el-text-color-placeholder, #a8abb2);
-      font-size: 13px;
+      padding: var(--ins-spacing-xl) 0;
+      color: var(--ins-text-secondary);
+      font-size: var(--ins-font-size-sm);
     }
   }
 }
