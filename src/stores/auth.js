@@ -1,4 +1,4 @@
-import { getUserInfoApi, loginApi } from '@/api/user'
+import { getUserInfoApi, loginApi } from '@/api/auth'
 import { useMenuStore } from '@/stores/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'

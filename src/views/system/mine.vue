@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { changePasswordApi, updateUserInfoApi } from '@/api/user'
+import { changePasswordApi, updateUserInfoApi } from '@/api/auth'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
 import { onMounted, reactive, ref } from 'vue'

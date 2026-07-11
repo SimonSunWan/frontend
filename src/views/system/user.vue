@@ -154,7 +154,7 @@
 <script setup>
 import InsTablePage from '@/components/InsCrud/index.vue'
 import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
-import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/user'
+import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/auth'
 import { getAllRolesApi } from '@/api/role'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, reactive, ref, watch } from 'vue'
