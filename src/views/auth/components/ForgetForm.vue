@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-import { forgetPasswordApi } from '@/api/users'
+import { forgetPasswordApi } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 

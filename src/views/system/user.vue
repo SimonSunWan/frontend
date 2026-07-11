@@ -155,8 +155,8 @@
 <script setup>
 import TablePage from '@/components/TablePage.vue'
 import FormDrawer from '@/components/FormDrawer.vue'
-import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/users'
-import { getAllRolesApi } from '@/api/roles'
+import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/user'
+import { getAllRolesApi } from '@/api/role'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, reactive, ref, watch } from 'vue'
 

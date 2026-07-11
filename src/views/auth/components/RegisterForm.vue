@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { registerApi } from '@/api/users'
+import { registerApi } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 

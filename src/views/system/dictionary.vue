@@ -153,7 +153,7 @@ import {
   getDictionaryTypesApi,
   updateDictionaryEnumApi,
   updateDictionaryTypeApi,
-} from '@/api/dictionaries'
+} from '@/api/dictionary'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 

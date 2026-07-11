@@ -125,7 +125,7 @@ import {
   getRoleMenusApi,
   updateRoleApi,
   updateRoleMenusApi,
-} from '@/api/roles'
+} from '@/api/role'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { nextTick, onMounted, reactive, ref } from 'vue'
 

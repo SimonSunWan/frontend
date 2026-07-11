@@ -122,8 +122,8 @@ import {
   deleteDepartmentApi,
   getDepartmentListApi,
   updateDepartmentApi,
-} from '@/api/departments'
-import { getUserListApi } from '@/api/users'
+} from '@/api/department'
+import { getUserListApi } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 

@@ -156,7 +156,7 @@
 import TablePage from '@/components/TablePage.vue'
 import FormDrawer from '@/components/FormDrawer.vue'
 import IconPicker from '@/components/IconPicker.vue'
-import { createMenuApi, deleteMenuApi, getMenuListApi, updateMenuApi } from '@/api/menus'
+import { createMenuApi, deleteMenuApi, getMenuListApi, updateMenuApi } from '@/api/menu'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 

@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores/auth'
 import { useMenuStore } from '@/stores/menu'
-import { getNavigationMenusApi } from '@/api/menus'
+import { getNavigationMenusApi } from '@/api/menu'
 import { registerDynamicRoutes } from './registerRoutes'
 import NProgress from 'nprogress'
 
