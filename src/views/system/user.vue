@@ -20,16 +20,8 @@
       <el-form-item label="手机号">
         <el-input v-model="form.phone" placeholder="请输入手机号" clearable />
       </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="form.email" placeholder="请输入邮箱" clearable />
-      </el-form-item>
       <el-form-item label="角色">
-        <el-select
-          v-model="form.roleCode"
-          placeholder="请选择角色"
-          clearable
-          style="width: 194.5px"
-        >
+        <el-select v-model="form.roleCode" placeholder="请选择角色" clearable>
           <el-option
             v-for="role in roleList"
             :key="role.value"
@@ -39,7 +31,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="状态">
-        <el-select v-model="form.status" placeholder="请选择状态" clearable style="width: 194.5px">
+        <el-select v-model="form.status" placeholder="请选择状态" clearable>
           <el-option label="启用" :value="true" />
           <el-option label="禁用" :value="false" />
         </el-select>
@@ -113,11 +105,6 @@
             <el-input v-model="dialogForm.phone" placeholder="请输入手机号" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="dialogForm.email" placeholder="请输入邮箱" />
-          </el-form-item>
-        </el-col>
         <el-col :span="24">
           <el-form-item label="角色" prop="roles">
             <el-select
@@ -156,7 +143,7 @@ import InsTablePage from '@/components/InsCrud/index.vue'
 import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
 import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/auth'
 import { getAllRolesApi } from '@/api/role'
-import { emailRule, nickNameRule, phoneRule, userNameRule } from '@/utils/validators'
+import { nickNameRule, phoneRule, userNameRule } from '@/utils/validators'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, reactive, ref, watch } from 'vue'
 
@@ -184,12 +171,6 @@ const columns = [
     showOverflowTooltip: true,
     formatter: (row) => row.phone || '-',
   },
-  {
-    prop: 'email',
-    label: '邮箱',
-    showOverflowTooltip: true,
-    formatter: (row) => row.email || '-',
-  },
   { label: '角色名称', minWidth: 120, slotName: 'roleNames' },
   { label: '所属部门', minWidth: 120, slotName: 'departments' },
   { label: '状态', width: 80, align: 'center', slotName: 'status' },
@@ -200,7 +181,6 @@ const searchForm = reactive({
   userName: '',
   nickName: '',
   phone: '',
-  email: '',
   roleCode: '',
   status: '',
 })
@@ -221,7 +201,6 @@ const dialogForm = reactive({
   userName: '',
   nickName: '',
   phone: '',
-  email: '',
   password: '',
   roles: [],
   status: true,
@@ -231,7 +210,6 @@ const dialogRules = {
   userName: userNameRule,
   nickName: nickNameRule,
   phone: phoneRule,
-  email: emailRule,
   roles: [{ required: true, message: '请选择角色', trigger: 'change' }],
 }
 
@@ -286,7 +264,6 @@ const handleReset = () => {
     userName: '',
     nickName: '',
     phone: '',
-    email: '',
     roleCode: '',
     status: '',
   })
@@ -310,7 +287,6 @@ const resetDialogForm = () => {
     userName: '',
     nickName: '',
     phone: '',
-    email: '',
     password: '',
     roles: [],
     status: true,
@@ -327,7 +303,6 @@ const showDialog = (type, row) => {
       userName: row.userName || '',
       nickName: row.nickName || '',
       phone: row.phone || '',
-      email: row.email || '',
       roles: Array.isArray(row.roles) ? row.roles : [],
       status: row.status,
     })

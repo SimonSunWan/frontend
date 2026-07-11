@@ -108,7 +108,7 @@ const TableColumn = defineComponent({
           headerAlign: col.headerAlign,
           sortable: col.sortable,
           type: col.type,
-          showOverflowTooltip: col.showOverflowTooltip,
+          showOverflowTooltip: col.showOverflowTooltip ?? !col.slotName,
           formatter: col.formatter,
           ...(col.attrs || {}),
         },

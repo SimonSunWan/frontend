@@ -38,9 +38,28 @@
   border-radius: var(--ins-radius-lg);
 }
 
+.el-button--primary:not(.is-link):not(.is-text):not(.is-plain) {
+  background: linear-gradient(225deg, #4f8aff, #0a66e6);
+  border-color: transparent;
+
+  &:hover,
+  &.is-hover {
+    background: linear-gradient(225deg, #4f8aff, #0a66e6);
+    filter: brightness(1.08);
+  }
+
+  &:active,
+  &.is-active {
+    filter: brightness(0.95);
+  }
+
+  &.is-disabled,
+  &.is-loading {
+    opacity: 0.6;
+  }
+}
+
 .el-table {
-  // 操作列：单元格内存在多个按钮时，自动在相邻按钮间绘制分割线
-  // 仅当按钮数 >= 2 时生效，权限只显示部分按钮时不会出现孤立分割线
   .cell:has(.el-button + .el-button) {
     display: inline-flex;
     align-items: center;
