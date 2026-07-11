@@ -206,7 +206,7 @@ const handleSearchSelect = (item) => {
 
       .el-menu-item.is-active {
         color: #4b5eff;
-        font-weight: var(--var-font-weight-medium);
+        font-weight: var(--ins-font-weight-medium);
         background-color: #eef3ff;
       }
     }

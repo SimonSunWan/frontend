@@ -32,7 +32,7 @@
         :loading="loading"
         @click="handleLogin"
       >
-        登 录
+        登录
       </el-button>
       <div class="footer">
         <p>

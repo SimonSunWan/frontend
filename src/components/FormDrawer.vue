@@ -65,16 +65,16 @@ const handleClose = (done) => {
 .form-drawer {
   .el-drawer__header {
     margin-bottom: 0;
-    padding-bottom: var(--var-spacing-md);
-    border-bottom: 1px solid var(--var-border-light);
+    padding-bottom: var(--ins-spacing-md);
+    border-bottom: 1px solid var(--ins-border-light);
   }
 
   .el-drawer__body {
-    padding: var(--var-spacing-md) var(--var-spacing-lg);
+    padding: var(--ins-spacing-md) var(--ins-spacing-lg);
   }
 
   .el-drawer__footer {
-    border-top: 1px solid var(--var-border-light);
+    border-top: 1px solid var(--ins-border-light);
   }
 }
 </style>

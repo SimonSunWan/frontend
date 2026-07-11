@@ -209,7 +209,7 @@ const handleCurrentChange = (current) => {
   flex-direction: column;
 
   :deep(.el-card) {
-    border-radius: var(--var-radius-lg);
+    border-radius: var(--ins-radius-lg);
   }
 
   .search-card {
@@ -258,7 +258,7 @@ const handleCurrentChange = (current) => {
     :deep(.el-table__header-wrapper) {
       .el-table__cell {
         color: #0d162a;
-        font-weight: var(--var-font-weight-medium);
+        font-weight: var(--ins-font-weight-medium);
         background-color: #eef3ff;
       }
     }

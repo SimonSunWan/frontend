@@ -2,73 +2,73 @@
 
 :root {
   // 品牌主色
-  --var-color-primary: #1677ff;
-  --var-color-primary-light: #4f8aff;
-  --var-color-primary-dark: #3d50f1;
+  --ins-color-primary: #1677ff;
+  --ins-color-primary-light: #4f8aff;
+  --ins-color-primary-dark: #3d50f1;
 
   // 状态色
-  --var-color-success: #67c23a;
-  --var-color-warning: #e6a23c;
-  --var-color-danger: #f56c6c;
-  --var-color-info: #909399;
+  --ins-color-success: #1677ff;
+  --ins-color-warning: #e6a23c;
+  --ins-color-danger: #f56c6c;
+  --ins-color-info: #909399;
 
   // 文字色
-  --var-text-primary: var(--el-text-color-primary);
-  --var-text-regular: var(--el-text-color-regular);
-  --var-text-secondary: var(--el-text-color-secondary);
-  --var-text-inverse: #ffffff; // 反色文字（深色/品牌色背景上的白字）
+  --ins-text-primary: var(--el-text-color-primary);
+  --ins-text-regular: var(--el-text-color-regular);
+  --ins-text-secondary: var(--el-text-color-secondary);
+  --ins-text-inverse: #ffffff; // 反色文字（深色/品牌色背景上的白字）
 
   // 背景色
-  --var-bg-page: #fafbfc; // 页面整体背景
-  --var-bg-container: #ffffff; // 卡片/容器背景
-  --var-bg-muted: #f5f7fa; // 次级背景（表格条纹/禁用区）
-  --var-bg-hover: #f2f4f5; // 悬浮背景（菜单等）
+  --ins-bg-page: #fafbfc; // 页面整体背景
+  --ins-bg-container: #ffffff; // 卡片/容器背景
+  --ins-bg-muted: #f5f7fa; // 次级背景（表格条纹/禁用区）
+  --ins-bg-hover: #f2f4f5; // 悬浮背景（菜单等）
 
   // 边框色
-  --var-border-light: var(--el-border-color-light);
+  --ins-border-light: var(--el-border-color-light);
 
   // 主题渐变
-  --var-gradient-brand: linear-gradient(221deg, #4f8aff, #3d50f1);
-  --var-brand-hover: #e6f0ff;
+  --ins-gradient-brand: linear-gradient(221deg, #4f8aff, #3d50f1);
+  --ins-brand-hover: #e6f0ff;
 
   // 间距
-  --var-spacing-2xs: 4px;
-  --var-spacing-xs: 8px;
-  --var-spacing-sm: 12px;
-  --var-spacing-md: 16px;
-  --var-spacing-lg: 20px;
-  --var-spacing-xl: 24px;
-  --var-spacing-2xl: 32px;
+  --ins-spacing-2xs: 4px;
+  --ins-spacing-xs: 8px;
+  --ins-spacing-sm: 12px;
+  --ins-spacing-md: 16px;
+  --ins-spacing-lg: 20px;
+  --ins-spacing-xl: 24px;
+  --ins-spacing-2xl: 32px;
 
   // 圆角
-  --var-radius-sm: 2px;
-  --var-radius-md: 4px;
-  --var-radius-lg: 8px;
-  --var-radius-xl: 12px;
+  --ins-radius-sm: 2px;
+  --ins-radius-md: 4px;
+  --ins-radius-lg: 8px;
+  --ins-radius-xl: 12px;
 
   // 字号
-  --var-font-size-xs: 12px;
-  --var-font-size-sm: 13px;
-  --var-font-size-base: 14px;
-  --var-font-size-lg: 16px;
-  --var-font-size-xl: 18px;
-  --var-font-size-2xl: 20px;
-  --var-font-size-3xl: 24px;
+  --ins-font-size-xs: 12px;
+  --ins-font-size-sm: 13px;
+  --ins-font-size-base: 14px;
+  --ins-font-size-lg: 16px;
+  --ins-font-size-xl: 18px;
+  --ins-font-size-2xl: 20px;
+  --ins-font-size-3xl: 24px;
 
   // 字重
-  --var-font-weight-regular: 400;
-  --var-font-weight-medium: 500;
-  --var-font-weight-bold: 700;
+  --ins-font-weight-regular: 400;
+  --ins-font-weight-medium: 500;
+  --ins-font-weight-bold: 700;
 
   // 行高
-  --var-line-height-base: 1.5;
+  --ins-line-height-base: 1.5;
 
   // 阴影
-  --var-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --var-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --var-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --ins-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --ins-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --ins-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
 
   // 过渡
-  --var-transition-fast: 0.15s ease;
-  --var-transition-base: 0.25s ease;
+  --ins-transition-fast: 0.15s ease;
+  --ins-transition-base: 0.25s ease;
 }

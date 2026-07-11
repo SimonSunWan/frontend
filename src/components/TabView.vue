@@ -115,9 +115,9 @@ onUnmounted(() => {
   display: flex;
   align-items: flex-end;
   padding: 0 4px;
-  background-color: var(--var-bg-container);
-  border-bottom: 1px solid var(--var-border-light);
-  border-radius: var(--var-radius-md) var(--var-radius-md) 0 0;
+  background-color: var(--ins-bg-container);
+  border-bottom: 1px solid var(--ins-border-light);
+  border-radius: var(--ins-radius-md) var(--ins-radius-md) 0 0;
 
   .tab-scroll {
     flex: 1;
@@ -142,21 +142,21 @@ onUnmounted(() => {
     height: 32px;
     padding: 0 8px 0 12px;
     margin-right: 4px;
-    font-size: var(--var-font-size-xs);
-    color: var(--var-text-regular);
+    font-size: var(--ins-font-size-xs);
+    color: var(--ins-text-regular);
     cursor: pointer;
-    border-radius: var(--var-radius-lg) var(--var-radius-lg) 0 0;
-    transition: all var(--var-transition-fast);
+    border-radius: var(--ins-radius-lg) var(--ins-radius-lg) 0 0;
+    transition: all var(--ins-transition-fast);
 
     &:hover {
-      color: var(--var-text-primary);
-      background-color: var(--var-bg-muted);
+      color: var(--ins-text-primary);
+      background-color: var(--ins-bg-muted);
     }
 
     /* 谷歌风格：激活态用品牌浅色背景 + 底部连通 */
     &.active {
       color: #4b5eff;
-      font-weight: var(--var-font-weight-medium);
+      font-weight: var(--ins-font-weight-medium);
       background-color: #eef3ff;
       border-bottom: 0;
       border-bottom-right-radius: 0;
@@ -171,7 +171,7 @@ onUnmounted(() => {
         color: #4b5eff;
 
         &:hover {
-          color: var(--var-text-inverse);
+          color: var(--ins-text-inverse);
           background-color: #4b5eff;
         }
       }
@@ -211,16 +211,16 @@ onUnmounted(() => {
       height: 18px;
       margin-left: 4px;
       border-radius: 50%;
-      color: var(--var-text-secondary);
-      transition: all var(--var-transition-fast);
+      color: var(--ins-text-secondary);
+      transition: all var(--ins-transition-fast);
 
       .el-icon {
         font-size: 12px;
       }
 
       &:hover {
-        color: var(--var-text-inverse);
-        background-color: var(--var-text-regular);
+        color: var(--ins-text-inverse);
+        background-color: var(--ins-text-regular);
       }
     }
 
@@ -231,9 +231,9 @@ onUnmounted(() => {
       top: 50%;
       width: 1px;
       height: 16px;
-      background-color: var(--var-border-light);
+      background-color: var(--ins-border-light);
       transform: translateY(-50%);
-      transition: opacity var(--var-transition-fast);
+      transition: opacity var(--ins-transition-fast);
       pointer-events: none;
     }
 
@@ -254,16 +254,16 @@ onUnmounted(() => {
     width: 32px;
     height: 32px;
     margin-left: 4px;
-    color: var(--var-text-secondary);
+    color: var(--ins-text-secondary);
     cursor: pointer;
-    border-radius: var(--var-radius-md);
+    border-radius: var(--ins-radius-md);
     flex-shrink: 0;
     outline: none;
-    transition: all var(--var-transition-fast);
+    transition: all var(--ins-transition-fast);
 
     &:hover {
-      color: var(--var-text-primary);
-      background-color: var(--var-bg-muted);
+      color: var(--ins-text-primary);
+      background-color: var(--ins-bg-muted);
     }
   }
 }

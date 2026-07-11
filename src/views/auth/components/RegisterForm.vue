@@ -50,7 +50,7 @@
         :loading="loading"
         @click="handleRegister"
       >
-        注 册
+        注册
       </el-button>
       <div class="footer">
         <p>
