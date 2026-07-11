@@ -1,5 +1,9 @@
-// 静态路由：无需权限即可访问
+// 静态路由
 export const staticRoutes = [
+  {
+    path: '/',
+    redirect: '/auth/login',
+  },
   {
     path: '/auth/login',
     name: 'Login',
@@ -14,5 +18,9 @@ export const staticRoutes = [
     path: '/auth/forget',
     name: 'Forget',
     component: () => import('@/views/auth/index.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/error/404.vue'),
   },
 ]
