@@ -1,5 +1,5 @@
 <template>
-  <TablePage
+  <InsTablePage
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
@@ -37,10 +37,10 @@
       <el-divider direction="vertical" />
       <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
     </template>
-  </TablePage>
+  </InsTablePage>
 
   <!-- 新增/编辑抽屉 -->
-  <FormDrawer
+  <InsDrawer
     v-model="dialogVisible"
     :title="dialogTitle"
     :loading="submitLoading"
@@ -111,12 +111,12 @@
         </el-col>
       </el-row>
     </el-form>
-  </FormDrawer>
+  </InsDrawer>
 </template>
 
 <script setup>
-import TablePage from '@/components/TablePage.vue'
-import FormDrawer from '@/components/FormDrawer.vue'
+import InsTablePage from '@/components/InsCrud/index.vue'
+import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
 import {
   createDepartmentApi,
   deleteDepartmentApi,

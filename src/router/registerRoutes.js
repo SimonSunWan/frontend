@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout.vue'
+import InsLayout from '@/components/InsLayout.vue'
 
 // 动态加载 views 下所有 vue 组件
 const modules = import.meta.glob('../views/**/*.vue')
@@ -33,9 +33,7 @@ export function registerDynamicRoutes(router, menuList) {
   menuList.forEach((menu) => {
     if (menu.meta?.isLink) return
 
-    const childMenus = (menu.children || []).filter(
-      (c) => !c.meta?.isLink && c.path,
-    )
+    const childMenus = (menu.children || []).filter((c) => !c.meta?.isLink && c.path)
     const children = childMenus
       .map((child) => {
         const component = loadComponent(child.path)
@@ -53,11 +51,11 @@ export function registerDynamicRoutes(router, menuList) {
       .filter(Boolean)
 
     if (children.length) {
-      // 父级菜单：使用 Layout 包裹子路由
+      // 父级菜单：使用 InsLayout 包裹子路由
       const removeFn = router.addRoute({
         path: menu.path,
         name: menu.name,
-        component: Layout,
+        component: InsLayout,
         redirect: menu.path + '/' + children[0].path,
         children,
       })
@@ -69,7 +67,7 @@ export function registerDynamicRoutes(router, menuList) {
         const removeFn = router.addRoute({
           path: menu.path,
           name: menu.name,
-          component: Layout,
+          component: InsLayout,
           children: [
             {
               path: '',

@@ -3,7 +3,7 @@
     <el-header class="layout-header">
       <div class="header-left">
         <el-image src="/favicon.ico" alt="logo" class="logo-img" fit="contain" />
-        <el-text size="large" tag="b" class="logo-text">极简设计运营平台</el-text>
+        <el-text size="large" tag="b" class="logo-text">INS DESIGN</el-text>
         <i
           class="iconfont collapse-btn"
           @click="isCollapse = !isCollapse"
@@ -30,7 +30,24 @@
         </template>
       </el-autocomplete>
       <div class="header-right">
-        <UserDropdown />
+        <el-popover placement="bottom-end" trigger="hover" popper-class="user-dropdown-popper">
+          <template #reference>
+            <div class="user-info">
+              <el-text>{{ authStore.userInfo?.nickName }}</el-text>
+              <el-icon><ArrowDown /></el-icon>
+            </div>
+          </template>
+          <div class="user-menu">
+            <div class="user-menu-item" @click="router.push('/system/mine')">
+              <el-icon><User /></el-icon>
+              <span>个人中心</span>
+            </div>
+            <div class="user-menu-item" @click="handleLogout">
+              <el-icon><SwitchButton /></el-icon>
+              <span>退出系统</span>
+            </div>
+          </div>
+        </el-popover>
       </div>
     </el-header>
     <el-container class="layout-body">
@@ -64,7 +81,7 @@
       </el-aside>
       <el-container class="layout-body">
         <el-main class="layout-main">
-          <TabView />
+          <InsTabBar />
           <div class="layout-content">
             <RouterView />
           </div>
@@ -75,16 +92,17 @@
 </template>
 
 <script setup>
-import TabView from '@/components/TabView.vue'
-import UserDropdown from '@/components/UserDropdown.vue'
+import InsTabBar from '@/components/InsTabBar.vue'
 import { useMenuStore } from '@/stores/menu'
-import { Search } from '@element-plus/icons-vue'
+import { useAuthStore } from '@/stores/auth'
+import { ArrowDown, Search, SwitchButton, User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const menuStore = useMenuStore()
+const authStore = useAuthStore()
 const isCollapse = ref(false)
 const searchKeyword = ref('')
 
@@ -120,6 +138,11 @@ const handleSearchSelect = (item) => {
     searchKeyword.value = ''
   }
 }
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/auth/login')
+}
 </script>
 
 <style lang="scss" scoped>
@@ -134,7 +157,7 @@ const handleSearchSelect = (item) => {
     padding: 0 20px;
     border-bottom: 1px solid var(--el-border-color);
     background:
-      url('@/assets/images/top-bg.png') no-repeat left center / auto 100%,
+      url('@/assets/images/layout-bg.png') no-repeat left center / auto 100%,
       linear-gradient(221deg, #4f8aff, #3d50f1);
     height: 60px;
     flex-shrink: 0;
@@ -250,6 +273,34 @@ const handleSearchSelect = (item) => {
     font-size: 12px;
   }
 }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: #fff;
+
+  :deep(.el-text) {
+    color: #fff;
+  }
+}
+
+.user-menu {
+  .user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px;
+    cursor: pointer;
+    border-radius: 4px;
+
+    &:hover {
+      background: #f5f7fa;
+      color: var(--el-color-primary);
+    }
+  }
+}
 </style>
 
 <style>
@@ -275,5 +326,10 @@ const handleSearchSelect = (item) => {
 .layout-header .el-input__prefix,
 .layout-header .el-input__suffix {
   color: var(--el-text-color-regular, #606266);
+}
+
+.user-dropdown-popper {
+  min-width: 115px !important;
+  width: 115px !important;
 }
 </style>

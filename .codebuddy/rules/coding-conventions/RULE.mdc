@@ -1,5 +1,5 @@
 ---
-description: 项目编码规范，约束异步错误处理、样式、表单校验与图标使用方式
+description: 项目编码规范
 alwaysApply: true
 enabled: true
 updatedAt: 2026-07-11T09:58:00.000Z

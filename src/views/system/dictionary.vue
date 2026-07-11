@@ -1,5 +1,5 @@
 <template>
-  <TablePage
+  <InsTablePage
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
@@ -32,10 +32,10 @@
       <el-divider direction="vertical" />
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
     </template>
-  </TablePage>
+  </InsTablePage>
 
   <!-- 字典分类抽屉 -->
-  <FormDrawer
+  <InsDrawer
     v-model="typeDialogVisible"
     :title="typeDialogType === 'add' ? '新增字典分类' : '编辑字典分类'"
     :loading="typeSubmitLoading"
@@ -65,10 +65,10 @@
         </el-col>
       </el-row>
     </el-form>
-  </FormDrawer>
+  </InsDrawer>
 
   <!-- 字典枚举抽屉 -->
-  <FormDrawer
+  <InsDrawer
     v-model="enumDialogVisible"
     :title="`${currentType?.name || ''} - 枚举管理`"
     size="700px"
@@ -101,7 +101,7 @@
     </el-table>
 
     <!-- 枚举新增/编辑表单抽屉 -->
-    <FormDrawer
+    <InsDrawer
       v-model="enumFormDialogVisible"
       :title="enumFormDialogType === 'add' ? '新增字典枚举' : '编辑字典枚举'"
       :loading="enumSubmitLoading"
@@ -137,13 +137,13 @@
           </el-col>
         </el-row>
       </el-form>
-    </FormDrawer>
-  </FormDrawer>
+    </InsDrawer>
+  </InsDrawer>
 </template>
 
 <script setup>
-import TablePage from '@/components/TablePage.vue'
-import FormDrawer from '@/components/FormDrawer.vue'
+import InsTablePage from '@/components/InsCrud/index.vue'
+import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
 import {
   createDictionaryEnumApi,
   createDictionaryTypeApi,

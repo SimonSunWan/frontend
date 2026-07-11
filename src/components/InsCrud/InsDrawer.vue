@@ -26,13 +26,15 @@
 <script setup>
 import { computed } from 'vue'
 
+defineOptions({ name: 'InsDrawer' })
+
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   title: { type: String, default: '' },
   size: { type: [String, Number], default: '700px' },
   direction: { type: String, default: 'rtl' },
   loading: { type: Boolean, default: false },
-  confirmText: { type: String, default: '确定' },
+  confirmText: { type: String, default: '保存' },
   appendToBody: { type: Boolean, default: false },
 })
 

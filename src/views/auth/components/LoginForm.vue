@@ -3,7 +3,7 @@
     <template #header>
       <div class="header-title">
         <img src="/favicon.ico" alt="logo" class="header-logo" />
-        <span>极简设计运营平台</span>
+        <span>INS DESIGN</span>
       </div>
     </template>
     <el-form ref="formRef" :model="form" :rules="rules" @keyup.enter="handleLogin">
@@ -66,7 +66,7 @@ const handleLogin = async () => {
   authStore
     .login(form.value)
     .then(() => {
-      ElMessage.success({ message: '登录成功', customClass: 'login-success-message' })
+      ElMessage.success('登录成功')
       router.push('/')
     })
     .catch(() => {})

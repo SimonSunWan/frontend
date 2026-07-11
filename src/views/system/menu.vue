@@ -1,5 +1,5 @@
 <template>
-  <TablePage
+  <InsTablePage
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
@@ -54,10 +54,10 @@
       <el-divider direction="vertical" />
       <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
     </template>
-  </TablePage>
+  </InsTablePage>
 
   <!-- 新增/编辑抽屉 -->
-  <FormDrawer
+  <InsDrawer
     v-model="dialogVisible"
     :title="dialogTitle"
     :loading="submitLoading"
@@ -90,7 +90,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="图标" prop="icon">
-              <IconPicker v-model="dialogForm.icon" />
+              <InsIconPicker v-model="dialogForm.icon" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -149,13 +149,13 @@
         </template>
       </el-row>
     </el-form>
-  </FormDrawer>
+  </InsDrawer>
 </template>
 
 <script setup>
-import TablePage from '@/components/TablePage.vue'
-import FormDrawer from '@/components/FormDrawer.vue'
-import IconPicker from '@/components/IconPicker.vue'
+import InsTablePage from '@/components/InsCrud/index.vue'
+import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
+import InsIconPicker from '@/components/InsIconPicker.vue'
 import { createMenuApi, deleteMenuApi, getMenuListApi, updateMenuApi } from '@/api/menu'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'

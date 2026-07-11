@@ -1,34 +1,20 @@
 <template>
-  <div class="table-page">
-    <!-- 搜索区域 -->
-    <el-card v-if="$slots.search" class="search-card" shadow="never">
-      <el-form :model="searchForm" inline>
-        <slot name="search" :form="searchForm" />
-        <el-form-item>
-          <el-button type="primary" @click="$emit('search')">搜索</el-button>
-          <el-button @click="$emit('reset')">重置</el-button>
-          <slot name="search-extra" />
-        </el-form-item>
-      </el-form>
-    </el-card>
-
-    <!-- 表格区域 -->
-    <el-card class="table-card" shadow="never">
-      <div v-if="$slots['table-header']" class="table-header">
-        <slot name="table-header" />
-      </div>
-      <div class="table-body">
-        <div class="table-body-inner">
-          <el-table
-            v-loading="loading"
-            :data="data"
-            :row-key="rowKey"
-            :tree-props="treeProps"
-            :stripe="stripe"
-            :border="border"
-            :default-expand-all="defaultExpandAll"
-            height="100%"
-          >
+  <el-card class="table-card" shadow="never">
+    <div v-if="$slots['table-header']" class="table-header">
+      <slot name="table-header" />
+    </div>
+    <div class="table-body">
+      <div class="table-body-inner">
+        <el-table
+          v-loading="loading"
+          :data="data"
+          :row-key="rowKey"
+          :tree-props="treeProps"
+          :stripe="stripe"
+          :border="border"
+          :default-expand-all="defaultExpandAll"
+          height="100%"
+        >
           <!-- 基于 columns 配置自动渲染列 -->
           <template v-if="columns?.length">
             <table-column
@@ -36,46 +22,35 @@
               :key="col.key || col.prop || col.type || col.label || idx"
               :col="col"
             >
-              <template
-                v-for="name in slotNames"
-                :key="name"
-                #[name]="slotProps"
-              >
+              <template v-for="name in slotNames" :key="name" #[name]="slotProps">
                 <slot :name="name" v-bind="slotProps" />
               </template>
             </table-column>
           </template>
           <!-- 兜底: 允许直接传入 el-table-column -->
           <slot v-else />
-          </el-table>
-        </div>
+        </el-table>
       </div>
+    </div>
 
-      <div v-if="showPagination" class="pagination">
-        <el-pagination
-          v-model:current-page="pagination.current"
-          v-model:page-size="pagination.size"
-          :page-sizes="pageSizes"
-          :total="pagination.total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-    </el-card>
-  </div>
+    <div v-if="showPagination" class="pagination">
+      <el-pagination
+        v-model:current-page="pager.current"
+        v-model:page-size="pager.size"
+        :page-sizes="pageSizes"
+        :total="pager.total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+  </el-card>
 </template>
 
 <script setup>
-import {
-  computed,
-  defineComponent,
-  h,
-  reactive,
-  resolveComponent,
-  useSlots,
-  watch,
-} from 'vue'
+import { computed, defineComponent, h, reactive, resolveComponent, useSlots, watch } from 'vue'
+
+defineOptions({ name: 'InsTable' })
 
 const ElTableColumn = resolveComponent('ElTableColumn')
 
@@ -147,8 +122,6 @@ const TableColumn = defineComponent({
 const props = defineProps({
   loading: { type: Boolean, default: false },
   data: { type: Array, default: () => [] },
-  // 搜索表单数据
-  searchForm: { type: Object, default: () => ({}) },
   // 分页
   pagination: { type: Object, default: null },
   pageSizes: { type: Array, default: () => [10, 20, 50, 100] },
@@ -162,15 +135,15 @@ const props = defineProps({
   columns: { type: Array, default: () => [] },
 })
 
-const emit = defineEmits(['search', 'reset', 'page-change', 'size-change', 'current-change'])
+const emit = defineEmits(['page-change', 'size-change', 'current-change'])
 
 const slots = useSlots()
 const slotNames = computed(() => Object.keys(slots))
 
-const showPagination = !!props.pagination
+const showPagination = computed(() => !!props.pagination)
 
-// 本地分页代理
-const pagination = reactive({
+// 本地分页代理 (避免直接修改 prop)
+const pager = reactive({
   current: props.pagination?.current || 1,
   size: props.pagination?.size || 10,
   total: props.pagination?.total || 0,
@@ -180,104 +153,85 @@ watch(
   () => props.pagination,
   (val) => {
     if (val) {
-      pagination.current = val.current
-      pagination.size = val.size
-      pagination.total = val.total
+      pager.current = val.current
+      pager.size = val.size
+      pager.total = val.total
     }
   },
   { deep: true },
 )
 
 const handleSizeChange = (size) => {
-  pagination.size = size
-  pagination.current = 1
+  pager.size = size
+  pager.current = 1
   emit('size-change', size)
-  emit('page-change', { current: pagination.current, size })
+  emit('page-change', { current: pager.current, size })
 }
 
 const handleCurrentChange = (current) => {
-  pagination.current = current
+  pager.current = current
   emit('current-change', current)
-  emit('page-change', { current, size: pagination.size })
+  emit('page-change', { current, size: pager.size })
 }
 </script>
 
 <style lang="scss" scoped>
-.table-page {
-  height: 100%;
+.table-card {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 
-  :deep(.el-card) {
-    border-radius: var(--ins-radius-lg);
-  }
-
-  .search-card {
-    flex-shrink: 0;
-    margin-bottom: 16px;
-
-    :deep(.el-card__body) {
-      padding-bottom: 0;
-    }
-  }
-
-  .table-card {
+  :deep(.el-card__body) {
     flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
+  }
 
-    :deep(.el-card__body) {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
+  .table-header {
+    flex-shrink: 0;
+    margin-bottom: 16px;
+  }
+
+  // 表格区域：relative + absolute 撑满，让 el-table height:100% 有明确基准
+  .table-body {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .table-body-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  // 表头背景色
+  :deep(.el-table__header-wrapper) {
+    .el-table__cell {
+      color: #0d162a;
+      font-weight: var(--ins-font-weight-medium);
+      background-color: #eef3ff;
     }
+  }
 
-    .table-header {
-      flex-shrink: 0;
-      margin-bottom: 16px;
-    }
-
-    // 表格区域：relative + absolute 撑满，让 el-table height:100% 有明确基准
-    .table-body {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-    }
-
-    .table-body-inner {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    // 表头背景色
-    :deep(.el-table__header-wrapper) {
-      .el-table__cell {
-        color: #0d162a;
-        font-weight: var(--ins-font-weight-medium);
-        background-color: #eef3ff;
+  // 斑马纹背景色
+  :deep(.el-table__body-wrapper) {
+    tr.el-table__row--striped {
+      td.el-table__cell {
+        background-color: #f5f8ff;
       }
     }
+  }
 
-    // 斑马纹背景色
-    :deep(.el-table__body-wrapper) {
-      tr.el-table__row--striped {
-        td.el-table__cell {
-          background-color: #f5f8ff;
-        }
-      }
-    }
-
-    .pagination {
-      flex-shrink: 0;
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 16px;
-    }
+  .pagination {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <TablePage
+  <InsTablePage
     :loading="loading"
     :data="tableData"
     :search-form="searchForm"
@@ -87,14 +87,13 @@
       <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
       <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
     </template>
-  </TablePage>
+  </InsTablePage>
 
   <!-- 新增/编辑抽屉 -->
-  <FormDrawer
+  <InsDrawer
     v-model="dialogVisible"
     :title="dialogType === 'add' ? '添加用户' : '编辑用户'"
     :loading="submitLoading"
-    confirm-text="提交"
     @submit="handleSubmit"
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="80px">
@@ -149,12 +148,12 @@
         </el-col>
       </el-row>
     </el-form>
-  </FormDrawer>
+  </InsDrawer>
 </template>
 
 <script setup>
-import TablePage from '@/components/TablePage.vue'
-import FormDrawer from '@/components/FormDrawer.vue'
+import InsTablePage from '@/components/InsCrud/index.vue'
+import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
 import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/user'
 import { getAllRolesApi } from '@/api/role'
 import { ElMessage, ElMessageBox } from 'element-plus'
