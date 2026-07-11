@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     v-model="visible"
-    class="form-drawer"
     :title="title"
     :size="size"
     :direction="direction"
@@ -13,12 +12,10 @@
       <slot />
     </div>
     <template #footer>
-      <div class="drawer-footer">
-        <el-button @click="visible = false">取消</el-button>
-        <el-button type="primary" :loading="loading" @click="$emit('submit')">
-          {{ confirmText }}
-        </el-button>
-      </div>
+      <el-button @click="visible = false">取消</el-button>
+      <el-button type="primary" :loading="loading" @click="$emit('submit')">
+        {{ confirmText }}
+      </el-button>
     </template>
   </el-drawer>
 </template>
@@ -50,33 +47,3 @@ const handleClose = (done) => {
   done()
 }
 </script>
-
-<style lang="scss" scoped>
-.drawer-body {
-  padding: 0 4px;
-}
-
-.drawer-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-</style>
-
-<style lang="scss">
-.form-drawer {
-  .el-drawer__header {
-    margin-bottom: 0;
-    padding-bottom: var(--ins-spacing-md);
-    border-bottom: 1px solid var(--ins-border-light);
-  }
-
-  .el-drawer__body {
-    padding: var(--ins-spacing-md) var(--ins-spacing-lg);
-  }
-
-  .el-drawer__footer {
-    border-top: 1px solid var(--ins-border-light);
-  }
-}
-</style>

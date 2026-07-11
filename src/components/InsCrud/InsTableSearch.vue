@@ -24,7 +24,7 @@ defineEmits(['search', 'reset'])
 <style lang="scss" scoped>
 .search-card {
   flex-shrink: 0;
-  margin-bottom: 16px;
+  margin-bottom: var(--ins-spacing-lg);
 
   :deep(.el-card__body) {
     padding-bottom: 0;

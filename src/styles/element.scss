@@ -1,5 +1,5 @@
 /* 全局样式配置 */
- 
+
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'primary': (
@@ -15,3 +15,21 @@
 );
 
 @use 'element-plus/theme-chalk/src/index.scss' as *;
+
+.el-drawer {
+  .el-drawer__header {
+    margin-bottom: 0;
+    padding-bottom: var(--ins-spacing-md);
+    border-bottom: 1px solid var(--ins-border-light);
+  }
+
+  .el-drawer__body {
+    padding: var(--ins-spacing-md) var(--ins-spacing-lg);
+  }
+
+  .el-drawer__footer {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--ins-border-light);
+  }
+}

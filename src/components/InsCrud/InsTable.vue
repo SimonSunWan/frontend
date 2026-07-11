@@ -27,7 +27,7 @@
               </template>
             </table-column>
           </template>
-          <!-- 兜底: 允许直接传入 el-table-column -->
+          <!-- 允许直接传入 el-table-column -->
           <slot v-else />
         </el-table>
       </div>
@@ -56,7 +56,7 @@ const ElTableColumn = resolveComponent('ElTableColumn')
 
 /**
  * 递归列渲染组件
- * - col.children   多级表头
+ * - col.children    多级表头
  * - col.slotName    自定义单元格内容 (使用对应具名插槽)
  * - col.options     字典映射 [{ label, value }]
  * - col.formatter   el-table-column 原生 formatter
@@ -73,7 +73,6 @@ const TableColumn = defineComponent({
       const scopedSlots = {}
 
       if (col.children && col.children.length) {
-        // 多级表头: 子列通过 default 插槽挂载
         scopedSlots.default = () =>
           col.children.map((child, i) =>
             h(
@@ -86,7 +85,7 @@ const TableColumn = defineComponent({
             ),
           )
       } else if (col.slotName && slots[col.slotName]) {
-        // 自定义插槽渲染
+        // 自定义插槽
         scopedSlots.default = (scope) => slots[col.slotName](scope)
       } else if (col.options) {
         // 字典映射
@@ -131,18 +130,14 @@ const props = defineProps({
   stripe: { type: Boolean, default: true },
   border: { type: Boolean, default: false },
   defaultExpandAll: { type: Boolean, default: false },
-  // 列配置 (JSON 数组驱动渲染)
+  // 列配置
   columns: { type: Array, default: () => [] },
 })
 
 const emit = defineEmits(['page-change', 'size-change', 'current-change'])
-
 const slots = useSlots()
 const slotNames = computed(() => Object.keys(slots))
-
 const showPagination = computed(() => !!props.pagination)
-
-// 本地分页代理 (避免直接修改 prop)
 const pager = reactive({
   current: props.pagination?.current || 1,
   size: props.pagination?.size || 10,
@@ -191,10 +186,9 @@ const handleCurrentChange = (current) => {
 
   .table-header {
     flex-shrink: 0;
-    margin-bottom: 16px;
+    margin-bottom: var(--ins-spacing-lg);
   }
 
-  // 表格区域：relative + absolute 撑满，让 el-table height:100% 有明确基准
   .table-body {
     position: relative;
     flex: 1;
@@ -209,20 +203,16 @@ const handleCurrentChange = (current) => {
     height: 100%;
   }
 
-  // 表头背景色
   :deep(.el-table__header-wrapper) {
     .el-table__cell {
-      color: #0d162a;
-      font-weight: var(--ins-font-weight-medium);
-      background-color: #eef3ff;
+      background-color: var(--ins-brand-hover);
     }
   }
 
-  // 斑马纹背景色
   :deep(.el-table__body-wrapper) {
     tr.el-table__row--striped {
       td.el-table__cell {
-        background-color: #f5f8ff;
+        background-color: var(--ins-bg-muted);
       }
     }
   }
@@ -231,7 +221,7 @@ const handleCurrentChange = (current) => {
     flex-shrink: 0;
     display: flex;
     justify-content: flex-end;
-    margin-top: 16px;
+    margin-top: var(--ins-spacing-md);
   }
 }
 </style>
