@@ -1,9 +1,9 @@
 ---
-description: 
+description: 项目编码规范，约束异步错误处理、样式、表单校验与图标使用方式
 alwaysApply: true
 enabled: true
-updatedAt: 2026-05-09T09:01:14.850Z
-provider: 
+updatedAt: 2026-07-11T09:58:00.000Z
+provider:
 ---
 
 # 项目编码规范
@@ -38,6 +38,10 @@ try {
 - 使用 Element Plus 的 `rules` + `formRef.validate()` 进行表单校验
 - 不使用手动 `if` 判断字段是否为空
 
-### 4. 其他
-- 组件图标使用 `@element-plus/icons-vue`，通过 `:prefix-icon` 绑定组件引用
+### 4. 全局样式
 - 全局样式文件放在 `src/styles/` 目录下
+
+### 5. 代码质量
+- 代码逻辑清晰、简洁，避免冗余实现
+- 只保留必要注释，不写无意义的注释说明
+- 严禁在代码中编写 `console` 语句（如 `console.log`、`console.error` 等）

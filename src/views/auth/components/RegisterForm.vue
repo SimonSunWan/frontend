@@ -6,18 +6,40 @@
         <span>注册</span>
       </div>
     </template>
-    <el-form ref="formRef" :model="form" :rules="rules" autocomplete="off" @keyup.enter="handleRegister">
+    <el-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      autocomplete="off"
+      @keyup.enter="handleRegister"
+    >
       <el-form-item prop="userName">
-        <el-input v-model="form.userName" placeholder="请输入用户名" size="large" autocomplete="off" />
+        <el-input
+          v-model="form.userName"
+          placeholder="请输入用户名"
+          size="large"
+          autocomplete="off"
+        />
       </el-form-item>
       <el-form-item prop="nickName">
-        <el-input v-model="form.nickName" placeholder="请输入姓名" size="large" autocomplete="off" />
+        <el-input
+          v-model="form.nickName"
+          placeholder="请输入姓名"
+          size="large"
+          autocomplete="off"
+        />
       </el-form-item>
       <el-form-item prop="phone">
         <el-input v-model="form.phone" placeholder="请输入手机号" size="large" autocomplete="off" />
       </el-form-item>
       <!-- 诱饵：吸收 Chrome 密码管理器的用户名自动填充，避免账号被填入手机号 -->
-      <input type="text" autocomplete="username" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" tabindex="-1" aria-hidden="true" />
+      <input
+        type="text"
+        autocomplete="username"
+        style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none"
+        tabindex="-1"
+        aria-hidden="true"
+      />
       <el-form-item prop="password">
         <el-input
           v-model="form.password"
@@ -39,7 +61,12 @@
         />
       </el-form-item>
       <el-form-item prop="systemCode">
-        <el-input v-model="form.systemCode" placeholder="请输入系统码" size="large" autocomplete="off" />
+        <el-input
+          v-model="form.systemCode"
+          placeholder="请输入系统码"
+          size="large"
+          autocomplete="off"
+        />
       </el-form-item>
     </el-form>
     <template #footer>

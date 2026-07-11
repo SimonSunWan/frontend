@@ -6,12 +6,29 @@
         <span>忘记密码</span>
       </div>
     </template>
-    <el-form ref="formRef" :model="form" :rules="rules" autocomplete="off" @keyup.enter="handleReset">
+    <el-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      autocomplete="off"
+      @keyup.enter="handleReset"
+    >
       <el-form-item prop="username">
-        <el-input v-model="form.username" placeholder="请输入用户名" size="large" autocomplete="off" />
+        <el-input
+          v-model="form.username"
+          placeholder="请输入用户名"
+          size="large"
+          autocomplete="off"
+        />
       </el-form-item>
       <!-- 诱饵：吸收 Chrome 密码管理器的用户名自动填充 -->
-      <input type="text" autocomplete="username" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none" tabindex="-1" aria-hidden="true" />
+      <input
+        type="text"
+        autocomplete="username"
+        style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none"
+        tabindex="-1"
+        aria-hidden="true"
+      />
       <el-form-item prop="newPassword">
         <el-input
           v-model="form.newPassword"
@@ -33,7 +50,12 @@
         />
       </el-form-item>
       <el-form-item prop="systemCode">
-        <el-input v-model="form.systemCode" placeholder="请输入系统码" size="large" autocomplete="off" />
+        <el-input
+          v-model="form.systemCode"
+          placeholder="请输入系统码"
+          size="large"
+          autocomplete="off"
+        />
       </el-form-item>
     </el-form>
     <template #footer>
