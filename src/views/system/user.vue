@@ -24,7 +24,12 @@
         <el-input v-model="form.email" placeholder="请输入邮箱" clearable />
       </el-form-item>
       <el-form-item label="角色">
-        <el-select v-model="form.roleCode" placeholder="请选择角色" clearable style="width: 194.5px">
+        <el-select
+          v-model="form.roleCode"
+          placeholder="请选择角色"
+          clearable
+          style="width: 194.5px"
+        >
           <el-option
             v-for="role in roleList"
             :key="role.value"
@@ -116,7 +121,12 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="角色" prop="roles">
-            <el-select v-model="dialogForm.roles" multiple placeholder="请选择角色" style="width: 100%">
+            <el-select
+              v-model="dialogForm.roles"
+              multiple
+              placeholder="请选择角色"
+              style="width: 100%"
+            >
               <el-option
                 v-for="role in roleList"
                 :key="role.value"
@@ -145,12 +155,7 @@
 <script setup>
 import TablePage from '@/components/TablePage.vue'
 import FormDrawer from '@/components/FormDrawer.vue'
-import {
-  createUserApi,
-  deleteUserApi,
-  getUserListApi,
-  updateUserApi,
-} from '@/api/users'
+import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/users'
 import { getAllRolesApi } from '@/api/roles'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, reactive, ref, watch } from 'vue'
@@ -276,40 +281,39 @@ const generatePassword = () => {
   dialogForm.password = userName + phone.slice(-4)
 }
 
-const loadRoleList = async () => {
-  try {
-    const res = await getAllRolesApi()
-    if (res?.data?.records) {
-      roleList.value = res.data.records.map((role) => ({
-        label: role.roleName,
-        value: role.roleCode,
-      }))
-    }
-  } catch (error) {
-    console.error(error)
-  }
+const loadRoleList = () => {
+  getAllRolesApi()
+    .then((res) => {
+      if (res?.data?.records) {
+        roleList.value = res.data.records.map((role) => ({
+          label: role.roleName,
+          value: role.roleCode,
+        }))
+      }
+    })
+    .catch(() => {})
 }
 
-const loadData = async () => {
+const loadData = () => {
   loading.value = true
-  try {
-    const params = {
-      current: pagination.current,
-      size: pagination.size,
-      ...searchForm,
-    }
-    Object.keys(params).forEach((key) => {
-      if (params[key] === '' || params[key] === null) delete params[key]
-    })
-    const res = await getUserListApi(params)
-    const data = res?.data || {}
-    tableData.value = data.records || []
-    pagination.total = data.total || 0
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
+  const params = {
+    current: pagination.current,
+    size: pagination.size,
+    ...searchForm,
   }
+  Object.keys(params).forEach((key) => {
+    if (params[key] === '' || params[key] === null) delete params[key]
+  })
+  getUserListApi(params)
+    .then((res) => {
+      const data = res?.data || {}
+      tableData.value = data.records || []
+      pagination.total = data.total || 0
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const handleSearch = () => {
@@ -385,38 +389,34 @@ const handleSubmit = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   submitLoading.value = true
-  try {
-    if (dialogType.value === 'add') {
-      await createUserApi(dialogForm)
-      ElMessage.success('新增成功')
-    } else {
-      await updateUserApi(currentUserId.value, dialogForm)
-      ElMessage.success('编辑成功')
-    }
-    dialogVisible.value = false
-    loadData()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    submitLoading.value = false
-  }
+  const apiCall =
+    dialogType.value === 'add'
+      ? createUserApi(dialogForm)
+      : updateUserApi(currentUserId.value, dialogForm)
+  apiCall
+    .then(() => {
+      ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')
+      dialogVisible.value = false
+      loadData()
+    })
+    .catch(() => {})
+    .finally(() => {
+      submitLoading.value = false
+    })
 }
 
-const handleDelete = async (row) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除用户 "${row.userName}" 吗？`, '删除用户', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+const handleDelete = (row) => {
+  ElMessageBox.confirm(`确定要删除用户 "${row.userName}" 吗？`, '删除用户', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => deleteUserApi(row.id))
+    .then(() => {
+      ElMessage.success('删除成功')
+      loadData()
     })
-    await deleteUserApi(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
-    }
-  }
+    .catch(() => {})
 }
 
 onMounted(() => {

@@ -89,7 +89,9 @@
       <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
       <el-table-column label="操作" width="200" fixed="right" align="center">
         <template #default="{ row }">
-          <el-button type="primary" link @click="showEnumFormDialog('add', row)">新增子级</el-button>
+          <el-button type="primary" link @click="showEnumFormDialog('add', row)"
+            >新增子级</el-button
+          >
           <el-divider direction="vertical" />
           <el-button type="primary" link @click="showEnumFormDialog('edit', row)">编辑</el-button>
           <el-divider direction="vertical" />
@@ -193,23 +195,23 @@ const pagination = reactive({
   total: 0,
 })
 
-const loadData = async () => {
+const loadData = () => {
   loading.value = true
-  try {
-    const params = {
-      current: pagination.current,
-      size: pagination.size,
-    }
-    if (searchForm.name) params.name = searchForm.name
-    const res = await getDictionaryTypesApi(params)
-    const data = res?.data || {}
-    tableData.value = data.records || []
-    pagination.total = data.total || 0
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
+  const params = {
+    current: pagination.current,
+    size: pagination.size,
   }
+  if (searchForm.name) params.name = searchForm.name
+  getDictionaryTypesApi(params)
+    .then((res) => {
+      const data = res?.data || {}
+      tableData.value = data.records || []
+      pagination.total = data.total || 0
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const handleSearch = () => {
@@ -275,38 +277,34 @@ const handleTypeSubmit = async () => {
   const valid = await typeFormRef.value.validate().catch(() => false)
   if (!valid) return
   typeSubmitLoading.value = true
-  try {
-    if (typeDialogType.value === 'add') {
-      await createDictionaryTypeApi(typeForm)
-      ElMessage.success('新增成功')
-    } else {
-      await updateDictionaryTypeApi(currentTypeId.value, typeForm)
-      ElMessage.success('编辑成功')
-    }
-    typeDialogVisible.value = false
-    loadData()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    typeSubmitLoading.value = false
-  }
+  const apiCall =
+    typeDialogType.value === 'add'
+      ? createDictionaryTypeApi(typeForm)
+      : updateDictionaryTypeApi(currentTypeId.value, typeForm)
+  apiCall
+    .then(() => {
+      ElMessage.success(typeDialogType.value === 'add' ? '新增成功' : '编辑成功')
+      typeDialogVisible.value = false
+      loadData()
+    })
+    .catch(() => {})
+    .finally(() => {
+      typeSubmitLoading.value = false
+    })
 }
 
-const handleDeleteType = async (row) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除字典分类 "${row.name}" 吗？`, '删除字典分类', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+const handleDeleteType = (row) => {
+  ElMessageBox.confirm(`确定要删除字典分类 "${row.name}" 吗？`, '删除字典分类', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => deleteDictionaryTypeApi(row.id))
+    .then(() => {
+      ElMessage.success('删除成功')
+      loadData()
     })
-    await deleteDictionaryTypeApi(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
-    }
-  }
+    .catch(() => {})
 }
 
 // 字典枚举弹窗（列表）
@@ -321,17 +319,17 @@ const showEnumDialog = async (row) => {
   await loadEnumData()
 }
 
-const loadEnumData = async () => {
+const loadEnumData = () => {
   if (!currentType.value) return
   enumLoading.value = true
-  try {
-    const res = await getDictionaryEnumsApi(currentType.value.id)
-    enumData.value = res?.data?.records || []
-  } catch (error) {
-    console.error(error)
-  } finally {
-    enumLoading.value = false
-  }
+  getDictionaryEnumsApi(currentType.value.id)
+    .then((res) => {
+      enumData.value = res?.data?.records || []
+    })
+    .catch(() => {})
+    .finally(() => {
+      enumLoading.value = false
+    })
 }
 
 // 枚举新增/编辑表单弹窗
@@ -394,40 +392,38 @@ const handleEnumSubmit = async () => {
   const valid = await enumFormRef.value.validate().catch(() => false)
   if (!valid) return
   enumSubmitLoading.value = true
-  try {
-    if (enumFormDialogType.value === 'add') {
-      const data = { typeId: currentType.value.id, ...enumForm }
-      if (currentEnumParentId.value) data.parentId = currentEnumParentId.value
-      await createDictionaryEnumApi(data)
-      ElMessage.success('新增成功')
-    } else {
-      await updateDictionaryEnumApi(currentEnumId.value, enumForm)
-      ElMessage.success('编辑成功')
-    }
-    enumFormDialogVisible.value = false
-    loadEnumData()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    enumSubmitLoading.value = false
+  const data = { typeId: currentType.value.id, ...enumForm }
+  if (enumFormDialogType.value === 'add' && currentEnumParentId.value) {
+    data.parentId = currentEnumParentId.value
   }
+  const apiCall =
+    enumFormDialogType.value === 'add'
+      ? createDictionaryEnumApi(data)
+      : updateDictionaryEnumApi(currentEnumId.value, enumForm)
+  apiCall
+    .then(() => {
+      ElMessage.success(enumFormDialogType.value === 'add' ? '新增成功' : '编辑成功')
+      enumFormDialogVisible.value = false
+      loadEnumData()
+    })
+    .catch(() => {})
+    .finally(() => {
+      enumSubmitLoading.value = false
+    })
 }
 
-const handleDeleteEnum = async (row) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除字典枚举 "${row.dictValue}" 吗？`, '删除字典枚举', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+const handleDeleteEnum = (row) => {
+  ElMessageBox.confirm(`确定要删除字典枚举 "${row.dictValue}" 吗？`, '删除字典枚举', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => deleteDictionaryEnumApi(row.id))
+    .then(() => {
+      ElMessage.success('删除成功')
+      loadEnumData()
     })
-    await deleteDictionaryEnumApi(row.id)
-    ElMessage.success('删除成功')
-    loadEnumData()
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
-    }
-  }
+    .catch(() => {})
 }
 
 onMounted(() => {

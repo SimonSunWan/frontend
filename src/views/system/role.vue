@@ -218,26 +218,26 @@ const getMenuTypeText = (data) => {
   return data.isLink ? '外链' : '菜单'
 }
 
-const loadData = async () => {
+const loadData = () => {
   loading.value = true
-  try {
-    const params = {
-      current: pagination.current,
-      size: pagination.size,
-      ...searchForm,
-    }
-    Object.keys(params).forEach((key) => {
-      if (params[key] === '' || params[key] === null) delete params[key]
-    })
-    const res = await getRoleListApi(params)
-    const data = res?.data || {}
-    tableData.value = data.records || []
-    pagination.total = data.total || 0
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
+  const params = {
+    current: pagination.current,
+    size: pagination.size,
+    ...searchForm,
   }
+  Object.keys(params).forEach((key) => {
+    if (params[key] === '' || params[key] === null) delete params[key]
+  })
+  getRoleListApi(params)
+    .then((res) => {
+      const data = res?.data || {}
+      tableData.value = data.records || []
+      pagination.total = data.total || 0
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const handleSearch = () => {
@@ -291,38 +291,34 @@ const handleSubmit = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   submitLoading.value = true
-  try {
-    if (dialogType.value === 'add') {
-      await createRoleApi(dialogForm)
-      ElMessage.success('新增成功')
-    } else {
-      await updateRoleApi(currentRoleId.value, dialogForm)
-      ElMessage.success('编辑成功')
-    }
-    dialogVisible.value = false
-    loadData()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    submitLoading.value = false
-  }
+  const apiCall =
+    dialogType.value === 'add'
+      ? createRoleApi(dialogForm)
+      : updateRoleApi(currentRoleId.value, dialogForm)
+  apiCall
+    .then(() => {
+      ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')
+      dialogVisible.value = false
+      loadData()
+    })
+    .catch(() => {})
+    .finally(() => {
+      submitLoading.value = false
+    })
 }
 
-const handleDelete = async (row) => {
-  try {
-    await ElMessageBox.confirm('确定删除该角色吗？', '删除确认', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+const handleDelete = (row) => {
+  ElMessageBox.confirm('确定删除该角色吗？', '删除确认', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => deleteRoleApi(row.id))
+    .then(() => {
+      ElMessage.success('删除成功')
+      loadData()
     })
-    await deleteRoleApi(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
-    }
-  }
+    .catch(() => {})
 }
 
 // 权限弹窗逻辑
@@ -332,19 +328,19 @@ const showPermissionDialog = async (role) => {
   await loadRoleMenus(role)
 }
 
-const loadRoleMenus = async (role) => {
-  try {
-    const res = await getRoleMenusApi(role.id)
-    const data = res?.data || {}
-    menuTreeData.value = data.menuTree || []
-    const selectedIds = data.selectedIds || []
-    nextTick(() => {
-      treeRef.value?.setCheckedKeys(selectedIds)
+const loadRoleMenus = (role) => {
+  getRoleMenusApi(role.id)
+    .then((res) => {
+      const data = res?.data || {}
+      menuTreeData.value = data.menuTree || []
+      const selectedIds = data.selectedIds || []
+      nextTick(() => {
+        treeRef.value?.setCheckedKeys(selectedIds)
+      })
     })
-  } catch (error) {
-    console.error(error)
-    menuTreeData.value = []
-  }
+    .catch(() => {
+      menuTreeData.value = []
+    })
 }
 
 const handleTreeCheck = () => {}
@@ -386,7 +382,7 @@ const toggleSelectAll = () => {
   }
 }
 
-const savePermission = async () => {
+const savePermission = () => {
   if (!currentRole.value) {
     ElMessage.error('请先选择角色')
     return
@@ -398,31 +394,33 @@ const savePermission = async () => {
   const halfCheckedKeys = tree.getHalfCheckedKeys()
   const allCheckedKeys = [...checkedKeys, ...halfCheckedKeys]
 
-  if (allCheckedKeys.length === 0) {
-    try {
-      await ElMessageBox.confirm(
-        '当前没有选中任何菜单权限，这将清空该角色的所有权限。确定要继续吗？',
-        '确认清空权限',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        },
-      )
-    } catch (error) {
-      if (error === 'cancel') return
-    }
+  const doSave = () => {
+    permLoading.value = true
+    updateRoleMenusApi(currentRole.value.id, allCheckedKeys)
+      .then(() => {
+        ElMessage.success('保存成功')
+        permissionVisible.value = false
+      })
+      .catch(() => {})
+      .finally(() => {
+        permLoading.value = false
+      })
   }
 
-  permLoading.value = true
-  try {
-    await updateRoleMenusApi(currentRole.value.id, allCheckedKeys)
-    ElMessage.success('保存成功')
-    permissionVisible.value = false
-  } catch (error) {
-    console.error(error)
-  } finally {
-    permLoading.value = false
+  if (allCheckedKeys.length === 0) {
+    ElMessageBox.confirm(
+      '当前没有选中任何菜单权限，这将清空该角色的所有权限。确定要继续吗？',
+      '确认清空权限',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      },
+    )
+      .then(() => doSave())
+      .catch(() => {})
+  } else {
+    doSave()
   }
 }
 

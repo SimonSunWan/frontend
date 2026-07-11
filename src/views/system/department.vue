@@ -186,27 +186,26 @@ const parentDeptName = computed(() => {
   return find(tableData.value)
 })
 
-const loadData = async () => {
+const loadData = () => {
   loading.value = true
-  try {
-    const params = {}
-    if (searchForm.deptName) params.deptName = searchForm.deptName
-    const res = await getDepartmentListApi(params)
-    tableData.value = res?.data?.records || []
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
+  const params = {}
+  if (searchForm.deptName) params.deptName = searchForm.deptName
+  getDepartmentListApi(params)
+    .then((res) => {
+      tableData.value = res?.data?.records || []
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 
-const loadUserOptions = async () => {
-  try {
-    const res = await getUserListApi({ current: 1, size: 1000 })
-    userOptions.value = res?.data?.records || []
-  } catch (error) {
-    console.error(error)
-  }
+const loadUserOptions = () => {
+  getUserListApi({ current: 1, size: 1000 })
+    .then((res) => {
+      userOptions.value = res?.data?.records || []
+    })
+    .catch(() => {})
 }
 
 const handleSearch = () => {
@@ -255,40 +254,36 @@ const handleSubmit = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   submitLoading.value = true
-  try {
-    if (dialogType.value === 'add') {
-      const data = { ...dialogForm }
-      if (currentParentId.value) data.parentId = currentParentId.value
-      await createDepartmentApi(data)
-      ElMessage.success('新增成功')
-    } else {
-      await updateDepartmentApi(currentDeptId.value, dialogForm)
-      ElMessage.success('编辑成功')
-    }
-    dialogVisible.value = false
-    loadData()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    submitLoading.value = false
-  }
+  const data = { ...dialogForm }
+  if (dialogType.value === 'add' && currentParentId.value) data.parentId = currentParentId.value
+  const apiCall =
+    dialogType.value === 'add'
+      ? createDepartmentApi(data)
+      : updateDepartmentApi(currentDeptId.value, dialogForm)
+  apiCall
+    .then(() => {
+      ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')
+      dialogVisible.value = false
+      loadData()
+    })
+    .catch(() => {})
+    .finally(() => {
+      submitLoading.value = false
+    })
 }
 
-const handleDelete = async (row) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除部门 "${row.deptName}" 吗？`, '删除确认', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+const handleDelete = (row) => {
+  ElMessageBox.confirm(`确定要删除部门 "${row.deptName}" 吗？`, '删除确认', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => deleteDepartmentApi(row.id))
+    .then(() => {
+      ElMessage.success('删除成功')
+      loadData()
     })
-    await deleteDepartmentApi(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
-    }
-  }
+    .catch(() => {})
 }
 
 onMounted(() => {

@@ -29,12 +29,7 @@
 
     <el-card shadow="never">
       <template #header>更改密码</template>
-      <el-form
-        ref="pwdFormRef"
-        :model="pwdForm"
-        :rules="pwdRules"
-        label-width="100px"
-      >
+      <el-form ref="pwdFormRef" :model="pwdForm" :rules="pwdRules" label-width="100px">
         <el-form-item label="当前密码" prop="password">
           <el-input
             v-model="pwdForm.password"
@@ -171,23 +166,21 @@ const rules = {
 const pwdRules = {
   password: [{ required: true, message: '请输入当前密码', trigger: 'blur' }],
   newPassword: [{ required: true, validator: validateNewPassword, trigger: 'blur' }],
-  confirmPassword: [
-    { required: true, validator: validateConfirmPassword, trigger: 'blur' },
-  ],
+  confirmPassword: [{ required: true, validator: validateConfirmPassword, trigger: 'blur' }],
 }
 
-const loadUserInfo = async () => {
-  try {
-    const data = await authStore.getUserInfo()
-    if (data) {
-      form.userName = data.userName || ''
-      form.nickName = data.nickName || ''
-      form.email = data.email || ''
-      form.phone = data.phone || ''
-    }
-  } catch (error) {
-    console.error(error)
-  }
+const loadUserInfo = () => {
+  authStore
+    .getUserInfo()
+    .then((data) => {
+      if (data) {
+        form.userName = data.userName || ''
+        form.nickName = data.nickName || ''
+        form.email = data.email || ''
+        form.phone = data.phone || ''
+      }
+    })
+    .catch(() => {})
 }
 
 const handleEdit = async () => {
@@ -195,21 +188,21 @@ const handleEdit = async () => {
     const valid = await formRef.value.validate().catch(() => false)
     if (!valid) return
     loading.value = true
-    try {
-      await updateUserInfoApi({
-        userName: form.userName,
-        nickName: form.nickName,
-        email: form.email,
-        phone: form.phone,
+    updateUserInfoApi({
+      userName: form.userName,
+      nickName: form.nickName,
+      email: form.email,
+      phone: form.phone,
+    })
+      .then(() => loadUserInfo())
+      .then(() => {
+        ElMessage.success('编辑成功')
+        isEdit.value = false
       })
-      await loadUserInfo()
-      ElMessage.success('编辑成功')
-      isEdit.value = false
-    } catch (error) {
-      console.error(error)
-    } finally {
-      loading.value = false
-    }
+      .catch(() => {})
+      .finally(() => {
+        loading.value = false
+      })
   } else {
     isEdit.value = true
   }
@@ -220,21 +213,21 @@ const handleEditPwd = async () => {
     const valid = await pwdFormRef.value.validate().catch(() => false)
     if (!valid) return
     pwdLoading.value = true
-    try {
-      await changePasswordApi({
-        currentPassword: pwdForm.password,
-        newPassword: pwdForm.newPassword,
+    changePasswordApi({
+      currentPassword: pwdForm.password,
+      newPassword: pwdForm.newPassword,
+    })
+      .then(() => {
+        ElMessage.success('密码修改成功')
+        isEditPwd.value = false
+        pwdForm.password = ''
+        pwdForm.newPassword = ''
+        pwdForm.confirmPassword = ''
       })
-      ElMessage.success('密码修改成功')
-      isEditPwd.value = false
-      pwdForm.password = ''
-      pwdForm.newPassword = ''
-      pwdForm.confirmPassword = ''
-    } catch (error) {
-      console.error(error)
-    } finally {
-      pwdLoading.value = false
-    }
+      .catch(() => {})
+      .finally(() => {
+        pwdLoading.value = false
+      })
   } else {
     isEditPwd.value = true
   }
@@ -247,7 +240,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .mine-container {
-
   .info-card {
     margin-bottom: 16px;
   }

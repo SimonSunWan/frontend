@@ -27,21 +27,23 @@ export function setupGuard(router) {
 
     // 首次进入：注册动态路由
     if (!menuStore.isRouteRegistered) {
-      try {
-        const res = await getNavigationMenusApi()
-        const menus = res?.data || []
-        const removeFns = registerDynamicRoutes(router, menus)
-        menuStore.setMenuList(menus)
-        menuStore.addRemoveRouteFns(removeFns)
-        menuStore.isRouteRegistered = true
-      } catch (error) {
-        console.error('获取菜单失败', error)
-        authStore.logout()
-        return next('/auth/login')
-      }
-      // 注册完成后重新导航；根路径直接跳首页避免循环
-      const target = to.path === '/' ? menuStore.homePath || '/auth/login' : to.path
-      return next({ path: target, query: to.query, replace: true })
+      return getNavigationMenusApi()
+        .then((res) => {
+          const menus = res?.data || []
+          const removeFns = registerDynamicRoutes(router, menus)
+          menuStore.setMenuList(menus)
+          menuStore.addRemoveRouteFns(removeFns)
+          menuStore.isRouteRegistered = true
+        })
+        .then(() => {
+          // 注册完成后重新导航；根路径直接跳首页避免循环
+          const target = to.path === '/' ? menuStore.homePath || '/auth/login' : to.path
+          next({ path: target, query: to.query, replace: true })
+        })
+        .catch(() => {
+          authStore.logout()
+          next('/auth/login')
+        })
     }
 
     // 根路径跳转首页（homePath 为空则回登录页，避免死循环）

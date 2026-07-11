@@ -45,3 +45,9 @@ try {
 - 代码逻辑清晰、简洁，避免冗余实现
 - 只保留必要注释，不写无意义的注释说明
 - 严禁在代码中编写 `console` 语句（如 `console.log`、`console.error` 等）
+
+### 6. 代码格式化
+- 每次修改代码后，必须对改动的文件执行 prettier 格式化：`npx prettier --write <文件路径>`
+- 格式化配置读取项目根目录的 `.prettierrc.json`
+- 该步骤不可省略，确保最终写入磁盘的代码已格式化
+- 格式化完成后无需再执行 lint 检查（prettier 已保证格式正确）

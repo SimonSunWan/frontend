@@ -127,20 +127,20 @@ const handleReset = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   loading.value = true
-  try {
-    await forgetPasswordApi({
-      username: form.username,
-      newPassword: form.newPassword,
-      systemCode: form.systemCode,
+  forgetPasswordApi({
+    username: form.username,
+    newPassword: form.newPassword,
+    systemCode: form.systemCode,
+  })
+    .then(() => {
+      ElMessage.success('密码重置成功')
+      setTimeout(() => {
+        emit('switch', 'login')
+      }, 1000)
     })
-    ElMessage.success('密码重置成功')
-    setTimeout(() => {
-      emit('switch', 'login')
-    }, 1000)
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 </script>

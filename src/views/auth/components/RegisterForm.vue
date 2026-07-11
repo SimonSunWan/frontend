@@ -172,22 +172,22 @@ const handleRegister = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   loading.value = true
-  try {
-    await registerApi({
-      userName: form.userName,
-      nickName: form.nickName,
-      phone: form.phone,
-      password: form.password,
-      systemCode: form.systemCode,
+  registerApi({
+    userName: form.userName,
+    nickName: form.nickName,
+    phone: form.phone,
+    password: form.password,
+    systemCode: form.systemCode,
+  })
+    .then(() => {
+      ElMessage.success('注册成功，请等待管理员审核')
+      setTimeout(() => {
+        emit('switch', 'login')
+      }, 1000)
     })
-    ElMessage.success('注册成功，请等待管理员审核')
-    setTimeout(() => {
-      emit('switch', 'login')
-    }, 1000)
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 </script>

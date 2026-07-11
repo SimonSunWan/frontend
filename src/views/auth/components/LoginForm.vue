@@ -63,12 +63,15 @@ const handleLogin = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   loading.value = true
-  try {
-    await authStore.login(form.value)
-    ElMessage.success({ message: '登录成功', customClass: 'login-success-message' })
-    router.push('/')
-  } finally {
-    loading.value = false
-  }
+  authStore
+    .login(form.value)
+    .then(() => {
+      ElMessage.success({ message: '登录成功', customClass: 'login-success-message' })
+      router.push('/')
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 </script>

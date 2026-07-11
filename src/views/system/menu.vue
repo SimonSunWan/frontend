@@ -28,7 +28,7 @@
       </el-tag>
     </template>
     <template #path="{ row }">
-      {{ row.isLink ? (row.link || '-') : (row.path || '-') }}
+      {{ row.isLink ? row.link || '-' : row.path || '-' }}
     </template>
     <template #authMark="{ row }">{{ row.authMark || '-' }}</template>
     <template #icon="{ row }">
@@ -156,12 +156,7 @@
 import TablePage from '@/components/TablePage.vue'
 import FormDrawer from '@/components/FormDrawer.vue'
 import IconPicker from '@/components/IconPicker.vue'
-import {
-  createMenuApi,
-  deleteMenuApi,
-  getMenuListApi,
-  updateMenuApi,
-} from '@/api/menus'
+import { createMenuApi, deleteMenuApi, getMenuListApi, updateMenuApi } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 
@@ -248,19 +243,19 @@ const getMenuTypeText = (row) => {
   return row.isLink ? '外链' : '菜单'
 }
 
-const loadData = async () => {
+const loadData = () => {
   loading.value = true
-  try {
-    const params = {}
-    if (searchForm.name) params.name = searchForm.name
-    if (searchForm.path) params.path = searchForm.path
-    const res = await getMenuListApi(params)
-    tableData.value = res?.data?.records || []
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
+  const params = {}
+  if (searchForm.name) params.name = searchForm.name
+  if (searchForm.path) params.path = searchForm.path
+  getMenuListApi(params)
+    .then((res) => {
+      tableData.value = res?.data?.records || []
+    })
+    .catch(() => {})
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const handleSearch = () => {
@@ -319,53 +314,46 @@ const handleSubmit = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   submitLoading.value = true
-  try {
-    const isButton = dialogForm.menuType === 'button'
-    const data = {
-      name: dialogForm.name,
-      path: isButton ? null : dialogForm.isLink ? null : dialogForm.path,
-      icon: isButton ? null : dialogForm.icon,
-      sort: dialogForm.sort,
-      isKeepAlive: isButton ? true : dialogForm.isKeepAlive,
-      link: isButton ? null : dialogForm.isLink ? dialogForm.link : null,
-      isLink: isButton ? false : dialogForm.isLink,
-      isEnable: dialogForm.isEnable,
-      menuType: dialogForm.menuType,
-      authMark: isButton ? dialogForm.authMark : null,
-    }
-
-    if (dialogType.value === 'add') {
-      if (currentParentId.value) data.parentId = currentParentId.value
-      await createMenuApi(data)
-      ElMessage.success('新增成功')
-    } else {
-      await updateMenuApi(currentMenuId.value, data)
-      ElMessage.success('编辑成功')
-    }
-    dialogVisible.value = false
-    loadData()
-  } catch (error) {
-    console.error(error)
-  } finally {
-    submitLoading.value = false
+  const isButton = dialogForm.menuType === 'button'
+  const data = {
+    name: dialogForm.name,
+    path: isButton ? null : dialogForm.isLink ? null : dialogForm.path,
+    icon: isButton ? null : dialogForm.icon,
+    sort: dialogForm.sort,
+    isKeepAlive: isButton ? true : dialogForm.isKeepAlive,
+    link: isButton ? null : dialogForm.isLink ? dialogForm.link : null,
+    isLink: isButton ? false : dialogForm.isLink,
+    isEnable: dialogForm.isEnable,
+    menuType: dialogForm.menuType,
+    authMark: isButton ? dialogForm.authMark : null,
   }
+  if (dialogType.value === 'add' && currentParentId.value) data.parentId = currentParentId.value
+  const apiCall =
+    dialogType.value === 'add' ? createMenuApi(data) : updateMenuApi(currentMenuId.value, data)
+  apiCall
+    .then(() => {
+      ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')
+      dialogVisible.value = false
+      loadData()
+    })
+    .catch(() => {})
+    .finally(() => {
+      submitLoading.value = false
+    })
 }
 
-const handleDelete = async (row) => {
-  try {
-    await ElMessageBox.confirm(`确定要删除"${row.name}"吗？删除后无法恢复`, '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+const handleDelete = (row) => {
+  ElMessageBox.confirm(`确定要删除"${row.name}"吗？删除后无法恢复`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => deleteMenuApi(row.id))
+    .then(() => {
+      ElMessage.success('删除成功')
+      loadData()
     })
-    await deleteMenuApi(row.id)
-    ElMessage.success('删除成功')
-    loadData()
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
-    }
-  }
+    .catch(() => {})
 }
 
 onMounted(() => {
