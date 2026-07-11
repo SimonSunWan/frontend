@@ -27,9 +27,7 @@
     </template>
     <template #action="{ row }">
       <el-button type="primary" link @click="showEnumDialog(row)">枚举管理</el-button>
-      <el-divider direction="vertical" />
       <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
-      <el-divider direction="vertical" />
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
     </template>
   </InsTablePage>
@@ -92,9 +90,7 @@
           <el-button type="primary" link @click="showEnumFormDialog('add', row)"
             >新增子级</el-button
           >
-          <el-divider direction="vertical" />
           <el-button type="primary" link @click="showEnumFormDialog('edit', row)">编辑</el-button>
-          <el-divider direction="vertical" />
           <el-button type="danger" link @click="handleDeleteEnum(row)">删除</el-button>
         </template>
       </el-table-column>

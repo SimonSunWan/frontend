@@ -27,9 +27,7 @@
     </template>
     <template #action="{ row }">
       <el-button type="primary" link @click="showPermissionDialog(row)">菜单权限</el-button>
-      <el-divider direction="vertical" />
       <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
-      <el-divider direction="vertical" />
       <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
     </template>
   </InsTablePage>
