@@ -19,6 +19,7 @@
           placeholder="请输入用户名"
           size="large"
           autocomplete="off"
+          clearable
         />
       </el-form-item>
       <!-- 诱饵：吸收 Chrome 密码管理器的用户名自动填充 -->
@@ -36,6 +37,7 @@
           placeholder="请输入新密码"
           size="large"
           show-password
+          clearable
           autocomplete="new-password"
         />
       </el-form-item>
@@ -46,6 +48,7 @@
           placeholder="请再次输入新密码"
           size="large"
           show-password
+          clearable
           autocomplete="new-password"
         />
       </el-form-item>
@@ -55,6 +58,7 @@
           placeholder="请输入系统码"
           size="large"
           autocomplete="off"
+          clearable
         />
       </el-form-item>
     </el-form>

@@ -8,7 +8,7 @@
     </template>
     <el-form ref="formRef" :model="form" :rules="rules" @keyup.enter="handleLogin">
       <el-form-item prop="userName">
-        <el-input v-model="form.userName" placeholder="请输入用户名" size="large" />
+        <el-input v-model="form.userName" clearable placeholder="请输入用户名" size="large" />
       </el-form-item>
       <el-form-item prop="password">
         <el-input
@@ -17,6 +17,7 @@
           placeholder="请输入密码"
           size="large"
           show-password
+          clearable
         />
       </el-form-item>
     </el-form>

@@ -156,6 +156,7 @@ import InsTablePage from '@/components/InsCrud/index.vue'
 import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
 import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/auth'
 import { getAllRolesApi } from '@/api/role'
+import { emailRule, nickNameRule, phoneRule, userNameRule } from '@/utils/validators'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, reactive, ref, watch } from 'vue'
 
@@ -226,51 +227,11 @@ const dialogForm = reactive({
   status: true,
 })
 
-const validateUserName = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入用户名'))
-  } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,19}$/.test(value)) {
-    callback(new Error('字母开头, 4-20位, 支持字母、数字、下划线'))
-  } else {
-    callback()
-  }
-}
-
-const validateNickName = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入姓名'))
-  } else if (!/^[\u4e00-\u9fa5a-zA-Z\s]{2,20}$/.test(value)) {
-    callback(new Error('2-20位, 支持中文、英文字母、空格'))
-  } else {
-    callback()
-  }
-}
-
-const validatePhone = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入手机号'))
-  } else if (!/^1[3-9]\d{9}$/.test(value)) {
-    callback(new Error('请输入正确的手机号'))
-  } else {
-    callback()
-  }
-}
-
-const validateEmail = (rule, value, callback) => {
-  if (!value) {
-    callback()
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-    callback(new Error('请输入正确的邮箱格式'))
-  } else {
-    callback()
-  }
-}
-
 const dialogRules = {
-  userName: [{ required: true, validator: validateUserName, trigger: 'blur' }],
-  nickName: [{ required: true, validator: validateNickName, trigger: 'blur' }],
-  phone: [{ required: true, validator: validatePhone, trigger: 'blur' }],
-  email: [{ validator: validateEmail, trigger: 'blur' }],
+  userName: userNameRule,
+  nickName: nickNameRule,
+  phone: phoneRule,
+  email: emailRule,
   roles: [{ required: true, message: '请选择角色', trigger: 'change' }],
 }
 

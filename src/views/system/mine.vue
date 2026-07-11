@@ -1,149 +1,191 @@
 <template>
   <div class="mine-container">
-    <el-card shadow="never">
-      <el-row>
-        <el-col :span="12">
-          <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
+    <div class="mine-layout">
+      <div class="mine-left">
+        <el-card shadow="never" class="profile-card">
+          <el-image :src="mineBg" fit="cover" class="profile-header" />
+          <div class="profile-meta">
+            <div class="meta-item">
+              <span class="meta-label">
+                <el-icon><User /></el-icon>
+              </span>
+              <span class="meta-value">{{ baseForm.userName || '-' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">
+                <el-icon><Postcard /></el-icon>
+              </span>
+              <span class="meta-value">{{ baseForm.nickName || '-' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">
+                <el-icon><Iphone /></el-icon>
+              </span>
+              <span class="meta-value">{{ baseForm.phone || '-' }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">
+                <el-icon><Lock /></el-icon>
+              </span>
+              <span class="meta-value">
+                <template v-if="roleNames.length">
+                  <el-tag
+                    v-for="r in roleNames"
+                    :key="r"
+                    size="small"
+                    type="primary"
+                    effect="plain"
+                    class="meta-tag"
+                  >
+                    {{ r }}
+                  </el-tag>
+                </template>
+                <span v-else>-</span>
+              </span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">
+                <el-icon><OfficeBuilding /></el-icon>
+              </span>
+              <span class="meta-value">
+                <template v-if="departments.length">
+                  <el-tag
+                    v-for="d in departments"
+                    :key="d"
+                    size="small"
+                    effect="plain"
+                    class="meta-tag"
+                  >
+                    {{ d }}
+                  </el-tag>
+                </template>
+                <span v-else>-</span>
+              </span>
+            </div>
+          </div>
+        </el-card>
+      </div>
+
+      <div class="mine-right">
+        <el-card shadow="never" class="info-card">
+          <el-form ref="baseFormRef" :model="baseForm" :rules="baseRules" label-width="100px">
+            <InsSectionTitle title="基本信息" />
             <el-form-item label="用户名" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名" />
+              <el-input v-model="baseForm.userName" clearable placeholder="请输入用户名" />
             </el-form-item>
             <el-form-item label="姓名" prop="nickName">
-              <el-input v-model="form.nickName" placeholder="请输入姓名" />
+              <el-input v-model="baseForm.nickName" clearable placeholder="请输入姓名" />
             </el-form-item>
             <el-form-item label="手机号" prop="phone">
-              <el-input v-model="form.phone" placeholder="请输入手机号" />
+              <el-input v-model="baseForm.phone" clearable placeholder="请输入手机号" />
             </el-form-item>
+          </el-form>
+          <template #footer>
+            <div class="info-footer">
+              <el-button type="primary" :loading="baseLoading" @click="handleBaseSave">
+                保存
+              </el-button>
+            </div>
+          </template>
+        </el-card>
+
+        <el-card shadow="never" class="info-card pwd-card">
+          <el-form ref="pwdFormRef" :model="pwdForm" :rules="pwdRules" label-width="100px">
+            <InsSectionTitle title="修改密码" />
             <el-form-item label="原密码" prop="password">
               <el-input
-                v-model="form.password"
+                v-model="pwdForm.password"
                 type="password"
                 show-password
+                clearable
                 autocomplete="new-password"
-                placeholder="请输入密码 (不修改密码请留空)"
+                placeholder="请输入原密码"
               />
             </el-form-item>
             <el-form-item label="新密码" prop="newPassword">
               <el-input
-                v-model="form.newPassword"
+                v-model="pwdForm.newPassword"
                 type="password"
                 show-password
+                clearable
                 autocomplete="new-password"
-                placeholder="请输入新密码 (不修改密码请留空)"
+                placeholder="请输入新密码"
               />
             </el-form-item>
             <el-form-item label="确认密码" prop="confirmPassword">
               <el-input
-                v-model="form.confirmPassword"
+                v-model="pwdForm.confirmPassword"
                 type="password"
                 show-password
+                clearable
                 autocomplete="new-password"
-                placeholder="请输入新密码 (不修改密码请留空)"
+                placeholder="请再次输入新密码"
               />
             </el-form-item>
           </el-form>
-        </el-col>
-      </el-row>
-      <template #footer>
-        <div style="text-align: right">
-          <el-button @click="handleCancel">取消</el-button>
-          <el-button type="primary" :loading="loading" @click="handleSave">保存</el-button>
-        </div>
-      </template>
-    </el-card>
+          <template #footer>
+            <div class="info-footer">
+              <el-button type="primary" :loading="pwdLoading" @click="handlePwdSave">
+                保存
+              </el-button>
+            </div>
+          </template>
+        </el-card>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import mineBg from '@/assets/images/mine-bg.png'
+import { Iphone, Lock, OfficeBuilding, Postcard, User } from '@element-plus/icons-vue'
 import { changePasswordApi, updateUserInfoApi } from '@/api/auth'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
+import InsSectionTitle from '@/components/InsSectionTitle.vue'
+import {
+  createConfirmPasswordRule,
+  nickNameRule,
+  passwordRule,
+  phoneRule,
+  userNameRule,
+} from '@/utils/validators'
 import { onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
-const loading = ref(false)
+const roleNames = ref([])
 
-const formRef = ref()
+const departments = ref([])
 
-const form = reactive({
+const baseLoading = ref(false)
+const baseFormRef = ref()
+const baseForm = reactive({
   userName: '',
   nickName: '',
   phone: '',
+})
+
+const pwdLoading = ref(false)
+const pwdFormRef = ref()
+const pwdForm = reactive({
   password: '',
   newPassword: '',
   confirmPassword: '',
 })
 
-const validateUserName = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入用户名'))
-  } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,19}$/.test(value)) {
-    callback(new Error('字母开头, 4-20位, 支持字母、数字、下划线'))
-  } else {
-    callback()
-  }
+const baseRules = {
+  userName: userNameRule,
+  nickName: nickNameRule,
+  phone: phoneRule,
 }
 
-const validateNickName = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入姓名'))
-  } else if (!/^[\u4e00-\u9fa5a-zA-Z\s]{2,20}$/.test(value)) {
-    callback(new Error('2-20位, 支持中文、英文字母、空格'))
-  } else {
-    callback()
-  }
-}
-
-const validatePhone = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入手机号'))
-  } else if (!/^1[3-9]\d{9}$/.test(value)) {
-    callback(new Error('请输入正确的手机号'))
-  } else {
-    callback()
-  }
-}
-
-const hasPwdInput = () => form.password || form.newPassword || form.confirmPassword
-
-const validatePassword = (rule, value, callback) => {
-  if (!value && (form.newPassword || form.confirmPassword)) {
-    callback(new Error('请输入当前密码'))
-  } else {
-    callback()
-  }
-}
-
-const validateNewPassword = (rule, value, callback) => {
-  if (!value && (form.password || form.confirmPassword)) {
-    callback(new Error('请输入新密码'))
-  } else if (value && !/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/.test(value)) {
-    callback(new Error('6-20位, 必须包含字母和数字'))
-  } else {
-    if (form.confirmPassword) {
-      formRef.value?.validateField('confirmPassword')
-    }
-    callback()
-  }
-}
-
-const validateConfirmPassword = (rule, value, callback) => {
-  if (!value && (form.password || form.newPassword)) {
-    callback(new Error('请再次输入新密码'))
-  } else if (value && value !== form.newPassword) {
-    callback(new Error('两次输入密码不一致'))
-  } else {
-    callback()
-  }
-}
-
-const rules = {
-  userName: [{ required: true, validator: validateUserName, trigger: 'blur' }],
-  nickName: [{ required: true, validator: validateNickName, trigger: 'blur' }],
-  phone: [{ required: true, validator: validatePhone, trigger: 'blur' }],
-  password: [{ validator: validatePassword, trigger: 'blur' }],
-  newPassword: [{ validator: validateNewPassword, trigger: 'blur' }],
-  confirmPassword: [{ validator: validateConfirmPassword, trigger: 'blur' }],
+const pwdRules = {
+  password: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
+  newPassword: passwordRule,
+  confirmPassword: createConfirmPasswordRule(() => pwdForm.newPassword),
 }
 
 const loadUserInfo = () => {
@@ -151,53 +193,148 @@ const loadUserInfo = () => {
     .getUserInfo()
     .then((data) => {
       if (data) {
-        form.userName = data.userName || ''
-        form.nickName = data.nickName || ''
-        form.phone = data.phone || ''
+        baseForm.userName = data.userName || ''
+        baseForm.nickName = data.nickName || ''
+        baseForm.phone = data.phone || ''
+        roleNames.value = Array.isArray(data.roleNames) ? data.roleNames : []
+        const dept = data.departments
+        departments.value = Array.isArray(dept) ? dept : dept ? [dept] : []
       }
     })
     .catch(() => {})
 }
 
-const handleSave = async () => {
-  const valid = await formRef.value.validate().catch(() => false)
+const handleBaseSave = async () => {
+  const valid = await baseFormRef.value.validate().catch(() => false)
   if (!valid) return
-  loading.value = true
+  baseLoading.value = true
   updateUserInfoApi({
-    userName: form.userName,
-    nickName: form.nickName,
-    phone: form.phone,
+    userName: baseForm.userName,
+    nickName: baseForm.nickName,
+    phone: baseForm.phone,
   })
-    .then(() => {
-      if (hasPwdInput()) {
-        return changePasswordApi({
-          currentPassword: form.password,
-          newPassword: form.newPassword,
-        })
-      }
-    })
     .then(() => loadUserInfo())
     .then(() => {
       ElMessage.success('保存成功')
-      form.password = ''
-      form.newPassword = ''
-      form.confirmPassword = ''
     })
     .catch(() => {})
     .finally(() => {
-      loading.value = false
+      baseLoading.value = false
     })
 }
 
-const handleCancel = () => {
-  formRef.value?.clearValidate()
-  form.password = ''
-  form.newPassword = ''
-  form.confirmPassword = ''
-  loadUserInfo()
+const handlePwdSave = async () => {
+  const valid = await pwdFormRef.value.validate().catch(() => false)
+  if (!valid) return
+  pwdLoading.value = true
+  changePasswordApi({
+    currentPassword: pwdForm.password,
+    newPassword: pwdForm.newPassword,
+  })
+    .then(() => {
+      ElMessage.success('密码修改成功, 请重新登录')
+      authStore.logout()
+      router.push('/auth/login')
+    })
+    .catch(() => {})
+    .finally(() => {
+      pwdLoading.value = false
+    })
 }
 
 onMounted(() => {
   loadUserInfo()
 })
 </script>
+
+<style lang="scss" scoped>
+.mine-container {
+  .mine-layout {
+    display: flex;
+    align-items: stretch;
+    gap: var(--ins-spacing-lg);
+
+    .mine-left {
+      width: 424px;
+      flex-shrink: 0;
+    }
+
+    .mine-right {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  .profile-card {
+    height: 100%;
+
+    :deep(.el-card__body) {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .profile-header {
+      display: block;
+      width: 424px;
+      margin: 0;
+      border-radius: var(--ins-radius-lg) var(--ins-radius-lg) 0 0;
+
+      :deep(.el-image__inner) {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .profile-meta {
+      padding: var(--ins-spacing-lg) 0;
+
+      .meta-item {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--ins-spacing-xs);
+        padding: 0 var(--ins-spacing-lg) var(--ins-spacing-lg) 100px;
+      }
+
+      .meta-label {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--ins-font-size-xl);
+        font-size: var(--ins-font-size-xl);
+        color: var(--ins-color-primary);
+      }
+
+      .meta-value {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ins-spacing-xs);
+        font-size: var(--ins-font-size-sm);
+        color: var(--ins-text-regular);
+        font-weight: var(--ins-font-weight-regular);
+      }
+
+      .meta-tag {
+        margin: 0;
+      }
+    }
+  }
+
+  .pwd-card {
+    margin-top: var(--ins-spacing-lg);
+  }
+
+  .info-card {
+    :deep(.el-card__body) {
+      padding-bottom: 0;
+    }
+
+    .info-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--ins-spacing-sm);
+    }
+  }
+}
+</style>

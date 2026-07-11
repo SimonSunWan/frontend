@@ -19,6 +19,7 @@
           placeholder="请输入用户名"
           size="large"
           autocomplete="off"
+          clearable
         />
       </el-form-item>
       <el-form-item prop="nickName">
@@ -27,10 +28,17 @@
           placeholder="请输入姓名"
           size="large"
           autocomplete="off"
+          clearable
         />
       </el-form-item>
       <el-form-item prop="phone">
-        <el-input v-model="form.phone" placeholder="请输入手机号" size="large" autocomplete="off" />
+        <el-input
+          v-model="form.phone"
+          clearable
+          placeholder="请输入手机号"
+          size="large"
+          autocomplete="off"
+        />
       </el-form-item>
       <!-- 诱饵：吸收 Chrome 密码管理器的用户名自动填充，避免账号被填入手机号 -->
       <input
@@ -47,6 +55,7 @@
           placeholder="请输入密码"
           size="large"
           show-password
+          clearable
           autocomplete="new-password"
         />
       </el-form-item>
@@ -57,6 +66,7 @@
           placeholder="请再次输入密码"
           size="large"
           show-password
+          clearable
           autocomplete="new-password"
         />
       </el-form-item>
@@ -66,6 +76,7 @@
           placeholder="请输入系统码"
           size="large"
           autocomplete="off"
+          clearable
         />
       </el-form-item>
     </el-form>
@@ -90,6 +101,13 @@
 
 <script setup>
 import { registerApi } from '@/api/auth'
+import {
+  createConfirmPasswordRule,
+  nickNameRule,
+  passwordRule,
+  phoneRule,
+  userNameRule,
+} from '@/utils/validators'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 
@@ -106,65 +124,12 @@ const form = reactive({
   systemCode: '',
 })
 
-const validateUserName = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入用户名'))
-  } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,19}$/.test(value)) {
-    callback(new Error('字母开头, 4-20位, 支持字母、数字、下划线'))
-  } else {
-    callback()
-  }
-}
-
-const validateNickName = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入姓名'))
-  } else if (!/^[\u4e00-\u9fa5a-zA-Z\s]{2,20}$/.test(value)) {
-    callback(new Error('2-20位, 支持中文、英文字母、空格'))
-  } else {
-    callback()
-  }
-}
-
-const validatePhone = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入手机号'))
-  } else if (!/^1[3-9]\d{9}$/.test(value)) {
-    callback(new Error('请输入正确的手机号'))
-  } else {
-    callback()
-  }
-}
-
-const validatePassword = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入密码'))
-  } else if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/.test(value)) {
-    callback(new Error('6-20位, 必须包含字母和数字'))
-  } else {
-    if (form.confirmPassword) {
-      formRef.value?.validateField('confirmPassword')
-    }
-    callback()
-  }
-}
-
-const validateConfirmPassword = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请再次输入密码'))
-  } else if (value !== form.password) {
-    callback(new Error('两次输入密码不一致'))
-  } else {
-    callback()
-  }
-}
-
 const rules = {
-  userName: [{ required: true, validator: validateUserName, trigger: 'blur' }],
-  nickName: [{ required: true, validator: validateNickName, trigger: 'blur' }],
-  phone: [{ required: true, validator: validatePhone, trigger: 'blur' }],
-  password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
-  confirmPassword: [{ required: true, validator: validateConfirmPassword, trigger: 'blur' }],
+  userName: userNameRule,
+  nickName: nickNameRule,
+  phone: phoneRule,
+  password: passwordRule,
+  confirmPassword: createConfirmPasswordRule(() => form.password),
   systemCode: [{ required: true, message: '请输入系统码', trigger: 'blur' }],
 }
 

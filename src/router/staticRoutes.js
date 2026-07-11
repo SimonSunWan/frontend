@@ -1,10 +1,6 @@
 // 静态路由
 export const staticRoutes = [
   {
-    path: '/',
-    redirect: '/auth/login',
-  },
-  {
     path: '/auth/login',
     name: 'Login',
     component: () => import('@/views/auth/index.vue'),
