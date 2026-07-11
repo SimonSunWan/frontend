@@ -131,7 +131,7 @@ const handleSearchSelect = (item) => {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 16px;
+    padding: 0 20px;
     border-bottom: 1px solid var(--el-border-color);
     background:
       url('@/assets/images/top-bg.png') no-repeat left center / auto 100%,
@@ -228,7 +228,7 @@ const handleSearchSelect = (item) => {
     overflow: hidden;
 
     .layout-content {
-      padding: 16px;
+      padding: 20px;
       flex: 1;
       min-height: 0;
       overflow: hidden;

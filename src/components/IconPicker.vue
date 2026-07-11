@@ -8,20 +8,16 @@
     @show="onShow"
   >
     <template #reference>
-      <div class="icon-picker-trigger">
+      <div class="icon-picker-trigger" @click="visible = true">
         <i v-if="modelValue" class="iconfont preview" :class="modelValue"></i>
         <span v-else class="placeholder">请选择图标</span>
-        <el-icon class="arrow"><ArrowDown /></el-icon>
+        <el-icon v-if="modelValue" class="clear" @click.stop="clear"><Close /></el-icon>
+        <el-icon class="arrow" @click.stop="visible = !visible"><ArrowDown /></el-icon>
       </div>
     </template>
 
     <div class="icon-picker">
-      <el-input
-        v-model="query"
-        placeholder="搜索图标名称"
-        clearable
-        :prefix-icon="Search"
-      />
+      <el-input v-model="query" placeholder="搜索图标名称" clearable :prefix-icon="Search" />
       <div class="icon-grid">
         <div
           v-for="name in filteredIcons"
@@ -41,7 +37,7 @@
 
 <script setup>
 import iconfontCss from '@/assets/iconfont/iconfont.css?raw'
-import { ArrowDown, Search } from '@element-plus/icons-vue'
+import { ArrowDown, Close, Search } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 
 defineProps({
@@ -59,9 +55,7 @@ const query = ref('')
 // 从 iconfont.css 中解析出所有图标 class 名
 const iconNames = [
   ...new Set(
-    [...iconfontCss.matchAll(/\.icon-([a-zA-Z0-9_-]+)\s*:before/g)].map(
-      (m) => `icon-${m[1]}`,
-    ),
+    [...iconfontCss.matchAll(/\.icon-([a-zA-Z0-9_-]+)\s*:before/g)].map((m) => `icon-${m[1]}`),
   ),
 ]
 
@@ -79,6 +73,10 @@ const pick = (name) => {
   emit('update:modelValue', name)
   visible.value = false
 }
+
+const clear = () => {
+  emit('update:modelValue', '')
+}
 </script>
 
 <style lang="scss" scoped>
@@ -86,6 +84,7 @@ const pick = (name) => {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   height: 32px;
   padding: 0 11px;
   border: 1px solid var(--el-border-color, #dcdfe6);
@@ -93,6 +92,7 @@ const pick = (name) => {
   cursor: pointer;
   background: var(--el-fill-color-blank, #fff);
   transition: border-color 0.2s;
+  box-sizing: border-box;
 
   &:hover {
     border-color: var(--el-border-color-hover, #c0c4cc);
@@ -106,6 +106,15 @@ const pick = (name) => {
   .placeholder {
     color: var(--el-text-color-placeholder, #a8abb2);
     font-size: 14px;
+  }
+
+  .clear {
+    color: var(--el-text-color-placeholder, #a8abb2);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--el-text-color-regular, #606266);
+    }
   }
 
   .arrow {
