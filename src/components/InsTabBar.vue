@@ -253,8 +253,10 @@ onUnmounted(() => {
     }
   }
 }
+</style>
 
-.dropdown-item {
+<style lang="scss">
+.el-dropdown-menu .dropdown-item {
   font-size: var(--ins-font-size-xs);
 }
 </style>

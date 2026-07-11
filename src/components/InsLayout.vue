@@ -33,14 +33,14 @@
         <el-popover placement="bottom-end" trigger="hover" popper-class="user-dropdown-popper">
           <template #reference>
             <div class="user-info">
-              <el-text>{{ authStore.userInfo?.nickName }}</el-text>
+              <span class="user-name">{{ authStore.userInfo?.nickName }}</span>
               <el-icon><ArrowDown /></el-icon>
             </div>
           </template>
           <div class="user-menu">
             <div class="user-menu-item" @click="router.push('/system/mine')">
               <el-icon><User /></el-icon>
-              <span>个人中心</span>
+              <span>个人信息</span>
             </div>
             <div class="user-menu-item" @click="handleLogout">
               <el-icon><SwitchButton /></el-icon>
@@ -176,6 +176,22 @@ const handleLogout = () => {
       display: flex;
       align-items: center;
       gap: var(--ins-spacing-md);
+
+      .user-info {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        color: var(--ins-text-inverse);
+
+        .user-name {
+          color: var(--ins-text-inverse);
+          margin-right: var(--ins-spacing-sm);
+        }
+
+        .el-icon {
+          align-self: center;
+        }
+      }
     }
 
     .menu-search {
@@ -275,18 +291,6 @@ const handleLogout = () => {
       flex: 1;
       min-height: 0;
       overflow: hidden;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: var(--ins-spacing-2xs);
-      cursor: pointer;
-      color: var(--ins-text-inverse);
-
-      :deep(.el-text) {
-        color: var(--ins-text-inverse);
-      }
     }
   }
 }
