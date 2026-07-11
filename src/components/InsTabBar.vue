@@ -33,13 +33,56 @@
 </template>
 
 <script setup>
-import { useTabs } from '@/composables/useTabs'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useMenuStore } from '@/stores/menu'
 import { ArrowDown, Close } from '@element-plus/icons-vue'
 
 const route = useRoute()
-const { tabs, addTab, removeTab, switchTab, closeOthers, closeAll } = useTabs()
+const router = useRouter()
+const menuStore = useMenuStore()
+
+const tabs = ref([])
+let initialized = false
+
+const addTab = (path) => {
+  const matched = router.resolve(path)
+  const title = matched?.meta?.title || path
+  if (!tabs.value.find((t) => t.path === path)) {
+    tabs.value.push({ path, title })
+  }
+}
+
+const removeTab = (path) => {
+  const idx = tabs.value.findIndex((t) => t.path === path)
+  if (idx === -1) return
+  tabs.value.splice(idx, 1)
+  if (route.path === path) {
+    const next = tabs.value[tabs.value.length - 1]
+    router.push(next ? next.path : menuStore.homePath || '/')
+  }
+}
+
+const closeOthers = (keepPath) => {
+  const keep = keepPath || route.path
+  tabs.value = tabs.value.filter((t) => t.path === keep)
+}
+
+const closeAll = () => {
+  const home = menuStore.homePath || '/'
+  tabs.value = []
+  router.push(home).catch(() => {})
+  addTab(home)
+}
+
+const switchTab = (path) => {
+  router.push(path)
+}
+
+if (!initialized) {
+  addTab(route.path)
+  initialized = true
+}
 
 const scrollRef = ref(null)
 const tabsRef = ref(null)
