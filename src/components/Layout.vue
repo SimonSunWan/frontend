@@ -33,8 +33,9 @@
         <UserDropdown />
       </div>
     </el-header>
-    <el-container>
+    <el-container class="layout-body">
       <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
+        <el-scrollbar>
         <el-menu :default-active="route.path" :collapse="isCollapse" unique-opened router>
           <template v-for="menu in menuStore.menuList" :key="menu.path">
             <el-sub-menu v-if="menu.children?.length" :index="menu.path">
@@ -55,8 +56,9 @@
             </el-menu-item>
           </template>
         </el-menu>
+        </el-scrollbar>
       </el-aside>
-      <el-container>
+      <el-container class="layout-body">
         <el-main class="layout-main">
           <TabView />
           <div class="layout-content">
@@ -187,6 +189,11 @@ const handleSearchSelect = (item) => {
     }
   }
 
+  .layout-body {
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .layout-aside {
     transition: width 0.3s;
     overflow: hidden;
@@ -196,13 +203,6 @@ const handleSearchSelect = (item) => {
 
     .el-menu {
       border-right: none;
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-
-      &::-webkit-scrollbar {
-        width: 0;
-      }
 
       .el-menu-item.is-active {
         color: #4b5eff;
