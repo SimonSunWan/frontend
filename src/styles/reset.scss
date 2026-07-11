@@ -1,4 +1,4 @@
-/* CSS Reset - 样式清除 */
+/* 全局样式清除 */
 
 *,
 *::before,
@@ -9,34 +9,28 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 body {
-  line-height: 1.5;
-  color: #606266;
   background-color: #fff;
 }
 
-/* 移除列表默认样式 */
 ul,
 ol {
   list-style: none;
 }
 
-/* 链接默认样式清除 */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* 图片默认样式 */
 img {
   max-width: 100%;
   display: block;
 }
 
-/* 按钮默认样式清除 */
 button {
   cursor: pointer;
   border: none;
@@ -46,7 +40,6 @@ button {
   color: inherit;
 }
 
-/* 输入框默认样式清除 */
 input,
 textarea,
 select {
@@ -57,13 +50,11 @@ select {
   background: none;
 }
 
-/* 表格默认样式清除 */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* 标题默认样式清除 */
 h1,
 h2,
 h3,
@@ -72,21 +63,4 @@ h5,
 h6 {
   font-size: inherit;
   font-weight: inherit;
-}
-
-/* 登录成功消息：主色风格 */
-.login-success-message {
-  --el-message-bg-color: #eef3ff !important;
-  --el-message-border-color: #eef3ff !important;
-  --el-message-text-color: #4b5eff !important;
-  background-color: #eef3ff !important;
-  border-color: #eef3ff !important;
-
-  .el-message__content {
-    color: #4b5eff !important;
-  }
-
-  .el-message__icon {
-    color: #4b5eff !important;
-  }
 }

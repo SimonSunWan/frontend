@@ -1,68 +1,37 @@
-/**
- * 设计规范（Design Tokens）
- * ------------------------------------------------------------
- * 全站统一的设计变量，所有页面/组件请优先使用这些变量，
- * 避免在业务代码中硬编码颜色、间距、圆角等数值。
- *
- * 使用方式：任意 .vue / .scss 文件中直接用 var(--var-xxx)
- *   color: var(--var-text-primary);
- *   padding: var(--var-spacing-lg);
- *   border-radius: var(--var-radius-md);
- *
- * 命名空间：--var-  （Element Plus 用 --el-，两者互不冲突）
- *
- * 颜色说明：文字/背景/边框等语义色映射自 Element Plus 变量。
- * ------------------------------------------------------------
- */
+// 全局设计规范
 
 :root {
-  /* ==================== 颜色 - 品牌主色 ==================== */
+  // 品牌主色
   --var-color-primary: #1677ff;
   --var-color-primary-light: #4f8aff;
   --var-color-primary-dark: #3d50f1;
 
-  /* 状态色 */
+  // 状态色
   --var-color-success: #67c23a;
   --var-color-warning: #e6a23c;
   --var-color-danger: #f56c6c;
   --var-color-info: #909399;
 
-  /* ==================== 颜色 - 文字 ==================== */
-  /* 映射 Element Plus，自动适配暗黑模式 */
-  --var-text-primary: var(--el-text-color-primary);      /* 主要文字 */
-  --var-text-regular: var(--el-text-color-regular);      /* 常规文字 */
-  --var-text-secondary: var(--el-text-color-secondary);  /* 次要文字 */
-  --var-text-placeholder: var(--el-text-color-placeholder);/* 占位文字 */
-  --var-text-disabled: var(--el-text-color-disabled);    /* 禁用文字 */
-  --var-text-brand: var(--el-color-primary);             /* 品牌色文字（链接等） */
-  --var-text-success: var(--el-color-success);
-  --var-text-warning: var(--el-color-warning);
-  --var-text-danger: var(--el-color-danger);
-  --var-text-info: var(--el-color-info);
-  /* 反色文字：用于深色/品牌色背景上的白字 */
-  --var-text-inverse: #ffffff;
+  // 文字色
+  --var-text-primary: var(--el-text-color-primary);
+  --var-text-regular: var(--el-text-color-regular);
+  --var-text-secondary: var(--el-text-color-secondary);
+  --var-text-inverse: #ffffff; // 反色文字（深色/品牌色背景上的白字）
 
-  /* ==================== 颜色 - 背景 ==================== */
-  --var-bg-page: #fafbfc;            /* 页面整体背景 */
-  --var-bg-container: #ffffff;       /* 卡片/容器背景 */
-  --var-bg-overlay: var(--el-bg-color-overlay); /* 弹层背景 */
-  --var-bg-muted: #f5f7fa;           /* 次级背景（表格条纹/禁用区） */
-  --var-bg-hover: #f2f4f5;          /* 悬浮背景（菜单等） */
-  --var-bg-brand: var(--el-color-primary); /* 品牌色背景 */
+  // 背景色
+  --var-bg-page: #fafbfc; // 页面整体背景
+  --var-bg-container: #ffffff; // 卡片/容器背景
+  --var-bg-muted: #f5f7fa; // 次级背景（表格条纹/禁用区）
+  --var-bg-hover: #f2f4f5; // 悬浮背景（菜单等）
 
-  /* ==================== 颜色 - 边框 ==================== */
-  --var-border-base: var(--el-border-color);        /* 主边框 */
-  --var-border-light: var(--el-border-color-light); /* 浅边框 */
-  --var-border-lighter: var(--el-border-color-lighter);/* 更浅边框 */
-  --var-border-extra-light: var(--el-border-color-extra-light);
-  --var-border-brand: var(--el-color-primary);
+  // 边框色
+  --var-border-light: var(--el-border-color-light);
 
-  /* ==================== 品牌渐变（顶栏等） ==================== */
+  // 主题渐变
   --var-gradient-brand: linear-gradient(221deg, #4f8aff, #3d50f1);
-  /* 渐变上的悬浮高亮色 */
   --var-brand-hover: #e6f0ff;
 
-  /* ==================== 间距（4px 体系） ==================== */
+  // 间距
   --var-spacing-2xs: 4px;
   --var-spacing-xs: 8px;
   --var-spacing-sm: 12px;
@@ -70,16 +39,14 @@
   --var-spacing-lg: 20px;
   --var-spacing-xl: 24px;
   --var-spacing-2xl: 32px;
-  --var-spacing-3xl: 40px;
 
-  /* ==================== 圆角 ==================== */
+  // 圆角
   --var-radius-sm: 2px;
   --var-radius-md: 4px;
   --var-radius-lg: 8px;
   --var-radius-xl: 12px;
-  --var-radius-full: 9999px; /* 胶囊形 */
 
-  /* ==================== 字号 ==================== */
+  // 字号
   --var-font-size-xs: 12px;
   --var-font-size-sm: 13px;
   --var-font-size-base: 14px;
@@ -88,31 +55,20 @@
   --var-font-size-2xl: 20px;
   --var-font-size-3xl: 24px;
 
-  /* ==================== 字重 ==================== */
+  // 字重
   --var-font-weight-regular: 400;
   --var-font-weight-medium: 500;
-  --var-font-weight-semibold: 600;
   --var-font-weight-bold: 700;
 
-  /* ==================== 行高 ==================== */
-  --var-line-height-tight: 1.2;
+  // 行高
   --var-line-height-base: 1.5;
-  --var-line-height-loose: 1.8;
 
-  /* ==================== 阴影 ==================== */
+  // 阴影
   --var-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
   --var-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
   --var-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
 
-  /* ==================== 过渡 ==================== */
+  // 过渡
   --var-transition-fast: 0.15s ease;
   --var-transition-base: 0.25s ease;
-  --var-transition-slow: 0.35s ease;
-
-  /* ==================== 层级 z-index ==================== */
-  --var-z-dropdown: 1000;
-  --var-z-sticky: 1020;
-  --var-z-modal: 1040;
-  --var-z-popover: 1060;
-  --var-z-tooltip: 1080;
 }

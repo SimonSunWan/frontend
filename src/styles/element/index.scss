@@ -1,27 +1,17 @@
-/**
- * Element Plus 主题色定制
- *
- * 采用官方推荐的「SCSS 变量覆盖」方式：
- *   https://element-plus.org/zh-CN/guide/theming
- *
- * 修改下方 $colors.primary.base 后，Element Plus 会自动生成全部派生色阶
- *（light-1 ~ light-9、dark-2，用于 hover / active / disabled / 边框等），
- * 无需手动逐个定义 CSS 变量。
- *
- * 如需更换主题色，只需修改下面这一个值即可。
- */
+/* 全局样式配置 */
+ 
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   $colors: (
     'primary': (
       'base': #1677ff,
     ),
+    'success': (
+      'base': #1677ff,
+    ),
   ),
-  // 按钮字重：默认继承 --el-font-weight-primary(500)，此处统一改为 400
   $button: (
     'font-weight': 400,
   )
 );
 
-/* 全量引入 Element Plus 样式源码（使用上面已覆盖的变量）。
-   必须放在 @forward 之后，保证变量覆盖先生效。 */
 @use 'element-plus/theme-chalk/src/index.scss' as *;
