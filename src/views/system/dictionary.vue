@@ -26,7 +26,7 @@
       </el-tag>
     </template>
     <template #action="{ row }">
-      <el-button type="primary" link @click="showEnumDialog(row)">枚举管理</el-button>
+      <el-button type="primary" link @click="showEnumDialog(row)">枚举</el-button>
       <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
     </template>
@@ -65,12 +65,8 @@
     </el-form>
   </InsDrawer>
 
-  <!-- 字典枚举抽屉 -->
-  <InsDrawer
-    v-model="enumDialogVisible"
-    :title="`${currentType?.name || ''} - 枚举管理`"
-    size="700px"
-  >
+  <!-- 枚举抽屉 -->
+  <InsDrawer v-model="enumDialogVisible" :title="`${currentType?.name || ''}`" size="700px">
     <div class="enum-header">
       <el-button type="primary" @click="showEnumFormDialog('add', null)">新增</el-button>
     </div>
@@ -96,7 +92,6 @@
       </el-table-column>
     </el-table>
 
-    <!-- 枚举新增/编辑表单抽屉 -->
     <InsDrawer
       v-model="enumFormDialogVisible"
       :type="enumFormDialogType"
@@ -290,7 +285,7 @@ const handleTypeSubmit = async () => {
 }
 
 const handleDeleteType = (row) => {
-  ElMessageBox.confirm(`确定要删除字典分类 "${row.name}" 吗？`, '删除字典分类', {
+  ElMessageBox.confirm(`确定删除字典分类${row.name}吗？`, '删除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
@@ -303,7 +298,6 @@ const handleDeleteType = (row) => {
     .catch(() => {})
 }
 
-// 字典枚举弹窗（列表）
 const enumDialogVisible = ref(false)
 const enumLoading = ref(false)
 const enumData = ref([])
@@ -328,7 +322,6 @@ const loadEnumData = () => {
     })
 }
 
-// 枚举新增/编辑表单弹窗
 const enumFormDialogVisible = ref(false)
 const enumFormDialogType = ref('add')
 const enumSubmitLoading = ref(false)
@@ -409,7 +402,7 @@ const handleEnumSubmit = async () => {
 }
 
 const handleDeleteEnum = (row) => {
-  ElMessageBox.confirm(`确定要删除字典枚举 "${row.dictValue}" 吗？`, '删除字典枚举', {
+  ElMessageBox.confirm(`确定删除字典枚举${row.dictValue}吗？`, '删除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',

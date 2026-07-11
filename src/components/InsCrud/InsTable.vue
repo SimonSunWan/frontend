@@ -206,6 +206,11 @@ const handleCurrentChange = (current) => {
   :deep(.el-table__header-wrapper) {
     .el-table__cell {
       background-color: var(--ins-brand-hover);
+
+      .cell {
+        font-weight: var(--ins-font-weight-medium);
+        color: var(--ins-text-primary);
+      }
     }
   }
 

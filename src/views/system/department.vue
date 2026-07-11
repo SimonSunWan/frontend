@@ -46,14 +46,14 @@
   >
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="100px">
       <el-row :gutter="16">
-        <el-col v-if="parentDeptName" :span="24">
+        <el-col v-if="parentDeptName" :span="12">
           <el-form-item label="父部门">
             <el-input :model-value="parentDeptName" disabled />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="部门名称" prop="deptName">
-            <el-input v-model="dialogForm.deptName" placeholder="请输入部门名称" />
+            <el-input v-model="dialogForm.deptName" clearable placeholder="请输入部门名称" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -66,12 +66,15 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="负责人" prop="leaderIds">
             <el-select
               v-model="dialogForm.leaderIds"
               multiple
               filterable
+              collapse-tags
+              collapse-tags-tooltip
+              clearable
               placeholder="请选择负责人"
               style="width: 100%"
             >
@@ -84,12 +87,15 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="部门成员" prop="memberIds">
             <el-select
               v-model="dialogForm.memberIds"
               multiple
               filterable
+              collapse-tags
+              collapse-tags-tooltip
+              clearable
               placeholder="请选择部门成员"
               style="width: 100%"
             >
@@ -266,7 +272,7 @@ const handleSubmit = async () => {
 }
 
 const handleDelete = (row) => {
-  ElMessageBox.confirm(`确定要删除部门 "${row.deptName}" 吗？`, '删除确认', {
+  ElMessageBox.confirm(`确定删除部门${row.deptName}吗？`, '删除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
