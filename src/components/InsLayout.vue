@@ -216,6 +216,7 @@ const handleLogout = () => {
   }
 
   .layout-aside {
+    padding-top: var(--ins-spacing-2xs);
     transition: width 0.3s;
     overflow: hidden;
     border-right: 1px solid var(--el-border-color);

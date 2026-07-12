@@ -26,8 +26,7 @@
       </el-tag>
     </template>
     <template #action="{ row }">
-      <el-button type="primary" link @click="showEnumDialog(row)">新增</el-button>
-      <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
+      <el-button type="primary" link @click="showEnumDialog(row)">编辑</el-button>
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
     </template>
   </InsTablePage>
@@ -43,12 +42,12 @@
       <el-row :gutter="16">
         <el-col :span="12">
           <el-form-item label="字典名称" prop="name">
-            <el-input v-model="typeForm.name" placeholder="请输入字典名称" />
+            <el-input v-model="typeForm.name" clearable placeholder="请输入字典名称" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="字典编码" prop="code">
-            <el-input v-model="typeForm.code" placeholder="请输入字典编码" />
+            <el-input v-model="typeForm.code" clearable placeholder="请输入字典编码" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -56,6 +55,7 @@
             <el-input
               v-model="typeForm.description"
               type="textarea"
+              clearable
               placeholder="请输入字典描述"
               :rows="3"
             />
@@ -66,7 +66,12 @@
   </InsDrawer>
 
   <!-- 枚举抽屉 -->
-  <InsDrawer v-model="enumDialogVisible" :title="`${currentType?.name || ''}`" size="700px">
+  <InsDrawer
+    v-model="enumDialogVisible"
+    :title="`${currentType?.name || ''}`"
+    size="700px"
+    :show-footer="false"
+  >
     <div class="enum-header">
       <el-button type="primary" @click="addEnumRoot">新增</el-button>
     </div>

@@ -75,15 +75,15 @@
         <template v-if="dialogForm.menuType === 'menu'">
           <el-col :span="12">
             <el-form-item label="菜单名称" prop="name">
-              <el-input v-model="dialogForm.name" placeholder="请输入菜单名称" />
+              <el-input v-model="dialogForm.name" clearable placeholder="请输入菜单名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="!dialogForm.isLink" label="路由地址" prop="path">
-              <el-input v-model="dialogForm.path" placeholder="请输入路由地址" />
+              <el-input v-model="dialogForm.path" clearable placeholder="请输入路由地址" />
             </el-form-item>
             <el-form-item v-else label="外链地址" prop="link">
-              <el-input v-model="dialogForm.link" placeholder="请输入外链地址" />
+              <el-input v-model="dialogForm.link" clearable placeholder="请输入外链地址" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -121,12 +121,12 @@
         <template v-if="dialogForm.menuType === 'button'">
           <el-col :span="12">
             <el-form-item label="权限名称" prop="name">
-              <el-input v-model="dialogForm.name" placeholder="请输入权限名称" />
+              <el-input v-model="dialogForm.name" clearable placeholder="请输入权限名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="权限标识" prop="authMark">
-              <el-input v-model="dialogForm.authMark" placeholder="请输入权限标识" />
+              <el-input v-model="dialogForm.authMark" clearable placeholder="请输入权限标识" />
             </el-form-item>
           </el-col>
           <el-col :span="12">

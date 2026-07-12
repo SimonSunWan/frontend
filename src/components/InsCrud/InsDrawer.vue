@@ -11,7 +11,7 @@
     <div class="drawer-body">
       <slot />
     </div>
-    <template #footer>
+    <template #footer v-if="showFooter">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" :loading="loading" @click="$emit('submit')">
         {{ confirmText }}
@@ -29,10 +29,11 @@ const props = defineProps({
   modelValue: { type: Boolean, default: false },
   title: { type: String, default: '' },
   type: { type: String, default: 'add' },
-  size: { type: [String, Number], default: '700px' },
+  size: { type: [String, Number], default: '620px' },
   direction: { type: String, default: 'rtl' },
   loading: { type: Boolean, default: false },
   confirmText: { type: String, default: '保存' },
+  showFooter: { type: Boolean, default: true },
   appendToBody: { type: Boolean, default: false },
 })
 

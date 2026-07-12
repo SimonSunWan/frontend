@@ -73,7 +73,7 @@
       &::before {
         content: '';
         position: absolute;
-        left: calc(var(--ins-spacing-xs) / -2);
+        left: calc(var(--ins-spacing-xs) * -0.5 - var(--el-border-width, 1px));
         top: 50%;
         transform: translate(-50%, -50%);
         width: 1px;
