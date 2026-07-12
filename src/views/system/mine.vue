@@ -232,7 +232,7 @@ const handlePwdSave = async () => {
     newPassword: pwdForm.newPassword,
   })
     .then(() => {
-      ElMessage.success('密码修改成功, 请重新登录')
+      ElMessage.success('保存成功, 请重新登录')
       authStore.logout()
       router.push('/auth/login')
     })

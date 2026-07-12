@@ -67,7 +67,6 @@ const handleLogin = async () => {
   authStore
     .login(form.value)
     .then(() => {
-      ElMessage.success('登录成功')
       router.push('/')
     })
     .catch(() => {})

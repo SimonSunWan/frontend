@@ -145,7 +145,7 @@ const handleRegister = async () => {
     systemCode: form.systemCode,
   })
     .then(() => {
-      ElMessage.success('注册成功，请等待管理员审核')
+      ElMessage.success('保存成功, 请等待超级管理员审核')
       setTimeout(() => {
         emit('switch', 'login')
       }, 1000)

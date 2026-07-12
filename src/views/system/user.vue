@@ -333,7 +333,7 @@ const handleSubmit = async () => {
       : updateUserApi(currentUserId.value, dialogForm)
   apiCall
     .then(() => {
-      ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')
+      ElMessage.success('保存成功')
       dialogVisible.value = false
       loadData()
     })

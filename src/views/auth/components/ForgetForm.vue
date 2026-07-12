@@ -137,7 +137,7 @@ const handleReset = async () => {
     systemCode: form.systemCode,
   })
     .then(() => {
-      ElMessage.success('密码重置成功')
+      ElMessage.success('保存成功')
       setTimeout(() => {
         emit('switch', 'login')
       }, 1000)

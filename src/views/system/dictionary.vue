@@ -274,7 +274,7 @@ const handleTypeSubmit = async () => {
       : updateDictionaryTypeApi(currentTypeId.value, typeForm)
   apiCall
     .then(() => {
-      ElMessage.success(typeDialogType.value === 'add' ? '新增成功' : '编辑成功')
+      ElMessage.success('保存成功')
       typeDialogVisible.value = false
       loadData()
     })
@@ -391,7 +391,7 @@ const handleEnumSubmit = async () => {
       : updateDictionaryEnumApi(currentEnumId.value, enumForm)
   apiCall
     .then(() => {
-      ElMessage.success(enumFormDialogType.value === 'add' ? '新增成功' : '编辑成功')
+      ElMessage.success('保存成功')
       enumFormDialogVisible.value = false
       loadEnumData()
     })

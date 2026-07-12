@@ -294,7 +294,7 @@ const handleSubmit = async () => {
       : updateRoleApi(currentRoleId.value, dialogForm)
   apiCall
     .then(() => {
-      ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')
+      ElMessage.success('保存成功')
       dialogVisible.value = false
       loadData()
     })
@@ -381,7 +381,7 @@ const toggleSelectAll = () => {
 
 const savePermission = () => {
   if (!currentRole.value) {
-    ElMessage.error('请先选择角色')
+    ElMessage.error('保存失败, 请选择角色')
     return
   }
   const tree = treeRef.value
