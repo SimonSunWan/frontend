@@ -31,7 +31,7 @@
       </el-tag>
     </template>
     <template #action="{ row }">
-      <el-button type="primary" link @click="showDialog('add', row)">新增子级</el-button>
+      <el-button type="primary" link @click="showDialog('add', row)">新增</el-button>
       <el-button type="primary" link @click="showDialog('edit', row)">编辑</el-button>
       <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
     </template>

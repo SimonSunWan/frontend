@@ -26,7 +26,7 @@
       </el-tag>
     </template>
     <template #action="{ row }">
-      <el-button type="primary" link @click="showEnumDialog(row)">枚举</el-button>
+      <el-button type="primary" link @click="showEnumDialog(row)">新增</el-button>
       <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
     </template>
@@ -68,67 +68,59 @@
   <!-- 枚举抽屉 -->
   <InsDrawer v-model="enumDialogVisible" :title="`${currentType?.name || ''}`" size="700px">
     <div class="enum-header">
-      <el-button type="primary" @click="showEnumFormDialog('add', null)">新增</el-button>
+      <el-button type="primary" @click="addEnumRoot">新增</el-button>
     </div>
     <el-table
+      ref="enumTableRef"
       v-loading="enumLoading"
       :data="enumData"
       row-key="id"
       border
+      class="enum-table"
+      :row-class-name="enumRowClassName"
       :tree-props="{ children: 'children' }"
       default-expand-all
     >
-      <el-table-column prop="dictValue" label="枚举名称" min-width="160" show-overflow-tooltip />
-      <el-table-column prop="keyValue" label="枚举编码" min-width="140" show-overflow-tooltip />
-      <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
+      <el-table-column prop="dictValue" label="枚举名称" min-width="180">
+        <template #default="{ row }">
+          <el-input v-if="row.isEditing" v-model="row.dictValue" placeholder="请输入枚举名称" />
+          <span v-else>{{ row.dictValue || '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="keyValue" label="枚举编码" min-width="160">
+        <template #default="{ row }">
+          <el-input v-if="row.isEditing" v-model="row.keyValue" placeholder="请输入枚举编码" />
+          <span v-else>{{ row.keyValue || '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="sortOrder" label="排序" width="100" align="center">
+        <template #default="{ row }">
+          <el-input-number
+            v-if="row.isEditing"
+            v-model="row.sortOrder"
+            :min="0"
+            controls-position="right"
+            style="width: 100%"
+          />
+          <span v-else>{{ row.sortOrder }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200" fixed="right" align="center">
         <template #default="{ row }">
-          <el-button type="primary" link @click="showEnumFormDialog('add', row)"
-            >新增子级</el-button
-          >
-          <el-button type="primary" link @click="showEnumFormDialog('edit', row)">编辑</el-button>
-          <el-button type="danger" link @click="handleDeleteEnum(row)">删除</el-button>
+          <template v-if="row.isEditing">
+            <el-button type="primary" link :loading="row.saving" @click="saveEnumRow(row)"
+              >保存</el-button
+            >
+            <el-button type="info" link @click="cancelEnumRow(row)">取消</el-button>
+          </template>
+          <template v-else>
+            <el-button type="primary" link @click="addEnumChild(row)">新增</el-button>
+            <el-button type="primary" link @click="editEnumRow(row)">编辑</el-button>
+            <el-button type="danger" link @click="handleDeleteEnum(row)">删除</el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
-
-    <InsDrawer
-      v-model="enumFormDialogVisible"
-      :type="enumFormDialogType"
-      :loading="enumSubmitLoading"
-      append-to-body
-      @submit="handleEnumSubmit"
-    >
-      <el-form ref="enumFormRef" :model="enumForm" :rules="enumRules" label-width="100px">
-        <el-row :gutter="16">
-          <el-col v-if="enumParentName" :span="24">
-            <el-form-item label="父级枚举">
-              <el-input :model-value="enumParentName" disabled />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="枚举名称" prop="dictValue">
-              <el-input v-model="enumForm.dictValue" placeholder="请输入枚举名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="枚举编码" prop="keyValue">
-              <el-input v-model="enumForm.keyValue" placeholder="请输入枚举编码" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="排序" prop="sortOrder">
-              <el-input-number
-                v-model="enumForm.sortOrder"
-                :min="0"
-                controls-position="right"
-                style="width: 100%"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </InsDrawer>
   </InsDrawer>
 </template>
 
@@ -146,7 +138,7 @@ import {
   updateDictionaryTypeApi,
 } from '@/api/dictionary'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive, ref } from 'vue'
 
 // 字典分类列表
 const loading = ref(false)
@@ -322,82 +314,111 @@ const loadEnumData = () => {
     })
 }
 
-const enumFormDialogVisible = ref(false)
-const enumFormDialogType = ref('add')
-const enumSubmitLoading = ref(false)
-const enumFormRef = ref()
-const currentEnumId = ref(null)
-const currentEnumParentId = ref(null)
+const enumTableRef = ref()
 
-const enumForm = reactive({
-  dictValue: '',
-  keyValue: '',
-  sortOrder: 0,
-})
+const enumRowClassName = ({ row }) => (row.isEditing ? 'is-editing-row' : '')
 
-const enumRules = {
-  dictValue: [{ required: true, message: '请输入枚举名称', trigger: 'blur' }],
-  keyValue: [{ required: true, message: '请输入枚举编码', trigger: 'blur' }],
-}
-
-const enumParentName = computed(() => {
-  if (!currentEnumParentId.value) return ''
-  const find = (list) => {
-    for (const item of list) {
-      if (item.id === currentEnumParentId.value) return item.dictValue
-      if (item.children?.length) {
-        const found = find(item.children)
-        if (found) return found
-      }
-    }
-    return ''
+const addEnumRow = (parentRow) => {
+  cancelEnumEdit()
+  const newRow = {
+    id: null,
+    dictValue: '',
+    keyValue: '',
+    sortOrder: 0,
+    parentId: parentRow ? parentRow.id : null,
+    children: [],
+    isEditing: true,
+    isNew: true,
   }
-  return find(enumData.value)
-})
-
-const resetEnumForm = () => {
-  Object.assign(enumForm, { dictValue: '', keyValue: '', sortOrder: 0 })
-  currentEnumId.value = null
-  currentEnumParentId.value = null
+  if (parentRow) {
+    if (!parentRow.children) parentRow.children = []
+    parentRow.children.push(newRow)
+    nextTick(() => {
+      enumTableRef.value?.toggleRowExpansion(parentRow, true)
+    })
+  } else {
+    enumData.value.push(newRow)
+  }
 }
 
-const showEnumFormDialog = (type, row) => {
-  enumFormDialogType.value = type
-  resetEnumForm()
-  if (type === 'add' && row) {
-    currentEnumParentId.value = row.id
-  } else if (type === 'edit' && row) {
-    currentEnumId.value = row.id
-    Object.assign(enumForm, {
-      dictValue: row.dictValue || '',
-      keyValue: row.keyValue || '',
-      sortOrder: row.sortOrder ?? 0,
+const addEnumRoot = () => addEnumRow(null)
+
+const addEnumChild = (parentRow) => addEnumRow(parentRow)
+
+const editEnumRow = (row) => {
+  cancelEnumEdit()
+  row._backup = { dictValue: row.dictValue, keyValue: row.keyValue, sortOrder: row.sortOrder }
+  row.isEditing = true
+  row.isNew = false
+}
+
+const removeRowFromData = (row) => {
+  const removeFromList = (list) => {
+    const idx = list.findIndex((item) => item === row)
+    if (idx > -1) {
+      list.splice(idx, 1)
+      return true
+    }
+    return list.some((item) => item.children?.length && removeFromList(item.children))
+  }
+  removeFromList(enumData.value)
+}
+
+const cancelEnumRow = (row) => {
+  if (row.isNew) {
+    removeRowFromData(row)
+    return
+  }
+  if (row._backup) {
+    row.dictValue = row._backup.dictValue
+    row.keyValue = row._backup.keyValue
+    row.sortOrder = row._backup.sortOrder
+    delete row._backup
+  }
+  row.isEditing = false
+}
+
+const cancelEnumEdit = () => {
+  const cancelInList = (list) => {
+    list.forEach((item) => {
+      if (item.isEditing) cancelEnumRow(item)
+      if (item.children?.length) cancelInList(item.children)
     })
   }
-  enumFormDialogVisible.value = true
+  cancelInList(enumData.value)
 }
 
-const handleEnumSubmit = async () => {
-  const valid = await enumFormRef.value.validate().catch(() => false)
-  if (!valid) return
-  enumSubmitLoading.value = true
-  const data = { typeId: currentType.value.id, ...enumForm }
-  if (enumFormDialogType.value === 'add' && currentEnumParentId.value) {
-    data.parentId = currentEnumParentId.value
+const saveEnumRow = (row) => {
+  if (!row.dictValue?.trim()) {
+    ElMessage.warning('请输入枚举名称')
+    return
   }
-  const apiCall =
-    enumFormDialogType.value === 'add'
-      ? createDictionaryEnumApi(data)
-      : updateDictionaryEnumApi(currentEnumId.value, enumForm)
+  if (!row.keyValue?.trim()) {
+    ElMessage.warning('请输入枚举编码')
+    return
+  }
+  row.saving = true
+  const data = {
+    typeId: currentType.value.id,
+    dictValue: row.dictValue,
+    keyValue: row.keyValue,
+    sortOrder: row.sortOrder ?? 0,
+  }
+  if (row.parentId) data.parentId = row.parentId
+  const apiCall = row.isNew
+    ? createDictionaryEnumApi(data)
+    : updateDictionaryEnumApi(row.id, {
+        dictValue: row.dictValue,
+        keyValue: row.keyValue,
+        sortOrder: row.sortOrder ?? 0,
+      })
   apiCall
     .then(() => {
       ElMessage.success('保存成功')
-      enumFormDialogVisible.value = false
       loadEnumData()
     })
-    .catch(() => {})
-    .finally(() => {
-      enumSubmitLoading.value = false
+    .catch(() => {
+      row.saving = false
     })
 }
 
@@ -422,6 +443,22 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .enum-header {
-  margin-bottom: 16px;
+  margin-bottom: var(--ins-spacing-md);
+}
+.enum-table {
+  :deep(.is-editing-row) {
+    .el-table__cell {
+      padding: 4px 0;
+      .cell {
+        padding: 0 4px;
+        .el-table__indent {
+          display: none;
+        }
+        .el-table__placeholder {
+          display: none;
+        }
+      }
+    }
+  }
 }
 </style>
