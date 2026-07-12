@@ -75,41 +75,23 @@
   <InsDrawer
     v-model="permissionVisible"
     title="权限"
-    size="500px"
     :loading="permLoading"
     confirm-text="保存"
     @submit="savePermission"
   >
-    <el-scrollbar height="60vh">
-      <el-tree
-        ref="treeRef"
-        :key="`tree-${currentRole?.id || 'new'}`"
-        :data="menuTreeData"
-        show-checkbox
-        node-key="id"
-        check-strictly
-        default-expand-all
-        :props="defaultProps"
-        @check="handleTreeCheck"
-      >
-        <template #default="{ data }">
-          <div class="tree-node">
-            <span>{{ data.name }}</span>
-            <el-tag :type="getMenuTypeTag(data)" size="small" class="node-tag">
-              {{ getMenuTypeText(data) }}
-            </el-tag>
-          </div>
-        </template>
-      </el-tree>
-    </el-scrollbar>
-    <div class="tree-actions">
-      <el-button @click="toggleExpandAll">
-        {{ isExpandAll ? '全部收起' : '全部展开' }}
-      </el-button>
-      <el-button @click="toggleSelectAll">
-        {{ isSelectAll ? '取消全选' : '全部选择' }}
-      </el-button>
-    </div>
+    <el-tree
+      ref="treeRef"
+      :key="`tree-${currentRole?.id || 'new'}`"
+      :data="menuTreeData"
+      show-checkbox
+      node-key="id"
+      default-expand-all
+      :props="defaultProps"
+    >
+      <template #default="{ data }">
+        <span>{{ data.name }}</span>
+      </template>
+    </el-tree>
   </InsDrawer>
 </template>
 
@@ -190,30 +172,10 @@ const permLoading = ref(false)
 const treeRef = ref()
 const currentRole = ref(null)
 const menuTreeData = ref([])
-const isExpandAll = ref(true)
-const isSelectAll = ref(false)
 
 const defaultProps = {
   children: 'children',
   label: (data) => data.name || '',
-}
-
-const getMenuTypeTag = (data) => {
-  if (data.menuType === 'button') return 'danger'
-  if (data.children?.length) {
-    const hasRealMenu = data.children.some((child) => child.menuType !== 'button')
-    return hasRealMenu ? 'info' : 'primary'
-  }
-  return data.isLink ? 'warning' : 'primary'
-}
-
-const getMenuTypeText = (data) => {
-  if (data.menuType === 'button') return '权限'
-  if (data.children?.length) {
-    const hasRealMenu = data.children.some((child) => child.menuType !== 'button')
-    return hasRealMenu ? '目录' : '菜单'
-  }
-  return data.isLink ? '外链' : '菜单'
 }
 
 const loadData = () => {
@@ -341,45 +303,6 @@ const loadRoleMenus = (role) => {
     })
 }
 
-const handleTreeCheck = () => {}
-
-const getAllNodeKeys = (nodes) => {
-  const keys = []
-  const traverse = (list) => {
-    list.forEach((node) => {
-      if (node.id) keys.push(node.id)
-      if (node.children?.length) traverse(node.children)
-    })
-  }
-  traverse(nodes)
-  return keys
-}
-
-const toggleExpandAll = () => {
-  const tree = treeRef.value
-  if (!tree) return
-  const nodes = tree.store.nodesMap
-  for (const node in nodes) {
-    nodes[node].expanded = !isExpandAll.value
-  }
-  isExpandAll.value = !isExpandAll.value
-}
-
-const toggleSelectAll = () => {
-  const tree = treeRef.value
-  if (!tree) return
-  if (!isSelectAll.value) {
-    const allKeys = getAllNodeKeys(menuTreeData.value)
-    if (allKeys.length > 0) {
-      tree.setCheckedKeys(allKeys)
-      isSelectAll.value = true
-    }
-  } else {
-    tree.setCheckedKeys([])
-    isSelectAll.value = false
-  }
-}
-
 const savePermission = () => {
   if (!currentRole.value) {
     ElMessage.error('保存失败, 请选择角色')
@@ -426,22 +349,3 @@ onMounted(() => {
   loadData()
 })
 </script>
-
-<style lang="scss" scoped>
-.tree-node {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-
-  .node-tag {
-    margin-right: 10px;
-  }
-}
-
-.tree-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-</style>

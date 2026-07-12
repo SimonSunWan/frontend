@@ -20,11 +20,6 @@
       <el-button type="primary" @click="showTypeDialog('add')">新增</el-button>
     </template>
 
-    <template #status="{ row }">
-      <el-tag :type="row.status ? 'primary' : 'info'">
-        {{ row.status ? '启用' : '禁用' }}
-      </el-tag>
-    </template>
     <template #action="{ row }">
       <el-button type="primary" link @click="showEnumDialog(row)">编辑</el-button>
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
@@ -66,12 +61,7 @@
   </InsDrawer>
 
   <!-- 枚举抽屉 -->
-  <InsDrawer
-    v-model="enumDialogVisible"
-    :title="`${currentType?.name || ''}`"
-    size="700px"
-    :show-footer="false"
-  >
+  <InsDrawer v-model="enumDialogVisible" :title="`${currentType?.name || ''}`" :show-footer="false">
     <div class="enum-header">
       <el-button type="primary" @click="addEnumRoot">新增</el-button>
     </div>
@@ -169,7 +159,6 @@ const columns = [
     showOverflowTooltip: true,
     formatter: (row) => row.description || '-',
   },
-  { label: '状态', width: 80, align: 'center', slotName: 'status' },
   { label: '操作', width: 220, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 

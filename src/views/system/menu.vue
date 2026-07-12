@@ -13,9 +13,6 @@
       <el-form-item label="菜单名称">
         <el-input v-model="form.name" placeholder="请输入菜单名称" clearable />
       </el-form-item>
-      <el-form-item label="路由地址">
-        <el-input v-model="form.path" placeholder="请输入路由地址" clearable />
-      </el-form-item>
     </template>
 
     <template #search-extra>
@@ -174,7 +171,6 @@ const columns = [
 
 const searchForm = reactive({
   name: '',
-  path: '',
 })
 
 // 弹窗
@@ -237,7 +233,6 @@ const loadData = () => {
   loading.value = true
   const params = {}
   if (searchForm.name) params.name = searchForm.name
-  if (searchForm.path) params.path = searchForm.path
   getMenuListApi(params)
     .then((res) => {
       tableData.value = res?.data?.records || []
@@ -254,7 +249,6 @@ const handleSearch = () => {
 
 const handleReset = () => {
   searchForm.name = ''
-  searchForm.path = ''
   loadData()
 }
 
