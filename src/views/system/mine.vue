@@ -257,7 +257,6 @@ onMounted(() => {
   .mine-layout {
     display: flex;
     align-items: stretch;
-    min-height: 100%;
     gap: var(--ins-spacing-lg);
 
     .mine-left {
