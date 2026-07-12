@@ -25,26 +25,6 @@
             </div>
             <div class="meta-item">
               <span class="meta-label">
-                <el-icon><Lock /></el-icon>
-              </span>
-              <span class="meta-value">
-                <template v-if="roleNames.length">
-                  <el-tag
-                    v-for="r in roleNames"
-                    :key="r"
-                    size="small"
-                    type="primary"
-                    effect="plain"
-                    class="meta-tag"
-                  >
-                    {{ r }}
-                  </el-tag>
-                </template>
-                <span v-else>-</span>
-              </span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">
                 <el-icon><OfficeBuilding /></el-icon>
               </span>
               <span class="meta-value">
@@ -57,6 +37,26 @@
                     class="meta-tag"
                   >
                     {{ d }}
+                  </el-tag>
+                </template>
+                <span v-else>-</span>
+              </span>
+            </div>
+            <div class="meta-item meta-item--full">
+              <span class="meta-label">
+                <el-icon><Service /></el-icon>
+              </span>
+              <span class="meta-value">
+                <template v-if="roleNames.length">
+                  <el-tag
+                    v-for="r in roleNames"
+                    :key="r"
+                    size="small"
+                    type="primary"
+                    effect="plain"
+                    class="meta-tag"
+                  >
+                    {{ r }}
                   </el-tag>
                 </template>
                 <span v-else>-</span>
@@ -138,7 +138,7 @@
 
 <script setup>
 import mineBg from '@/assets/images/mine-bg.png'
-import { Iphone, Lock, OfficeBuilding, Postcard, User } from '@element-plus/icons-vue'
+import { Iphone, OfficeBuilding, Postcard, Service, User } from '@element-plus/icons-vue'
 import { changePasswordApi, updateUserInfoApi } from '@/api/auth'
 import { useAuthStore } from '@/stores/auth'
 import { ElMessage } from 'element-plus'
@@ -293,13 +293,15 @@ onMounted(() => {
     }
 
     .profile-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       padding: var(--ins-spacing-lg) 0;
 
       .meta-item {
         display: flex;
         align-items: flex-start;
         gap: var(--ins-spacing-xs);
-        padding: 0 var(--ins-spacing-lg) var(--ins-spacing-lg) 100px;
+        padding: 0 var(--ins-spacing-lg) var(--ins-spacing-lg) var(--ins-spacing-lg);
       }
 
       .meta-label {
@@ -323,6 +325,10 @@ onMounted(() => {
 
       .meta-tag {
         margin: 0;
+      }
+
+      .meta-item--full {
+        grid-column: 1 / -1;
       }
     }
   }
