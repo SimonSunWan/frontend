@@ -24,9 +24,7 @@
         {{ getMenuTypeText(row) }}
       </el-tag>
     </template>
-    <template #path="{ row }">
-      {{ row.isLink ? row.link || '-' : row.path || '-' }}
-    </template>
+    <template #path="{ row }">{{ row.path || '-' }}</template>
     <template #authMark="{ row }">{{ row.authMark || '-' }}</template>
     <template #icon="{ row }">
       <i v-if="row.icon" class="iconfont menu-icon" :class="row.icon"></i>
@@ -76,11 +74,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="!dialogForm.isLink" label="路由地址" prop="path">
+            <el-form-item label="路由地址" prop="path">
               <el-input v-model="dialogForm.path" clearable placeholder="请输入路由地址" />
-            </el-form-item>
-            <el-form-item v-else label="外链地址" prop="link">
-              <el-input v-model="dialogForm.link" clearable placeholder="请输入外链地址" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -101,11 +96,6 @@
           <el-col :span="12">
             <el-form-item label="是否启用">
               <el-switch v-model="dialogForm.isEnable" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否外链">
-              <el-switch v-model="dialogForm.isLink" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -184,12 +174,10 @@ const currentParentId = ref(null)
 const dialogForm = reactive({
   name: '',
   path: '',
-  link: '',
   icon: '',
   sort: 1,
   isEnable: true,
   isKeepAlive: true,
-  isLink: false,
   menuType: 'menu',
   parentId: null,
   authMark: '',
@@ -199,11 +187,7 @@ const dialogRules = computed(() => {
   const rules = {}
   if (dialogForm.menuType === 'menu') {
     rules.name = [{ required: true, message: '请输入菜单名称', trigger: 'blur' }]
-    if (dialogForm.isLink) {
-      rules.link = [{ required: true, message: '请输入外链地址', trigger: 'blur' }]
-    } else {
-      rules.path = [{ required: true, message: '请输入路由地址', trigger: 'blur' }]
-    }
+    rules.path = [{ required: true, message: '请输入路由地址', trigger: 'blur' }]
   } else {
     rules.name = [{ required: true, message: '请输入权限名称', trigger: 'blur' }]
     rules.authMark = [{ required: true, message: '请输入权限标识', trigger: 'blur' }]
@@ -217,7 +201,7 @@ const getMenuTypeTag = (row) => {
     const hasRealMenu = row.children.some((child) => child.menuType !== 'button')
     return hasRealMenu ? 'info' : 'primary'
   }
-  return row.isLink ? 'warning' : 'primary'
+  return 'primary'
 }
 
 const getMenuTypeText = (row) => {
@@ -226,7 +210,7 @@ const getMenuTypeText = (row) => {
     const hasRealMenu = row.children.some((child) => child.menuType !== 'button')
     return hasRealMenu ? '目录' : '菜单'
   }
-  return row.isLink ? '外链' : '菜单'
+  return '菜单'
 }
 
 const loadData = () => {
@@ -256,12 +240,10 @@ const resetDialogForm = () => {
   Object.assign(dialogForm, {
     name: '',
     path: '',
-    link: '',
     icon: '',
     sort: 1,
     isEnable: true,
     isKeepAlive: true,
-    isLink: false,
     menuType: 'menu',
     parentId: null,
     authMark: '',
@@ -280,12 +262,10 @@ const showDialog = (type, row) => {
     Object.assign(dialogForm, {
       name: row.name || '',
       path: row.path || '',
-      link: row.link || '',
       icon: row.icon || '',
       sort: row.sort ?? 1,
       isEnable: row.isEnable ?? true,
       isKeepAlive: row.isKeepAlive ?? true,
-      isLink: row.isLink ?? false,
       menuType: row.menuType || 'menu',
       parentId: row.parentId || null,
       authMark: row.authMark || '',
@@ -301,12 +281,10 @@ const handleSubmit = async () => {
   const isButton = dialogForm.menuType === 'button'
   const data = {
     name: dialogForm.name,
-    path: isButton ? null : dialogForm.isLink ? null : dialogForm.path,
+    path: isButton ? null : dialogForm.path,
     icon: isButton ? null : dialogForm.icon,
     sort: dialogForm.sort,
     isKeepAlive: isButton ? true : dialogForm.isKeepAlive,
-    link: isButton ? null : dialogForm.isLink ? dialogForm.link : null,
-    isLink: isButton ? false : dialogForm.isLink,
     isEnable: dialogForm.isEnable,
     menuType: dialogForm.menuType,
     authMark: isButton ? dialogForm.authMark : null,

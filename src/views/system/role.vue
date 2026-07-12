@@ -85,11 +85,18 @@
       :data="menuTreeData"
       show-checkbox
       node-key="id"
+      check-strictly
       default-expand-all
       :props="defaultProps"
+      @check="handleTreeCheck"
     >
       <template #default="{ data }">
-        <span>{{ data.name }}</span>
+        <div class="tree-node">
+          <span>{{ data.name }}</span>
+          <el-tag :type="getMenuTypeTag(data)" size="small" class="node-tag">
+            {{ getMenuTypeText(data) }}
+          </el-tag>
+        </div>
       </template>
     </el-tree>
   </InsDrawer>
@@ -176,6 +183,24 @@ const menuTreeData = ref([])
 const defaultProps = {
   children: 'children',
   label: (data) => data.name || '',
+}
+
+const getMenuTypeTag = (data) => {
+  if (data.menuType === 'button') return 'danger'
+  if (data.children?.length) {
+    const hasRealMenu = data.children.some((child) => child.menuType !== 'button')
+    return hasRealMenu ? 'info' : 'primary'
+  }
+  return 'primary'
+}
+
+const getMenuTypeText = (data) => {
+  if (data.menuType === 'button') return '权限'
+  if (data.children?.length) {
+    const hasRealMenu = data.children.some((child) => child.menuType !== 'button')
+    return hasRealMenu ? '目录' : '菜单'
+  }
+  return '菜单'
 }
 
 const loadData = () => {
@@ -303,6 +328,32 @@ const loadRoleMenus = (role) => {
     })
 }
 
+const getChildMenuIds = (node) => {
+  const ids = []
+  const traverse = (n) => {
+    if (n.children?.length) {
+      n.children.forEach((child) => {
+        if (child.menuType !== 'button') {
+          ids.push(child.id)
+          traverse(child)
+        }
+      })
+    }
+  }
+  traverse(node)
+  return ids
+}
+
+const handleTreeCheck = (data, { checkedKeys }) => {
+  const tree = treeRef.value
+  if (!tree) return
+  if (data.menuType === 'button') return
+  const isChecked = checkedKeys.includes(data.id)
+  getChildMenuIds(data).forEach((id) => {
+    tree.setChecked(id, isChecked)
+  })
+}
+
 const savePermission = () => {
   if (!currentRole.value) {
     ElMessage.error('保存失败, 请选择角色')
@@ -349,3 +400,16 @@ onMounted(() => {
   loadData()
 })
 </script>
+
+<style lang="scss" scoped>
+.tree-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  .node-tag {
+    margin-right: 10px;
+  }
+}
+</style>
