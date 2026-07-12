@@ -333,7 +333,7 @@ const handleSubmit = async () => {
 }
 
 const handleDelete = (row) => {
-  ElMessageBox.confirm(`确定删除"${row.name}"吗？`, '删除', {
+  ElMessageBox.confirm(`确定删除${row.name}吗？`, '删除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
