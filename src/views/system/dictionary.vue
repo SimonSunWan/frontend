@@ -398,11 +398,12 @@ const saveEnumRow = (row) => {
     return
   }
   row.saving = true
+  const sortOrder = row.sortOrder ?? 0
   const data = {
     typeId: currentType.value.id,
     dictValue: row.dictValue,
     keyValue: row.keyValue,
-    sortOrder: row.sortOrder ?? 0,
+    sortOrder,
   }
   if (row.parentId) data.parentId = row.parentId
   const apiCall = row.isNew
@@ -410,14 +411,15 @@ const saveEnumRow = (row) => {
     : updateDictionaryEnumApi(row.id, {
         dictValue: row.dictValue,
         keyValue: row.keyValue,
-        sortOrder: row.sortOrder ?? 0,
+        sortOrder,
       })
   apiCall
     .then(() => {
       ElMessage.success('保存成功')
       loadEnumData()
     })
-    .catch(() => {
+    .catch(() => {})
+    .finally(() => {
       row.saving = false
     })
 }
@@ -448,9 +450,9 @@ onMounted(() => {
 .enum-table {
   :deep(.is-editing-row) {
     .el-table__cell {
-      padding: 4px 0;
+      padding: var(--ins-spacing-2xs) 0;
       .cell {
-        padding: 0 4px;
+        padding: 0 var(--ins-spacing-2xs);
         .el-table__indent {
           display: none;
         }
