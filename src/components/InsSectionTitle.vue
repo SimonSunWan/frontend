@@ -17,7 +17,7 @@ defineProps({
 .ins-section-title {
   position: relative;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--ins-text-primary);
   margin-bottom: 16px;
   padding: 12px 16px 12px 24px;

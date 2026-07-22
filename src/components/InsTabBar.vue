@@ -1,7 +1,12 @@
 <template>
   <div class="tab-view">
     <div class="tab-scroll" ref="scrollRef">
-      <ul class="tab-list" ref="tabsRef" :class="{ single: tabs.length === 1 }" :style="{ transform: `translateX(${translateX}px)` }">
+      <ul
+        class="tab-list"
+        ref="tabsRef"
+        :class="{ single: tabs.length === 1 }"
+        :style="{ transform: `translateX(${translateX}px)` }"
+      >
         <li
           v-for="(tab, index) in tabs"
           :key="tab.path"
@@ -188,7 +193,6 @@ onUnmounted(() => {
 
     &.active {
       color: var(--ins-color-primary);
-      font-weight: 500;
       background-color: var(--ins-color-primary-bg);
       border-bottom: 0;
       border-bottom-right-radius: 0;

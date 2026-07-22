@@ -245,7 +245,6 @@ const handleLogout = () => {
 
       :deep(.el-menu-item.is-active) {
         color: var(--ins-color-primary);
-        font-weight: 500;
         background-color: var(--ins-color-primary-bg);
         border-radius: 4px;
       }

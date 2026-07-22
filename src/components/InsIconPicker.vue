@@ -81,15 +81,15 @@ const clear = () => {
 .icon-picker-trigger {
   display: flex;
   align-items: center;
-  gap: var(--ins-spacing-xs);
+  gap: 8px;
   width: 100%;
   height: 32px;
-  padding: 0 var(--ins-spacing-sm);
+  padding: 0 12px;
   border: 1px solid var(--el-border-color);
-  border-radius: var(--ins-radius-md);
+  border-radius: 4px;
   cursor: pointer;
   background: var(--ins-bg-container);
-  transition: border-color var(--ins-transition-base);
+  transition: border-color 0.2s;
   box-sizing: border-box;
 
   &:hover {
@@ -101,21 +101,21 @@ const clear = () => {
   }
 
   .preview {
-    font-size: var(--ins-font-size-xl);
+    font-size: 16px;
     color: var(--ins-text-primary);
     margin-right: auto;
   }
 
   .placeholder {
     color: var(--ins-text-secondary);
-    font-size: var(--ins-font-size-base);
+    font-size: 14px;
     margin-right: auto;
   }
 
   .clear {
     color: var(--ins-text-secondary);
     cursor: pointer;
-    transition: color var(--ins-transition-base);
+    transition: color 0.2s;
 
     &:hover {
       color: var(--ins-color-primary);
@@ -124,7 +124,7 @@ const clear = () => {
 
   .arrow {
     color: var(--ins-text-secondary);
-    transition: transform var(--ins-transition-base);
+    transition: transform 0.2s;
 
     &.is-open {
       transform: rotate(180deg);
@@ -134,14 +134,14 @@ const clear = () => {
 
 .icon-picker {
   .icon-grid {
-    margin-top: var(--ins-spacing-xs);
-    margin-right: calc(-1 * var(--ins-spacing-sm));
-    padding-right: var(--ins-spacing-sm);
+    margin-top: 8px;
+    margin-right: -12px;
+    padding-right: 12px;
     max-height: 280px;
     overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: var(--ins-spacing-2xs);
+    gap: 6px;
 
     .icon-cell {
       display: flex;
@@ -149,11 +149,11 @@ const clear = () => {
       justify-content: center;
       height: 40px;
       border: 1px solid var(--el-border-color-light);
-      border-radius: var(--ins-radius-md);
+      border-radius: 4px;
       cursor: pointer;
-      font-size: var(--ins-font-size-2xl);
+      font-size: 20px;
       color: var(--ins-text-regular);
-      transition: all var(--ins-transition-fast);
+      transition: all 0.15s;
 
       &:hover,
       &.active {
@@ -166,9 +166,9 @@ const clear = () => {
     .empty {
       grid-column: 1 / -1;
       text-align: center;
-      padding: var(--ins-spacing-xl) 0;
+      padding: 24px 0;
       color: var(--ins-text-secondary);
-      font-size: var(--ins-font-size-sm);
+      font-size: 12px;
     }
   }
 }
