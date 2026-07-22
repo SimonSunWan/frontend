@@ -186,7 +186,7 @@ const handleCurrentChange = (current) => {
 
   .table-header {
     flex-shrink: 0;
-    margin-bottom: var(--ins-spacing-lg);
+    margin-bottom: 20px;
   }
 
   .table-body {
@@ -205,19 +205,10 @@ const handleCurrentChange = (current) => {
 
   :deep(.el-table__header-wrapper) {
     .el-table__cell {
-      background-color: var(--ins-brand-hover);
-
+      background-color: var(--el-fill-color-lighter);
       .cell {
-        font-weight: var(--ins-font-weight-medium);
+        font-weight: 500;
         color: var(--ins-text-primary);
-      }
-    }
-  }
-
-  :deep(.el-table__body-wrapper) {
-    tr.el-table__row--striped {
-      td.el-table__cell {
-        background-color: var(--ins-bg-muted);
       }
     }
   }
@@ -226,7 +217,7 @@ const handleCurrentChange = (current) => {
     flex-shrink: 0;
     display: flex;
     justify-content: flex-end;
-    margin-top: var(--ins-spacing-md);
+    margin-top: 16px;
   }
 }
 </style>

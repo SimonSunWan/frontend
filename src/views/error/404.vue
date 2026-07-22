@@ -1,15 +1,15 @@
 <template>
   <div class="not-found">
-    <el-result icon="warning" title="404" sub-title="页面不存在或已被移除">
-      <template #extra>
-        <el-button type="primary" @click="goHome">返回首页</el-button>
-      </template>
-    </el-result>
+    <div class="not-found__content">
+      <img class="not-found__img" :src="img404" alt="404" />
+      <el-button type="primary" @click="goHome">返回首页</el-button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import img404 from '@/assets/images/404.png'
 
 const router = useRouter()
 
@@ -23,7 +23,18 @@ const goHome = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 100vh;
   background-color: var(--ins-bg-container);
+}
+
+.not-found__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.not-found__img {
+  width: 420px;
+  max-width: 80%;
 }
 </style>

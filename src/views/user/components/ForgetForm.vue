@@ -1,5 +1,5 @@
 <template>
-  <el-card class="auth-card" shadow="always">
+  <el-card class="user-card" shadow="always">
     <template #header>
       <div class="header-title">
         <img src="/favicon.ico" alt="logo" class="header-logo" />
@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { forgetPasswordApi } from '@/api/auth'
+import { forgetPasswordApi } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 

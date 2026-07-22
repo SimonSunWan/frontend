@@ -11,8 +11,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        // target: 'http://localhost:8000',
-        target: 'https://donglidianchi.com.cn',
+        target: 'http://localhost:8000',
+        // target: 'https://donglidianchi.com.cn',
         changeOrigin: true,
       },
     },

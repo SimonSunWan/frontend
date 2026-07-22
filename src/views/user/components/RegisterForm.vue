@@ -1,5 +1,5 @@
 <template>
-  <el-card class="auth-card" shadow="always">
+  <el-card class="user-card" shadow="always">
     <template #header>
       <div class="header-title">
         <img src="/favicon.ico" alt="logo" class="header-logo" />
@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import { registerApi } from '@/api/auth'
+import { registerApi } from '@/api/user'
 import {
   createConfirmPasswordRule,
   nickNameRule,

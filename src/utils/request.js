@@ -42,7 +42,7 @@ request.interceptors.response.use(
     if (status === 401 || status === 422) {
       localStorage.removeItem('token')
       localStorage.removeItem('userInfo')
-      window.location.href = '/auth/login'
+      window.location.href = '/login'
       return Promise.reject(error)
     }
     const message = error.response?.data?.message || '请求失败'

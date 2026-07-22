@@ -1,19 +1,19 @@
 // 静态路由
 export const staticRoutes = [
   {
-    path: '/auth/login',
+    path: '/login',
     name: 'Login',
-    component: () => import('@/views/auth/index.vue'),
+    component: () => import('@/views/user/index.vue'),
   },
   {
-    path: '/auth/register',
+    path: '/register',
     name: 'Register',
-    component: () => import('@/views/auth/index.vue'),
+    component: () => import('@/views/user/index.vue'),
   },
   {
-    path: '/auth/forget',
+    path: '/forget',
     name: 'Forget',
-    component: () => import('@/views/auth/index.vue'),
+    component: () => import('@/views/user/index.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

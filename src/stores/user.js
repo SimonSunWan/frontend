@@ -1,9 +1,9 @@
-import { getUserInfoApi, loginApi } from '@/api/auth'
+import { getUserInfoApi, loginApi } from '@/api/user'
 import { useMenuStore } from '@/stores/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useAuthStore = defineStore('auth', () => {
+export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.getItem('token') || '')
   const userInfo = ref(JSON.parse(localStorage.getItem('userInfo') || 'null'))
 

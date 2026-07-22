@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-container">
+  <div class="user-container">
     <transition name="card-switch" mode="out-in">
       <component :is="currentComponent" @switch="handleSwitch" />
     </transition>
@@ -17,14 +17,14 @@ const route = useRoute()
 const router = useRouter()
 
 const pathToMode = {
-  '/auth/login': 'login',
-  '/auth/register': 'register',
-  '/auth/forget': 'forget',
+  '/login': 'login',
+  '/register': 'register',
+  '/forget': 'forget',
 }
 const modeToPath = {
-  login: '/auth/login',
-  register: '/auth/register',
-  forget: '/auth/forget',
+  login: '/login',
+  register: '/register',
+  forget: '/forget',
 }
 const componentMap = {
   login: LoginForm,
@@ -51,14 +51,14 @@ const handleSwitch = (target) => {
 </script>
 
 <style lang="scss" scoped>
-.auth-container {
+.user-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background: url('@/assets/images/login-bg.png') no-repeat center center / cover;
 
-  :deep(.auth-card) {
+  :deep(.user-card) {
     width: 450px;
     border-radius: 8px;
     overflow: hidden;

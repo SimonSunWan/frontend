@@ -1,5 +1,5 @@
 <template>
-  <el-card class="auth-card" shadow="always">
+  <el-card class="user-card" shadow="always">
     <template #header>
       <div class="header-title">
         <img src="/favicon.ico" alt="logo" class="header-logo" />
@@ -43,14 +43,14 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '@/stores/auth'
+import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const emit = defineEmits(['switch'])
 const router = useRouter()
-const authStore = useAuthStore()
+const userStore = useUserStore()
 const formRef = ref()
 const form = ref({ userName: '', password: '' })
 const loading = ref(false)
@@ -64,7 +64,7 @@ const handleLogin = async () => {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
   loading.value = true
-  authStore
+  userStore
     .login(form.value)
     .then(() => {
       router.push('/')

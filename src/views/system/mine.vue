@@ -139,8 +139,8 @@
 <script setup>
 import mineBg from '@/assets/images/mine-bg.png'
 import { Iphone, OfficeBuilding, Postcard, Service, User } from '@element-plus/icons-vue'
-import { changePasswordApi, updateUserInfoApi } from '@/api/auth'
-import { useAuthStore } from '@/stores/auth'
+import { changePasswordApi, updateUserInfoApi } from '@/api/user'
+import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import InsSectionTitle from '@/components/InsSectionTitle.vue'
 import {
@@ -153,7 +153,7 @@ import {
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const authStore = useAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 const roleNames = ref([])
@@ -189,7 +189,7 @@ const pwdRules = {
 }
 
 const loadUserInfo = () => {
-  authStore
+  userStore
     .getUserInfo()
     .then((data) => {
       if (data) {
@@ -233,8 +233,8 @@ const handlePwdSave = async () => {
   })
     .then(() => {
       ElMessage.success('保存成功, 请重新登录')
-      authStore.logout()
-      router.push('/auth/login')
+      userStore.logout()
+      router.push('/login')
     })
     .catch(() => {})
     .finally(() => {
@@ -251,13 +251,13 @@ onMounted(() => {
 .mine-container {
   height: 100%;
   overflow-y: auto;
-  padding-right: var(--ins-spacing-lg);
-  margin-right: calc(-1 * var(--ins-spacing-lg));
+  padding-right: 20px;
+  margin-right: calc(-1 * 20px);
 
   .mine-layout {
     display: flex;
     align-items: stretch;
-    gap: var(--ins-spacing-lg);
+    gap: 20px;
 
     .mine-left {
       width: 424px;
@@ -282,7 +282,7 @@ onMounted(() => {
       display: block;
       width: 424px;
       margin: 0;
-      border-radius: var(--ins-radius-lg) var(--ins-radius-lg) 0 0;
+      border-radius: 8px 8px 0 0;
 
       :deep(.el-image__inner) {
         width: 100%;
@@ -294,13 +294,13 @@ onMounted(() => {
     .profile-meta {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      padding: var(--ins-spacing-lg) 0;
+      padding: 20px 0;
 
       .meta-item {
         display: flex;
         align-items: flex-start;
-        gap: var(--ins-spacing-xs);
-        padding: 0 var(--ins-spacing-lg) var(--ins-spacing-lg) var(--ins-spacing-lg);
+        gap: 8px;
+        padding: 0 20px 20px 20px;
       }
 
       .meta-label {
@@ -308,18 +308,18 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: var(--ins-font-size-xl);
-        font-size: var(--ins-font-size-xl);
+        width: 18px;
+        font-size: 18px;
         color: var(--ins-color-primary);
       }
 
       .meta-value {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--ins-spacing-xs);
-        font-size: var(--ins-font-size-sm);
+        gap: 8px;
+        font-size: 13px;
         color: var(--ins-text-regular);
-        font-weight: var(--ins-font-weight-regular);
+        font-weight: 400;
       }
 
       .meta-tag {
@@ -333,7 +333,7 @@ onMounted(() => {
   }
 
   .pwd-card {
-    margin-top: var(--ins-spacing-lg);
+    margin-top: 20px;
   }
 
   .info-card {
@@ -344,7 +344,7 @@ onMounted(() => {
     .info-footer {
       display: flex;
       justify-content: flex-end;
-      gap: var(--ins-spacing-sm);
+      gap: 12px;
     }
   }
 }

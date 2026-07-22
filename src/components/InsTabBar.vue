@@ -1,7 +1,7 @@
 <template>
   <div class="tab-view">
     <div class="tab-scroll" ref="scrollRef">
-      <ul class="tab-list" ref="tabsRef" :style="{ transform: `translateX(${translateX}px)` }">
+      <ul class="tab-list" ref="tabsRef" :class="{ single: tabs.length === 1 }" :style="{ transform: `translateX(${translateX}px)` }">
         <li
           v-for="(tab, index) in tabs"
           :key="tab.path"
@@ -147,23 +147,23 @@ onUnmounted(() => {
 .tab-view {
   display: flex;
   align-items: flex-end;
-  padding: 0 var(--ins-spacing-sm) 0 var(--ins-spacing-md);
+  padding: 0 12px 0 16px;
   background-color: var(--ins-bg-container);
   border-bottom: 1px solid var(--ins-border-light);
-  border-radius: var(--ins-radius-md) var(--ins-radius-md) 0 0;
+  border-radius: 4px 4px 0 0;
 
   .tab-scroll {
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    padding-top: var(--ins-spacing-2xs);
+    padding-top: 4px;
   }
 
   .tab-list {
     display: inline-flex;
     align-items: flex-end;
     height: 32px;
-    padding-left: var(--ins-spacing-2xs);
+    padding-left: 4px;
     white-space: nowrap;
     will-change: transform;
   }
@@ -173,30 +173,30 @@ onUnmounted(() => {
     display: inline-flex;
     align-items: center;
     height: 32px;
-    padding: 0 var(--ins-spacing-xs) 0 var(--ins-spacing-sm);
-    margin-right: var(--ins-spacing-2xs);
-    font-size: var(--ins-font-size-xs);
+    padding: 0 8px 0 12px;
+    margin-right: 4px;
+    font-size: 12px;
     color: var(--ins-text-regular);
     cursor: pointer;
-    border-radius: var(--ins-radius-lg) var(--ins-radius-lg) 0 0;
-    transition: all var(--ins-transition-fast);
+    border-radius: 8px 8px 0 0;
+    transition: all 0.15s ease;
 
     &:hover {
       color: var(--ins-text-primary);
-      background-color: var(--ins-bg-muted);
+      background-color: var(--ins-color-primary-bg);
     }
 
     &.active {
       color: var(--ins-color-primary);
-      font-weight: var(--ins-font-weight-medium);
-      background-color: var(--ins-brand-hover);
+      font-weight: 500;
+      background-color: var(--ins-color-primary-bg);
       border-bottom: 0;
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
 
       &::before,
       &::after {
-        box-shadow: 0 0 0 30px var(--ins-brand-hover);
+        box-shadow: 0 0 0 30px var(--ins-color-primary-bg);
       }
 
       .tab-close {
@@ -240,13 +240,13 @@ onUnmounted(() => {
       justify-content: center;
       width: 18px;
       height: 18px;
-      margin-left: var(--ins-spacing-2xs);
+      margin-left: 4px;
       border-radius: 50%;
       color: var(--ins-text-secondary);
-      transition: all var(--ins-transition-fast);
+      transition: all 0.15s ease;
 
       .el-icon {
-        font-size: var(--ins-font-size-xs);
+        font-size: 12px;
       }
 
       &:hover {
@@ -263,7 +263,7 @@ onUnmounted(() => {
       height: 16px;
       background-color: var(--ins-border-light);
       transform: translateY(-50%);
-      transition: opacity var(--ins-transition-fast);
+      transition: opacity 0.15s ease;
       pointer-events: none;
     }
 
@@ -276,23 +276,27 @@ onUnmounted(() => {
     }
   }
 
+  .tab-list.single .tab-item {
+    padding: 0 12px;
+  }
+
   .more-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 32px;
     height: 32px;
-    margin-left: var(--ins-spacing-2xs);
+    margin-left: 4px;
     color: var(--ins-text-secondary);
     cursor: pointer;
-    border-radius: var(--ins-radius-md);
+    border-radius: 4px;
     flex-shrink: 0;
     outline: none;
-    transition: all var(--ins-transition-fast);
+    transition: all 0.15s ease;
 
     &:hover {
       color: var(--ins-text-primary);
-      background-color: var(--ins-bg-muted);
+      background-color: var(--ins-color-primary-bg);
     }
   }
 }
@@ -300,6 +304,6 @@ onUnmounted(() => {
 
 <style lang="scss">
 .el-dropdown-menu .dropdown-item {
-  font-size: var(--ins-font-size-xs);
+  font-size: 12px;
 }
 </style>

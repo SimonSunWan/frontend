@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/stores/auth'
+import { useUserStore } from '@/stores/user'
 import { useMenuStore } from '@/stores/menu'
 import { getNavigationMenusApi } from '@/api/menu'
 import { registerDynamicRoutes } from './registerRoutes'
@@ -6,17 +6,19 @@ import NProgress from 'nprogress'
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 200 })
 
+const PUBLIC_PATHS = ['/login', '/register', '/forget']
+
 export function setupGuard(router) {
   router.beforeEach((to) => {
     NProgress.start()
-    const authStore = useAuthStore()
+    const userStore = useUserStore()
     const menuStore = useMenuStore()
 
-    if (!authStore.token) {
-      return to.path.startsWith('/auth/') ? true : '/auth/login'
+    if (!userStore.token) {
+      return PUBLIC_PATHS.includes(to.path) ? true : '/login'
     }
 
-    if (to.path === '/auth/login') {
+    if (to.path === '/login') {
       return menuStore.homePath || '/'
     }
 
@@ -30,17 +32,17 @@ export function setupGuard(router) {
           menuStore.isRouteRegistered = true
         })
         .then(() => {
-          const target = to.path === '/' ? menuStore.homePath || '/auth/login' : to.path
+          const target = to.path === '/' ? menuStore.homePath || '/login' : to.path
           return { path: target, query: to.query, replace: true }
         })
         .catch(() => {
-          authStore.logout()
-          return '/auth/login'
+          userStore.logout()
+          return '/login'
         })
     }
 
     if (to.path === '/') {
-      return menuStore.homePath || '/auth/login'
+      return menuStore.homePath || '/login'
     }
 
     return true

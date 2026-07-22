@@ -144,7 +144,7 @@
 <script setup>
 import InsTablePage from '@/components/InsCrud/index.vue'
 import InsDrawer from '@/components/InsCrud/InsDrawer.vue'
-import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/auth'
+import { createUserApi, deleteUserApi, getUserListApi, updateUserApi } from '@/api/user'
 import { getAllRolesApi } from '@/api/role'
 import { nickNameRule, phoneRule, userNameRule } from '@/utils/validators'
 import { ElMessage, ElMessageBox } from 'element-plus'

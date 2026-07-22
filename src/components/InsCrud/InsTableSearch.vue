@@ -24,7 +24,7 @@ defineEmits(['search', 'reset'])
 <style lang="scss" scoped>
 .search-card {
   flex-shrink: 0;
-  margin-bottom: var(--ins-spacing-lg);
+  margin-bottom: 20px;
 
   :deep(.el-card__body) {
     padding-bottom: 0;
@@ -38,16 +38,16 @@ defineEmits(['search', 'reset'])
     align-items: center;
     width: var(--ins-search-item-width, 240px);
     height: 32px;
-    padding: 0 var(--ins-spacing-sm);
-    margin: 0 var(--ins-spacing-md) var(--ins-spacing-md) 0;
+    padding: 0 12px;
+    margin: 0 16px 16px 0;
     background-color: var(--ins-bg-container);
     border: 1px solid var(--el-border-color-light);
-    border-radius: var(--ins-radius-md);
-    transition: border-color var(--ins-transition-fast);
+    border-radius: 4px;
+    transition: border-color 0.15s ease;
 
     .el-form-item__label {
       flex-shrink: 0;
-      padding: 0 var(--ins-spacing-sm) 0 0;
+      padding: 0 12px 0 0;
       line-height: 32px;
       color: var(--el-text-color-regular);
     }
@@ -83,11 +83,11 @@ defineEmits(['search', 'reset'])
   }
 
   :deep(.el-form-item.span-2) {
-    width: calc(2 * var(--ins-search-item-width, 240px) + var(--ins-spacing-md));
+    width: calc(2 * var(--ins-search-item-width, 240px) + 16px);
   }
 
   :deep(.el-form-item.span-3) {
-    width: calc(3 * var(--ins-search-item-width, 240px) + 2 * var(--ins-spacing-md));
+    width: calc(3 * var(--ins-search-item-width, 240px) + 2 * 16px);
   }
 
   :deep(.search-actions) {

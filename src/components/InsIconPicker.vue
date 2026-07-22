@@ -159,7 +159,7 @@ const clear = () => {
       &.active {
         border-color: var(--ins-color-primary);
         color: var(--ins-color-primary);
-        background: var(--ins-brand-hover);
+        background: var(--ins-color-primary-bg);
       }
     }
 

@@ -439,14 +439,14 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .enum-header {
-  margin-bottom: var(--ins-spacing-md);
+  margin-bottom: 16px;
 }
 .enum-table {
   :deep(.is-editing-row) {
     .el-table__cell {
-      padding: var(--ins-spacing-2xs) 0;
+      padding: 4px 0;
       .cell {
-        padding: 0 var(--ins-spacing-2xs);
+        padding: 0 4px;
         .el-table__indent {
           display: none;
         }

@@ -19,12 +19,12 @@
 .el-drawer {
   .el-drawer__header {
     margin-bottom: 0;
-    padding-bottom: var(--ins-spacing-md);
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--ins-border-light);
   }
 
   .el-drawer__body {
-    padding: var(--ins-spacing-md) var(--ins-spacing-lg);
+    padding: 16px 20px;
   }
 
   .el-drawer__footer {
@@ -35,16 +35,16 @@
 }
 
 .el-card {
-  border-radius: var(--ins-radius-lg);
+  border-radius: 8px;
 }
 
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain) {
-  background: linear-gradient(225deg, #4f8aff, #0a66e6);
+  background: linear-gradient(270deg, #4f8aff, #0a66e6);
   border-color: transparent;
 
   &:hover,
   &.is-hover {
-    background: linear-gradient(225deg, #4f8aff, #0a66e6);
+    background: linear-gradient(270deg, #4f8aff, #0a66e6);
     filter: brightness(1.08);
   }
 
@@ -64,7 +64,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--ins-spacing-xs);
+    gap: 8px;
 
     .el-button + .el-button {
       position: relative;
@@ -73,7 +73,7 @@
       &::before {
         content: '';
         position: absolute;
-        left: calc(var(--ins-spacing-xs) * -0.5 - var(--el-border-width, 1px));
+        left: calc(8px * -0.5 - var(--el-border-width, 1px));
         top: 50%;
         transform: translate(-50%, -50%);
         width: 1px;

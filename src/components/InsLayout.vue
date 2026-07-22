@@ -33,7 +33,7 @@
         <el-popover placement="bottom-end" trigger="hover" popper-class="user-dropdown-popper">
           <template #reference>
             <div class="user-info">
-              <span class="user-name">{{ authStore.userInfo?.nickName }}</span>
+              <span class="user-name">{{ userStore.userInfo?.nickName }}</span>
               <el-icon><ArrowDown /></el-icon>
             </div>
           </template>
@@ -74,7 +74,7 @@
 import InsTabBar from '@/components/InsTabBar.vue'
 import InsMenuTree from '@/components/InsMenuTree.vue'
 import { useMenuStore } from '@/stores/menu'
-import { useAuthStore } from '@/stores/auth'
+import { useUserStore } from '@/stores/user'
 import { ArrowDown, Search, SwitchButton, User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -82,7 +82,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const menuStore = useMenuStore()
-const authStore = useAuthStore()
+const userStore = useUserStore()
 const isCollapse = ref(false)
 const searchKeyword = ref('')
 
@@ -120,8 +120,8 @@ const handleSearchSelect = (item) => {
 }
 
 const handleLogout = () => {
-  authStore.logout()
-  router.push('/auth/login')
+  userStore.logout()
+  router.push('/login')
 }
 </script>
 
@@ -133,8 +133,8 @@ const handleLogout = () => {
   .layout-header {
     display: flex;
     align-items: center;
-    gap: var(--ins-spacing-sm);
-    padding: 0 var(--ins-spacing-lg);
+    gap: 12px;
+    padding: 0 20px;
     border-bottom: 1px solid var(--el-border-color);
     background:
       url('@/assets/images/layout-bg.png') no-repeat left center / auto 100%,
@@ -146,7 +146,7 @@ const handleLogout = () => {
     .header-left {
       display: flex;
       align-items: center;
-      gap: var(--ins-spacing-sm);
+      gap: 12px;
       margin-right: auto;
     }
 
@@ -157,25 +157,25 @@ const handleLogout = () => {
     }
 
     .logo-text {
-      font-size: var(--ins-font-size-2xl);
+      font-size: 20px;
       white-space: nowrap;
       color: var(--ins-text-inverse);
     }
 
     .collapse-btn {
-      font-size: var(--ins-font-size-2xl);
+      font-size: 20px;
       cursor: pointer;
       color: var(--ins-text-inverse);
 
       &:hover {
-        color: var(--ins-brand-hover);
+        color: var(--ins-color-primary-bg);
       }
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: var(--ins-spacing-md);
+      gap: 16px;
 
       .user-info {
         display: inline-flex;
@@ -185,7 +185,7 @@ const handleLogout = () => {
 
         .user-name {
           color: var(--ins-text-inverse);
-          margin-right: var(--ins-spacing-sm);
+          margin-right: 12px;
         }
 
         .el-icon {
@@ -216,7 +216,7 @@ const handleLogout = () => {
   }
 
   .layout-aside {
-    padding-top: var(--ins-spacing-2xs);
+    padding-top: 4px;
     transition: width 0.3s;
     overflow: hidden;
     border-right: 1px solid var(--el-border-color);
@@ -234,33 +234,33 @@ const handleLogout = () => {
       :deep(.el-menu-item) {
         height: 40px;
         line-height: 40px;
-        margin: var(--ins-spacing-2xs) var(--ins-spacing-xs);
+        margin: 4px 8px;
       }
 
       :deep(.el-menu-item):hover {
         color: var(--ins-color-primary);
-        background-color: var(--ins-brand-hover);
-        border-radius: var(--ins-radius-md);
+        background-color: var(--ins-color-primary-bg);
+        border-radius: 4px;
       }
 
       :deep(.el-menu-item.is-active) {
         color: var(--ins-color-primary);
-        font-weight: var(--ins-font-weight-medium);
-        background-color: var(--ins-brand-hover);
-        border-radius: var(--ins-radius-md);
+        font-weight: 500;
+        background-color: var(--ins-color-primary-bg);
+        border-radius: 4px;
       }
 
       :deep(.el-sub-menu__title) {
         height: 40px;
         line-height: 40px;
-        margin: 0 var(--ins-spacing-xs);
-        border-radius: var(--ins-radius-md);
+        margin: 0 8px;
+        border-radius: 4px;
       }
 
       :deep(.el-sub-menu__title):hover {
         color: var(--ins-color-primary);
-        background-color: var(--ins-brand-hover);
-        border-radius: var(--ins-radius-md);
+        background-color: var(--ins-color-primary-bg);
+        border-radius: 4px;
       }
 
       :deep(.el-menu-item) > span,
@@ -274,8 +274,8 @@ const handleLogout = () => {
     }
 
     :deep(.menu-icon) {
-      margin-right: var(--ins-spacing-2xs);
-      font-size: var(--ins-font-size-2xl);
+      margin-right: 8px;
+      font-size: 20px;
       vertical-align: middle;
     }
   }
@@ -288,7 +288,7 @@ const handleLogout = () => {
     overflow: hidden;
 
     .layout-content {
-      padding: var(--ins-spacing-lg);
+      padding: 20px;
       flex: 1;
       min-height: 0;
       overflow: hidden;
@@ -300,7 +300,7 @@ const handleLogout = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--ins-spacing-2xs);
+  gap: 4px;
 
   &-title {
     color: var(--ins-text-primary);
@@ -308,7 +308,7 @@ const handleLogout = () => {
 
   &-path {
     color: var(--ins-text-secondary);
-    font-size: var(--ins-font-size-xs);
+    font-size: 12px;
   }
 }
 
@@ -316,13 +316,13 @@ const handleLogout = () => {
   .user-menu-item {
     display: flex;
     align-items: center;
-    gap: var(--ins-spacing-xs);
-    padding: var(--ins-spacing-xs) var(--ins-spacing-2xs);
+    gap: 8px;
+    padding: 8px 4px;
     cursor: pointer;
-    border-radius: var(--ins-radius-md);
+    border-radius: 4px;
 
     &:hover {
-      background: var(--ins-bg-muted);
+      background: var(--ins-color-primary-bg);
       color: var(--ins-color-primary);
     }
   }
