@@ -155,7 +155,7 @@ const tableData = ref([])
 const roleList = ref([])
 
 const columns = [
-  { type: 'index', label: '序号', width: 60, align: 'center' },
+  { type: 'index', label: '序号', width: 80, align: 'center' },
   {
     prop: 'userName',
     label: '用户名',
@@ -174,9 +174,9 @@ const columns = [
     showOverflowTooltip: true,
     formatter: (row) => row.phone || '-',
   },
-  { label: '角色名称', minWidth: 120, slotName: 'roleNames' },
-  { label: '所属部门', minWidth: 120, slotName: 'departments' },
-  { label: '状态', width: 80, align: 'center', slotName: 'status' },
+  { label: '角色名称', slotName: 'roleNames' },
+  { label: '所属部门', slotName: 'departments' },
+  { label: '状态', align: 'center', slotName: 'status' },
   { label: '操作', width: 120, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 

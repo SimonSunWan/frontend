@@ -120,7 +120,7 @@ const loading = ref(false)
 const tableData = ref([])
 
 const columns = [
-  { type: 'index', label: '序号', width: 60, align: 'center' },
+  { type: 'index', label: '序号', width: 80, align: 'center' },
   {
     prop: 'roleName',
     label: '角色名称',
@@ -139,8 +139,8 @@ const columns = [
     showOverflowTooltip: true,
     formatter: (row) => row.description || '-',
   },
-  { label: '状态', width: 80, align: 'center', slotName: 'status' },
-  { label: '操作', width: 200, fixed: 'right', align: 'center', slotName: 'action' },
+  { label: '状态', align: 'center', slotName: 'status' },
+  { label: '操作', width: 180, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 
 const searchForm = reactive({

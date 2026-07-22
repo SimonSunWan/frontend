@@ -76,19 +76,19 @@
       :tree-props="{ children: 'children' }"
       default-expand-all
     >
-      <el-table-column prop="dictValue" label="枚举名称" min-width="180">
+      <el-table-column prop="dictValue" label="枚举名称">
         <template #default="{ row }">
           <el-input v-if="row.isEditing" v-model="row.dictValue" placeholder="请输入枚举名称" />
           <span v-else>{{ row.dictValue || '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="keyValue" label="枚举编码" min-width="160">
+      <el-table-column prop="keyValue" label="枚举编码">
         <template #default="{ row }">
           <el-input v-if="row.isEditing" v-model="row.keyValue" placeholder="请输入枚举编码" />
           <span v-else>{{ row.keyValue || '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="sortOrder" label="排序" width="100" align="center">
+      <el-table-column prop="sortOrder" label="排序" align="center">
         <template #default="{ row }">
           <el-input-number
             v-if="row.isEditing"
@@ -100,7 +100,7 @@
           <span v-else>{{ row.sortOrder }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" fixed="right" align="center">
+      <el-table-column label="操作" width="180" fixed="right" align="center">
         <template #default="{ row }">
           <template v-if="row.isEditing">
             <el-button type="primary" link :loading="row.saving" @click="saveEnumRow(row)"
@@ -140,7 +140,7 @@ const loading = ref(false)
 const tableData = ref([])
 
 const columns = [
-  { type: 'index', label: '序号', width: 60, align: 'center' },
+  { type: 'index', label: '序号', width: 80, align: 'center' },
   {
     prop: 'name',
     label: '字典名称',
@@ -159,7 +159,7 @@ const columns = [
     showOverflowTooltip: true,
     formatter: (row) => row.description || '-',
   },
-  { label: '操作', width: 220, fixed: 'right', align: 'center', slotName: 'action' },
+  { label: '操作', width: 120, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 
 const searchForm = reactive({

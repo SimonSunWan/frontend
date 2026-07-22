@@ -149,14 +149,14 @@ const loading = ref(false)
 const tableData = ref([])
 
 const columns = [
-  { prop: 'name', label: '菜单名称', minWidth: 160, showOverflowTooltip: true },
-  { label: '菜单类型', width: 90, align: 'center', slotName: 'menuType' },
-  { label: '路由地址', minWidth: 140, showOverflowTooltip: true, slotName: 'path' },
-  { label: '权限标识', minWidth: 120, showOverflowTooltip: true, slotName: 'authMark' },
-  { label: '图标', width: 70, align: 'center', slotName: 'icon' },
-  { label: '状态', width: 80, align: 'center', slotName: 'status' },
-  { prop: 'sort', label: '排序', width: 70, align: 'center' },
-  { label: '操作', width: 200, fixed: 'right', align: 'center', slotName: 'action' },
+  { prop: 'name', label: '菜单名称', showOverflowTooltip: true },
+  { label: '菜单类型', align: 'center', slotName: 'menuType' },
+  { label: '路由地址', showOverflowTooltip: true, slotName: 'path' },
+  { label: '权限标识', showOverflowTooltip: true, slotName: 'authMark' },
+  { label: '图标', align: 'center', slotName: 'icon' },
+  { label: '状态', align: 'center', slotName: 'status' },
+  { prop: 'sort', label: '排序', align: 'center' },
+  { label: '操作', width: 180, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 
 const searchForm = reactive({

@@ -136,11 +136,11 @@ const tableData = ref([])
 
 const columns = [
   { prop: 'deptName', label: '部门名称', showOverflowTooltip: true },
-  { label: '负责人', minWidth: 120, showOverflowTooltip: true, slotName: 'leaders' },
-  { label: '部门成员', minWidth: 120, showOverflowTooltip: true, slotName: 'members' },
-  { label: '状态', width: 80, align: 'center', slotName: 'status' },
-  { prop: 'sortOrder', label: '排序', width: 80, align: 'center' },
-  { label: '操作', width: 200, fixed: 'right', align: 'center', slotName: 'action' },
+  { label: '负责人', showOverflowTooltip: true, slotName: 'leaders' },
+  { label: '部门成员', showOverflowTooltip: true, slotName: 'members' },
+  { label: '状态', align: 'center', slotName: 'status' },
+  { prop: 'sortOrder', label: '排序', align: 'center' },
+  { label: '操作', width: 180, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 
 const searchForm = reactive({
