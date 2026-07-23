@@ -174,7 +174,7 @@ const columns = [
     showOverflowTooltip: true,
     formatter: (row) => row.phone || '-',
   },
-  { label: '角色名称', slotName: 'roleNames' },
+  { label: '角色', slotName: 'roleNames' },
   { label: '所属部门', slotName: 'departments' },
   { label: '状态', align: 'center', slotName: 'status' },
   { label: '操作', width: 120, fixed: 'right', align: 'center', slotName: 'action' },

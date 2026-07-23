@@ -57,16 +57,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="排序" prop="sortOrder">
-            <el-input-number
-              v-model="dialogForm.sortOrder"
-              :min="1"
-              controls-position="right"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="负责人" prop="leaderIds">
             <el-select
               v-model="dialogForm.leaderIds"
@@ -109,7 +99,17 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="启用状态">
+          <el-form-item label="排序" prop="sortOrder">
+            <el-input-number
+              v-model="dialogForm.sortOrder"
+              :min="1"
+              controls-position="right"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="状态">
             <el-switch v-model="dialogForm.status" />
           </el-form-item>
         </el-col>
@@ -138,8 +138,8 @@ const columns = [
   { prop: 'deptName', label: '部门名称', showOverflowTooltip: true },
   { label: '负责人', showOverflowTooltip: true, slotName: 'leaders' },
   { label: '部门成员', showOverflowTooltip: true, slotName: 'members' },
-  { label: '状态', align: 'center', slotName: 'status' },
   { prop: 'sortOrder', label: '排序', align: 'center' },
+  { label: '状态', align: 'center', slotName: 'status' },
   { label: '操作', width: 180, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 

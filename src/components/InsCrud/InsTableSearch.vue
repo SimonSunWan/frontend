@@ -24,7 +24,7 @@ defineEmits(['search', 'reset'])
 <style lang="scss" scoped>
 .search-card {
   flex-shrink: 0;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 
   :deep(.el-card__body) {
     padding-bottom: 0;
@@ -49,7 +49,6 @@ defineEmits(['search', 'reset'])
       flex-shrink: 0;
       padding: 0 12px 0 0;
       line-height: 32px;
-      color: var(--el-text-color-regular);
     }
 
     .el-form-item__content {
@@ -65,15 +64,6 @@ defineEmits(['search', 'reset'])
       box-shadow: none !important;
       border-radius: 0;
       padding: 0;
-    }
-
-    .el-input__inner,
-    .el-select__placeholder,
-    .el-select__selected-item,
-    .el-range-input,
-    .el-input__prefix,
-    .el-input__suffix {
-      color: var(--el-text-color-regular);
     }
 
     &:hover,

@@ -21,7 +21,8 @@
     </template>
 
     <template #action="{ row }">
-      <el-button type="primary" link @click="showEnumDialog(row)">编辑</el-button>
+      <el-button type="primary" link @click="showEnumDialog(row)">枚举</el-button>
+      <el-button type="primary" link @click="showTypeDialog('edit', row)">编辑</el-button>
       <el-button type="danger" link @click="handleDeleteType(row)">删除</el-button>
     </template>
   </InsTablePage>
@@ -46,12 +47,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="字典描述" prop="description">
+          <el-form-item label="备注" prop="description">
             <el-input
               v-model="typeForm.description"
               type="textarea"
               clearable
-              placeholder="请输入字典描述"
+              placeholder="请输入备注"
               :rows="3"
             />
           </el-form-item>
@@ -155,11 +156,11 @@ const columns = [
   },
   {
     prop: 'description',
-    label: '描述',
+    label: '备注',
     showOverflowTooltip: true,
     formatter: (row) => row.description || '-',
   },
-  { label: '操作', width: 120, fixed: 'right', align: 'center', slotName: 'action' },
+  { label: '操作', width: 180, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 
 const searchForm = reactive({

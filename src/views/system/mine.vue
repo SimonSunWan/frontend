@@ -23,7 +23,13 @@
               </span>
               <span class="meta-value">{{ baseForm.phone || '-' }}</span>
             </div>
-            <div class="meta-item">
+            <div v-if="isSuperAdmin" class="meta-item">
+              <span class="meta-label">
+                <el-icon><Document /></el-icon>
+              </span>
+              <span class="meta-value">{{ systemCode || '-' }}</span>
+            </div>
+            <div v-else class="meta-item">
               <span class="meta-label">
                 <el-icon><OfficeBuilding /></el-icon>
               </span>
@@ -138,8 +144,9 @@
 
 <script setup>
 import mineBg from '@/assets/images/mine-bg.png'
-import { Iphone, OfficeBuilding, Postcard, Service, User } from '@element-plus/icons-vue'
+import { Document, Iphone, OfficeBuilding, Postcard, Service, User } from '@element-plus/icons-vue'
 import { changePasswordApi, updateUserInfoApi } from '@/api/user'
+import { getSystemSettingApi } from '@/api/system'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import InsSectionTitle from '@/components/InsSectionTitle.vue'
@@ -150,7 +157,7 @@ import {
   phoneRule,
   userNameRule,
 } from '@/utils/validators'
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
@@ -158,7 +165,11 @@ const router = useRouter()
 
 const roleNames = ref([])
 
+const isSuperAdmin = computed(() => userStore.userInfo?.roles?.includes('SUPER') ?? false)
+
 const departments = ref([])
+
+const systemCode = ref('')
 
 const baseLoading = ref(false)
 const baseFormRef = ref()
@@ -188,6 +199,14 @@ const pwdRules = {
   confirmPassword: createConfirmPasswordRule(() => pwdForm.newPassword),
 }
 
+const loadSystemCode = () => {
+  getSystemSettingApi('REGISTER_SYSTEM_CODE')
+    .then((res) => {
+      systemCode.value = res?.data?.settingValue || ''
+    })
+    .catch(() => {})
+}
+
 const loadUserInfo = () => {
   userStore
     .getUserInfo()
@@ -197,6 +216,7 @@ const loadUserInfo = () => {
         baseForm.nickName = data.nickName || ''
         baseForm.phone = data.phone || ''
         roleNames.value = Array.isArray(data.roleNames) ? data.roleNames : []
+        if (isSuperAdmin.value) loadSystemCode()
         const dept = data.departments
         departments.value = Array.isArray(dept) ? dept : dept ? [dept] : []
       }
@@ -257,7 +277,7 @@ onMounted(() => {
   .mine-layout {
     display: flex;
     align-items: stretch;
-    gap: 20px;
+    gap: 16px;
 
     .mine-left {
       width: 424px;
@@ -326,6 +346,10 @@ onMounted(() => {
         margin: 0;
       }
 
+      .meta-code {
+        color: var(--ins-text-primary);
+      }
+
       .meta-item--full {
         grid-column: 1 / -1;
       }
@@ -333,7 +357,7 @@ onMounted(() => {
   }
 
   .pwd-card {
-    margin-top: 20px;
+    margin-top: 16px;
   }
 
   .info-card {

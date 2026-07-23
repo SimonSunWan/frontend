@@ -52,12 +52,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="描述" prop="description">
+          <el-form-item label="备注" prop="description">
             <el-input
               v-model="dialogForm.description"
               type="textarea"
               clearable
-              placeholder="请输入角色描述"
+              placeholder="请输入备注"
               :rows="3"
             />
           </el-form-item>
@@ -135,7 +135,7 @@ const columns = [
   },
   {
     prop: 'description',
-    label: '描述',
+    label: '备注',
     showOverflowTooltip: true,
     formatter: (row) => row.description || '-',
   },
@@ -170,7 +170,7 @@ const dialogForm = reactive({
 const dialogRules = {
   roleName: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
   roleCode: [{ required: true, message: '请输入角色编码', trigger: 'blur' }],
-  description: [{ required: true, message: '请输入角色描述', trigger: 'blur' }],
+  description: [{ required: true, message: '请输入备注', trigger: 'blur' }],
 }
 
 // 权限弹窗

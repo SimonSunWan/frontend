@@ -152,7 +152,7 @@ onUnmounted(() => {
 .tab-view {
   display: flex;
   align-items: flex-end;
-  padding: 0 12px 0 16px;
+  padding: 0 8px 0 12px;
   background-color: var(--ins-bg-container);
   border-bottom: 1px solid var(--ins-border-light);
   border-radius: 4px 4px 0 0;

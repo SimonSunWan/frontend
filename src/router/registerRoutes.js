@@ -28,6 +28,7 @@ function collectLeafRoutes(nodes, topPath, result = []) {
         meta: {
           title: node.meta?.title || node.name,
           icon: node.meta?.icon,
+          keepAlive: node.meta?.keepAlive,
         },
       })
     }
@@ -88,7 +89,7 @@ export function registerDynamicRoutes(router, menuList) {
               path: '',
               name: (menu.name || menu.path) + '_index',
               component,
-              meta: { title: menu.meta?.title || menu.name },
+              meta: { title: menu.meta?.title || menu.name, keepAlive: menu.meta?.keepAlive },
             },
           ],
         })

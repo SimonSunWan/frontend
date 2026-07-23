@@ -10,8 +10,8 @@
     @reset="handleReset"
   >
     <template #search="{ form }">
-      <el-form-item label="菜单名称">
-        <el-input v-model="form.name" placeholder="请输入菜单名称" clearable />
+      <el-form-item label="名称">
+        <el-input v-model="form.name" placeholder="请输入名称" clearable />
       </el-form-item>
     </template>
 
@@ -59,7 +59,7 @@
     <el-form ref="formRef" :model="dialogForm" :rules="dialogRules" label-width="85px">
       <el-row :gutter="16">
         <el-col :span="24">
-          <el-form-item label="菜单类型">
+          <el-form-item label="类型">
             <el-radio-group v-model="dialogForm.menuType" :disabled="dialogType === 'edit'">
               <el-radio-button value="menu">菜单</el-radio-button>
               <el-radio-button value="button">权限</el-radio-button>
@@ -69,8 +69,8 @@
 
         <template v-if="dialogForm.menuType === 'menu'">
           <el-col :span="12">
-            <el-form-item label="菜单名称" prop="name">
-              <el-input v-model="dialogForm.name" clearable placeholder="请输入菜单名称" />
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="dialogForm.name" clearable placeholder="请输入名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -94,7 +94,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="是否启用">
+            <el-form-item label="状态">
               <el-switch v-model="dialogForm.isEnable" />
             </el-form-item>
           </el-col>
@@ -107,8 +107,8 @@
 
         <template v-if="dialogForm.menuType === 'button'">
           <el-col :span="12">
-            <el-form-item label="权限名称" prop="name">
-              <el-input v-model="dialogForm.name" clearable placeholder="请输入权限名称" />
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="dialogForm.name" clearable placeholder="请输入名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -127,7 +127,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="是否启用">
+            <el-form-item label="状态">
               <el-switch v-model="dialogForm.isEnable" />
             </el-form-item>
           </el-col>
@@ -149,13 +149,13 @@ const loading = ref(false)
 const tableData = ref([])
 
 const columns = [
-  { prop: 'name', label: '菜单名称', showOverflowTooltip: true },
-  { label: '菜单类型', align: 'center', slotName: 'menuType' },
+  { prop: 'name', label: '名称', showOverflowTooltip: true },
+  { label: '类型', align: 'center', slotName: 'menuType' },
   { label: '路由地址', showOverflowTooltip: true, slotName: 'path' },
   { label: '权限标识', showOverflowTooltip: true, slotName: 'authMark' },
   { label: '图标', align: 'center', slotName: 'icon' },
-  { label: '状态', align: 'center', slotName: 'status' },
   { prop: 'sort', label: '排序', align: 'center' },
+  { label: '状态', align: 'center', slotName: 'status' },
   { label: '操作', width: 180, fixed: 'right', align: 'center', slotName: 'action' },
 ]
 
@@ -186,10 +186,10 @@ const dialogForm = reactive({
 const dialogRules = computed(() => {
   const rules = {}
   if (dialogForm.menuType === 'menu') {
-    rules.name = [{ required: true, message: '请输入菜单名称', trigger: 'blur' }]
+    rules.name = [{ required: true, message: '请输入名称', trigger: 'blur' }]
     rules.path = [{ required: true, message: '请输入路由地址', trigger: 'blur' }]
   } else {
-    rules.name = [{ required: true, message: '请输入权限名称', trigger: 'blur' }]
+    rules.name = [{ required: true, message: '请输入名称', trigger: 'blur' }]
     rules.authMark = [{ required: true, message: '请输入权限标识', trigger: 'blur' }]
   }
   return rules
@@ -264,8 +264,8 @@ const showDialog = (type, row) => {
       path: row.path || '',
       icon: row.icon || '',
       sort: row.sort ?? 1,
-      isEnable: row.isEnable ?? true,
-      isKeepAlive: row.isKeepAlive ?? true,
+      isEnable: row.isEnable,
+      isKeepAlive: row.isKeepAlive,
       menuType: row.menuType || 'menu',
       parentId: row.parentId || null,
       authMark: row.authMark || '',

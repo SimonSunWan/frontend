@@ -51,7 +51,7 @@
       </div>
     </el-header>
     <el-container class="layout-body">
-      <el-aside :width="isCollapse ? '64px' : '220px'" class="layout-aside">
+      <el-aside :width="isCollapse ? '44px' : '220px'" class="layout-aside">
         <el-scrollbar>
           <el-menu :default-active="route.path" :collapse="isCollapse" unique-opened router>
             <InsMenuTree :menus="menuStore.menuList" />
@@ -62,7 +62,12 @@
         <el-main class="layout-main">
           <InsTabBar />
           <div class="layout-content">
-            <RouterView />
+            <router-view v-slot="{ Component }">
+              <keep-alive>
+                <component :is="Component" v-if="route.meta?.keepAlive" />
+              </keep-alive>
+              <component :is="Component" v-if="!route.meta?.keepAlive" />
+            </router-view>
           </div>
         </el-main>
       </el-container>
@@ -93,8 +98,10 @@ const flattenMenus = (list, result = []) => {
     if (item.children?.length) {
       flattenMenus(item.children, result)
     } else if (item.path) {
+      const title = item.meta?.title || item.name
       result.push({
-        title: item.meta?.title || item.name,
+        value: title,
+        title,
         path: item.path,
       })
     }
@@ -134,7 +141,7 @@ const handleLogout = () => {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 20px;
+    padding: 0 16px;
     border-bottom: 1px solid var(--el-border-color);
     background:
       url('@/assets/images/layout-bg.png') no-repeat left center / auto 100%,
@@ -225,7 +232,8 @@ const handleLogout = () => {
 
     .el-menu {
       border-right: none;
-      --el-menu-base-level-padding: 12px;
+      --el-menu-base-level-padding: 14px;
+      --el-menu-level-padding: 28px;
 
       :deep(.el-menu--inline) {
         overflow: hidden;
@@ -234,32 +242,27 @@ const handleLogout = () => {
       :deep(.el-menu-item) {
         height: 40px;
         line-height: 40px;
-        margin: 4px 8px;
+        margin: 4px 0;
       }
 
       :deep(.el-menu-item):hover {
         color: var(--ins-color-primary);
         background-color: var(--ins-color-primary-bg);
-        border-radius: 4px;
       }
 
       :deep(.el-menu-item.is-active) {
         color: var(--ins-color-primary);
         background-color: var(--ins-color-primary-bg);
-        border-radius: 4px;
       }
 
       :deep(.el-sub-menu__title) {
         height: 40px;
         line-height: 40px;
-        margin: 0 8px;
-        border-radius: 4px;
       }
 
       :deep(.el-sub-menu__title):hover {
         color: var(--ins-color-primary);
         background-color: var(--ins-color-primary-bg);
-        border-radius: 4px;
       }
 
       :deep(.el-menu-item) > span,
@@ -287,10 +290,10 @@ const handleLogout = () => {
     overflow: hidden;
 
     .layout-content {
-      padding: 20px;
+      padding: 16px;
       flex: 1;
       min-height: 0;
-      overflow: hidden;
+      overflow: auto;
     }
   }
 }
@@ -318,7 +321,6 @@ const handleLogout = () => {
     gap: 8px;
     padding: 8px 4px;
     cursor: pointer;
-    border-radius: 4px;
 
     &:hover {
       background: var(--ins-color-primary-bg);
